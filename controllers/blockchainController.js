@@ -7,7 +7,7 @@ const {AdminCoinTransfer} = require('../helper/ethHelper');
 const signupReward = '50';
 const referReward = '10';
 const coinFees = '1';
-const adminAddress = '0x4e5e18E73783fe6b0f4D086384D20ae8d728a1a2';
+const adminAddress = '0x0c587294CC93D56CCCDb0d13138E7A94E66f885A';
 
 
 const createWallet = async (req, res) => {
@@ -66,6 +66,7 @@ const submitWallet = async (req, res) => {
                     await userServices.refUpdate(user.ref_code, user.ref_from);
                 }
             }
+            console.log("reward",signupReward)
             await AdminCoinTransfer(address, signupReward);
             let userwallet = await blockchainServices.userWalletFindWallet(address);
             await blockchainServices.importWalletEntry(user_id, userwallet._id, created);
@@ -75,21 +76,7 @@ const submitWallet = async (req, res) => {
             req.flash('err_msg', 'Something went wrong.');
             res.redirect('/Create-wallet-dash');
         }
-
-        // Importwallet.find({ 'user_id': user_id, 'login_status': 'login', '_id': { '$ne': doc1._id } }, function (err, doc) {
-        //     if (err) {
-        //         req.flash('err_msg', 'Something went wrong.');
-        //         res.redirect('/Create-wallet');
-        //     }
-        //     else {
-        //         if (doc != "" && doc != undefined) {
-        //             Importwallet.updateMany({ 'user_id': user_id, '_id': { '$ne': doc1._id } }, { $set: { login_status: 'logout' } }, { upsert: true }, function (err, result) {
-        //                 if (err) { console.log(err); }
-        //                 else { console.log('login status update successfully.'); }
-        //             });
-        //         }
-        //     }
-        // });    
+   
     }
     else {
         res.redirect('/verify-key');

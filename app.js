@@ -1,5 +1,7 @@
 const express = require("express");
 const path = require("path");
+const dotenv = require("dotenv");
+dotenv.config();
 var indexroutes = require("./routes");
 const app = express();
 const session = require('express-session');
@@ -31,6 +33,7 @@ app.use(express.static(path.join(__dirname,'/public')));
 app.use(flash())
 
 app.use("/", indexroutes);
+console.log(process.env.ADMIN)
 
 const PORT = 9000;
 app.listen(PORT, () => console.log(`App listening on port ${PORT}!`));

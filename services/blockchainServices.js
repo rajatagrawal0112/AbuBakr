@@ -1,7 +1,7 @@
 const moment = require("moment");
 const crypto = require('crypto');
 const { createWalletHelper,checkWalletPrivateHelper} = require('../helper/ethHelper');
-const { Registration, Userwallet } = require('../models/userModel');
+const { Registration, Userwallet, RefCode, Importwallet } = require('../models/userModel');
 
 const createWallet = async () => {
     let newData = await createWalletHelper();
