@@ -213,6 +213,25 @@ var Userwalletschema = mongoose.Schema({
 
 var Registration = mongoose.model('User_registration', RegistrationSchema);
 
+var RefCodeschema = mongoose.Schema({
+    my_ref_code: {
+        type: String
+    },
+    reg_ref_code: {
+        type: String
+    },
+    status: {
+        type: String,
+        default: "Not used"
+    },
+    user_id: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User_registration'
+    }
+})
+
+var RefCode = mongoose.model('RefCode', RefCodeschema);
+
 /**********UserwalletSchema**********/
 var Userwalletschema = mongoose.Schema({
 
@@ -260,8 +279,57 @@ var Userwalletschema = mongoose.Schema({
 
 var Userwallet = mongoose.model('User_wallet', Userwalletschema);
 
+/**********ImportwalletSchema**********/
+var ImportwalletSchema = mongoose.Schema({
+
+    user_id: {
+        type: String
+    },
+    wallet_id: {
+        type: String
+    },
+    login_status: {
+        type: String
+    },
+    created_at: {
+        type: String
+    },
+    deleted_at: {
+        type: String,
+        default: null
+    },
+    deleted_by: {
+
+        type: String,
+        default: null
+    },
+
+    updated_at: {
+
+        type: String,
+        default: null
+    },
+    status: {
+
+        type: String,
+        enum: ['active', 'inactive'],
+        default: 'active'
+
+    },
+    deleted: {
+
+        type: String,
+        enum: ['0', '1'],
+        default: '0'
+    },
+});
+
+var Importwallet = mongoose.model('import_wallet', ImportwalletSchema);
+
 module.exports = {
     Registration: Registration,
+    RefCode: RefCode,
+    Importwallet: Importwallet,
     Userwallet: Userwallet
     
 };
