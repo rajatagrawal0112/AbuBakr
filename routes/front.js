@@ -19,6 +19,7 @@ var isUser = auth.isUser;
 //************ to get user data on header using session **********//
 router.use(userControllers.sessionHeader);
 
+
 router.get('/login', userControllers.loginPage);
 
 router.get('/buy-coin', userControllers.buyPage);
@@ -66,9 +67,7 @@ router.post('/submit-create-wallet', isUser, blockchainController.submitWallet);
 
 
 //***************** get Wallet-success **************//
-router.get('/Create-wallet-dash', isUser, function (req, res) {
-  res.render('Create-wallet');
-});
+router.get('/Create-wallet-success', userControllers.walletSuccess);
 
 router.get('/change-password', isUser, function (req, res) {
   var test = req.session.is_user_logged_in;
@@ -130,6 +129,64 @@ router.post('/update-profile', isUser, async function (req, res) {
     res.redirect('/profile');
   }
 });
+
+// //***************** post changes password **************//
+// router.post('/submit-change-pass', isUser, function (req, res) {
+//   if (req.body.new_password == req.body.new_password2) {
+//     var user_id = req.session.re_us_id;
+//     var old_pass = req.body.password;
+//     var mykey1 = crypto.createCipher('aes-128-cbc', 'mypass');
+//     var mystr1 = mykey1.update(old_pass, 'utf8', 'hex')
+//     mystr1 += mykey1.final('hex');
+//     Registration.find({ '_id': user_id, 'password': mystr1 }, async function (err, result) {
+//       if (err) {
+//         req.flash('err_msg', 'Something is worng');
+//         res.redirect('/profile');
+//       } else {
+//         if (result.length > 0 && result.length == 1) {
+//           var check_old_pass = result[0].password;
+//           var mykey2 = crypto.createCipher('aes-128-cbc', 'mypass');
+//           var new_pass = mykey2.update(req.body.new_password, 'utf8', 'hex')
+//           new_pass += mykey2.final('hex');
+
+//           if (mystr1 != new_pass) {
+//             // console.log(result);
+//             let status = await userServices.updateARTPass(email, req.body.new_password);
+//             console.log(status);
+//             if (status == 1) {
+//               Registration.update({ _id: user_id }, { $set: { password: new_pass } }, { upsert: true }, function (err) {
+//                 if (err) {
+//                   req.flash('err_msg', 'Something went wrong.');
+//                   res.redirect('/profile');
+//                 } else {
+//                   req.flash('success_msg', 'Password changed successfully.');
+//                   res.redirect('/profile');
+//                 }
+//               });
+//             }
+//             else {
+//               req.flash('err_msg', 'Something went wrong.');
+//               res.redirect('/profile');
+//             }
+//           }
+//           else {
+//             req.flash('err_msg', 'New password can not be same as current password.');
+//             res.redirect('/profile');
+//           }
+//         }
+//         else {
+//           req.flash('err_msg', 'Please enter correct current password.');
+//           res.redirect('/profile');
+//         }
+//       }
+//     });
+//   }
+//   else {
+//     req.flash('err_msg', 'Password and Confirm password do not match.');
+//     res.redirect('/profile');
+//   }
+// });
+
 
 //***************** post changes password **************//
 router.post('/submit-change-pass', isUser, function (req, res) {

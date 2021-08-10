@@ -354,6 +354,7 @@ module.exports = {
     walletSuccess,
     buyPage,
     ReceivePage,
-    sendPage 
+    sendPage,
+    logout
 
 };
