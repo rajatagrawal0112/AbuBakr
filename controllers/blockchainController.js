@@ -51,24 +51,24 @@ const submitWallet = async (req, res) => {
         let UserwalletData = await blockchainServices.userWalletEntry(user_id, address, hash, created);
         if (UserwalletData) {
             let user = await userServices.checkUserId(user_id);
-            if(user.ref_from){
-                await AdminCoinTransfer(address, referReward);
-                let userRefer = await userServices.checkUserReferCode(user.ref_from);
-                let subject = 'Referral bonus credited.'
-                let text = 'Hello '+ user.email + ',<br><br>\n\n' +
-                'Congratulations we have credited your ARTW account by 10 ARTW (worth US$10) as your friend signed up using your referral code!<br><br>\n\n' + 
-                'Earn more ARTW by referring your friends and stand a chance to win exclusive ARTW NFTs !!' + '<br><br>\n\n' + 'Regards,<br>\nTheArtW Team<br>\nhttps://theartwcoin.com';
-                await mail(user.email, subject, text);
-                let userReferred = await userServices.checkUserWallet(userRefer._id);
-                let referAddress = userReferred.wallet_address;
-                let hashObject = await AdminCoinTransfer(referAddress, referReward);
-                if(hashObject){
-                    await userServices.refUpdate(user.ref_code, user.ref_from);
-                }
-            }
-            await AdminCoinTransfer(address, signupReward);
-            let userwallet = await blockchainServices.userWalletFindWallet(address);
-            await blockchainServices.importWalletEntry(user_id, userwallet._id, created);
+            // if(user.ref_from){
+            //     await AdminCoinTransfer(address, referReward);
+            //     let userRefer = await userServices.checkUserReferCode(user.ref_from);
+            //     let subject = 'Referral bonus credited.'
+            //     let text = 'Hello '+ user.email + ',<br><br>\n\n' +
+            //     'Congratulations we have credited your ARTW account by 10 ARTW (worth US$10) as your friend signed up using your referral code!<br><br>\n\n' + 
+            //     'Earn more ARTW by referring your friends and stand a chance to win exclusive ARTW NFTs !!' + '<br><br>\n\n' + 'Regards,<br>\nTheArtW Team<br>\nhttps://theartwcoin.com';
+            //     await mail(user.email, subject, text);
+            //     let userReferred = await userServices.checkUserWallet(userRefer._id);
+            //     let referAddress = userReferred.wallet_address;
+            //     let hashObject = await AdminCoinTransfer(referAddress, referReward);
+            //     if(hashObject){
+            //         await userServices.refUpdate(user.ref_code, user.ref_from);
+            //     }
+            // }
+            // await AdminCoinTransfer(address, signupReward);
+            // let userwallet = await blockchainServices.userWalletFindWallet(address);
+            // await blockchainServices.importWalletEntry(user_id, userwallet._id, created);
             res.redirect('/Create-wallet-success?wallet=' + Buffer.from(address).toString('base64'));
         }
         else {
