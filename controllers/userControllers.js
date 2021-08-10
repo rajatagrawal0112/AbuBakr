@@ -31,7 +31,15 @@ const dashboardPage = async (req, res) => {
 }
 
 const loginPage = async (req, res) => {
-    res.render('login')  
+    let err_msg = req.flash('err_msg');
+    let success_msg = req.flash('success_msg');
+    let test = req.session.is_user_logged_in;
+    if (test == true) {
+        res.redirect('/dashboard');
+    }
+    else {
+        res.render('login', { err_msg, success_msg, layout: false, session: req.session });
+    }
 }
 
 const buyPage = async (req, res) => {
@@ -77,44 +85,44 @@ const forgotPage = async (req, res) => {
 }
 
 
-const settingPage = async (req, res) => {
-        let err_msg = req.flash('err_msg');
-        let success_msg = req.flash('success_msg');
+// const settingPage = async (req, res) => {
+//         let err_msg = req.flash('err_msg');
+//         let success_msg = req.flash('success_msg');
     
-        let test = req.session.is_user_logged_in;
-        if (test == true) {
-            res.render('profile', { err_msg, success_msg, layout: false, session: req.session});
-        }
-            else {
-                res.redirect('/dashboard');
-            }
-}
+//         let test = req.session.is_user_logged_in;
+//         if (test == true) {
+//             res.render('profile', { err_msg, success_msg, layout: false, session: req.session});
+//         }
+//             else {
+//                 res.redirect('/dashboard');
+//             }
+// }
 
-const kycPage = async (req, res) => {
-            let err_msg = req.flash('err_msg');
-            let success_msg = req.flash('success_msg');
+// const kycPage = async (req, res) => {
+//             let err_msg = req.flash('err_msg');
+//             let success_msg = req.flash('success_msg');
         
-            let test = req.session.is_user_logged_in;
-            if (test == false) {
-                res.redirect('/login');
-            }
-                else {
-                    res.render('kyc', { err_msg, success_msg, layout: false, session: req.session });
-                }
-}
+//             let test = req.session.is_user_logged_in;
+//             if (test == false) {
+//                 res.redirect('/login');
+//             }
+//                 else {
+//                     res.render('kyc', { err_msg, success_msg, layout: false, session: req.session });
+//                 }
+// }
 
-const transactionPage = async (req, res) => {
-        let err_msg = req.flash('err_msg');
-        let success_msg = req.flash('success_msg');
+// const transactionPage = async (req, res) => {
+//         let err_msg = req.flash('err_msg');
+//         let success_msg = req.flash('success_msg');
     
-        let test = req.session.is_user_logged_in;
-        if (test == true) {
-            res.render('transaction-table', { err_msg, success_msg, layout: false, session: req.session });
-        }
-            else {
-                res.redirect('/login');
-            }
-}
+//         let test = req.session.is_user_logged_in;
+//         if (test == true) {
+//             res.render('transaction-table', { err_msg, success_msg, layout: false, session: req.session });
+//         }
+//             else {
+//                 res.redirect('/login');
+//             }
+// }
 
 const verifyPage = async (req, res) => {
             let err_msg = req.flash('err_msg');
@@ -331,9 +339,9 @@ const submitForgot = async (req, res) => {
 module.exports = {
     sessionHeader,
     dashboardPage,
-    transactionPage,
+    // transactionPage,
     referral,
-    settingPage,
+    // settingPage,
     signupPage,
     LoginPost,
     submitUser,
@@ -341,7 +349,7 @@ module.exports = {
     verifyPage,
     verifyUser,
     submitForgot,
-    kycPage,
+    // kycPage,
     loginPage,
     walletSuccess,
     buyPage,

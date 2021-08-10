@@ -2,7 +2,7 @@ const moment = require("moment");
 const { generateCode } = require('../helper/userHelper');
 const { Registration } = require('../models/userModel');
 const crypto = require('crypto');
-
+var axios = require('axios');
 
 const addUser = async (userDetails, pass,mystr, created ) => {
   let ref_code = generateCode();
@@ -96,6 +96,29 @@ const checkUser = async (email) => {
     }
   };
 
+  const updateARTUser = async (email, name) => {
+    try {
+      var data = JSON.stringify({
+        "pass" : "toIbb5gvcKHCBvF1qr6hihMYU",
+        "email" : email,
+        "name" : name
+      });
+      var config = {
+        method: 'post',
+        url: 'https://theartw.com/api/profile/update',
+        headers: { 
+          'Content-Type': 'application/json'
+        },
+        data : data
+      };
+      let response = await axios(config);
+      let status = response.data.status;
+      return status;
+    } catch (error) {
+      console.log(error);
+      return null;
+    }
+  }
 module.exports = {
     addUser,
     checkUser,
@@ -104,5 +127,6 @@ module.exports = {
   createCipher,
   updateUserPassword,
   createAtTimer,
-  updateEmailStatus
+  updateEmailStatus,
+  updateARTUser
   };

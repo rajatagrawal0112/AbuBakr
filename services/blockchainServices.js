@@ -42,9 +42,17 @@ const userWalletEntry = async (user_id, address, hash, created) => {
     }
 };
 
+const userWalletFindWallet = async (address) => {
+    let userwallet = await Userwallet.findOne({'wallet_address': address});
+    if(userwallet){
+        return userwallet;
+    }
+};
+
 module.exports = {
     createWallet,
     createHash,
     userWalletEntry,
-    checkWalletPrivate
+    checkWalletPrivate,
+    userWalletFindWallet
 };

@@ -12,7 +12,11 @@
       <div class="card">
                                <div class="card-header">
                      <div class="row">
-                       <div class="col-md-2">
+
+                      <% if(success_msg!=undefined){ %>
+                        <span class="flash_msg" style="color:green;"><%= success_msg %></span>
+                     <% }%>
+                       <!-- <div class="col-md-2">
                             <div class="form-group">
                              <div class="input-group mb-3">
                         <div class="input-group-prepend">
@@ -21,7 +25,7 @@
                         <input type="text" class="form-control" id="datepicker" placeholder="Date">
                       </div>
                             </div>
-                      </div>
+                      </div> -->
                       <div class="col-md-2">
                             <div class="form-group">
                              <div class="input-group mb-3">

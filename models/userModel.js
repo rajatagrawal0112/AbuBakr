@@ -326,9 +326,94 @@ var ImportwalletSchema = mongoose.Schema({
 
 var Importwallet = mongoose.model('import_wallet', ImportwalletSchema);
 
+/**********ImportwalletSchema**********/
+var TokendetailsSchema = mongoose.Schema({
+
+    auto: {
+        type: Number,
+        required: true,
+        unique: true,
+        integer: true
+    },
+    user_id: {
+        type: String
+    },
+    wallet_id: {
+        type: String
+    },
+    sender_wallet_address: {
+        type: String
+    },
+    receiver_wallet_address: {
+        type: String
+    },
+    hash: {
+        type: String
+    },
+    amount: {
+        type: String
+    },
+    payment_status: {
+        type: String
+    },
+    token_type: {
+        type: String
+    },
+    block_id: {
+        type: String,
+        default: null
+    },
+    transaction_type: {
+        type: String
+    },
+    referred_to_name: {
+        type: String
+    },
+    referred_to_email: {
+        type: String
+    },
+    bonus_reward: {
+        type: String
+    },
+    created_at: {
+        type: String
+    },
+    deleted_at: {
+        type: String,
+        default: null
+    },
+    deleted_by: {
+
+        type: String,
+        default: null
+    },
+
+    updated_at: {
+
+        type: String,
+        default: null
+    },
+    status: {
+
+        type: String,
+        enum: ['active', 'inactive'],
+        default: 'active'
+
+    },
+    deleted: {
+
+        type: String,
+        enum: ['0', '1'],
+        default: '0'
+    },
+});
+
+var Tokendetails = mongoose.model('token_details', TokendetailsSchema);
+
 module.exports = {
     Registration: Registration,
     RefCode: RefCode,
+    Tokendetails: Tokendetails,
     Importwallet: Importwallet,
     Userwallet: Userwallet
     
