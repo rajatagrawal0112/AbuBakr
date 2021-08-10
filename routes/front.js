@@ -68,6 +68,11 @@ router.post('/submit-create-wallet', isUser, blockchainController.submitWallet);
 
 //***************** get Wallet-success **************//
 router.get('/Create-wallet-success', userControllers.walletSuccess);
+// router.get('/Create-wallet-success', isUser, function (req, res) {
+//   res.render('Create-wallet');
+// });
+
+router.get('/Create-wallet-success', userControllers.walletSuccess);
 
 router.get('/change-password', isUser, function (req, res) {
   var test = req.session.is_user_logged_in;
