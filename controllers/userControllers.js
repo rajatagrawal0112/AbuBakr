@@ -3,6 +3,7 @@ const request = require('request');
 const crypto = require('crypto');
 const { mail } = require('../helper/mailer');
 const userServices = require("../services/userServices");
+const blockchainServices = require("../services/blockchainServices");
 
 const sessionHeader = async (req, res, next) => {
     
@@ -26,8 +27,64 @@ const logout = async (req, res) => {
     res.redirect('/login');
 }
 
+
 const dashboardPage = async (req, res) => {
-    res.render('dashboard')
+    console.log("Welcome to dashboard")
+    let err_msg = req.flash('err_msg');
+    let success_msg = req.flash('success_msg');
+    let test = req.session.is_user_logged_in;
+    if (test != true) {
+        res.redirect('/Login');
+    }
+    else {
+        let user_id = req.session.re_us_id;
+        let user = await userServices.checkUserId(user_id);
+        let ref_code = user.ref_code;
+        let rates = await userServices.getRates();
+        // let usdValue = rates.usdValue;
+        let etherValue = rates.etherValue;
+        console.log("ethhhvalue",etherValue)
+        // let btcValue = rates.btcValue;
+        // let bnbValue = rates.bnbValue;
+        let loginwallet = await blockchainServices.importWalletFindId(user_id);
+        console.log("login wallet",loginwallet)
+        if (loginwallet) {
+            let result = await blockchainServices.userWalletFindId(loginwallet.wallet_id);
+            console.log("in dashboard results",result)
+            if (result) {
+                req.session.wallet = true;
+                let wallet_creation = result.created_at;
+                let today = await userServices.createAtTimer();
+                let wallet_time_difference = calculateHours(new Date(wallet_creation), new Date(today));
+                wallet_details = result;
+                import_wallet_id = loginwallet._id;
+                let all_transaction = await blockchainServices.findTransactions(wallet_details.wallet_address);
+                await blockchainServices.checkTxStatus(all_transaction);
+                all_transaction = await blockchainServices.findTransactions(wallet_details.wallet_address);
+                let balance = await blockchainServices.getCoinBalance(wallet_details.wallet_address);
+                let rown_bal = balance;
+                let bnbBalance = await balanceMainBNB(wallet_details.wallet_address);
+                let ethBalance = await balanceMainETH(wallet_details.wallet_address);
+                let coinbalance = await coinBalanceBNB(wallet_details.wallet_address);
+                let usd_value = Math.round(usdValue * coinbalance * 100) / 100;
+                let usd_actual = (1 / parseFloat(usdValue)) * coinbalance;
+                let bnb_value = (1 / parseFloat(bnbValue)) * bnbBalance;
+                let eth_value = (1 / parseFloat(etherValue)) * ethBalance;
+                let full_value = usd_actual + bnb_value + eth_value;
+                full_value = Math.round(full_value * 100) / 100;
+                res.render('dashboard', { err_msg, success_msg, ref_code, wallet_details, usdValue, etherValue, btcValue, bnbValue, import_wallet_id, balance, rown_bal, layout: false, session: req.session, crypto, all_transaction, wallet_time_difference, moment, bnbBalance, coinbalance, usd_value, ethBalance, full_value });
+            }
+        }
+        else {
+            // let usd_value = 0;
+            // let bnbBalance = 0;
+            // let ethBalance = 0;
+            // let coinbalance = 0;
+            // res.render('front/dashboard', { err_msg, success_msg, ref_code, wallet_details, usdValue, etherValue, btcValue, bnbValue, import_wallet_id, rown_bal, layout: false, session: req.session, crypto, all_transaction: [], coinbalance, bnbBalance, usd_value, ethBalance });
+            req.session.wallet = false;
+            res.redirect('/Create-wallet');
+        }
+    }
 }
 
 const loginPage = async (req, res) => {
@@ -42,12 +99,7 @@ const loginPage = async (req, res) => {
     }
 }
 
-const buyPage = async (req, res) => {
-    res.render('buy-coin')  
-}
-const ReceivePage = async (req, res) => {
-    res.render('receive')  
-}
+
 const sendPage = async (req, res) => {
     res.render('send-uwct')  
 }
@@ -84,45 +136,6 @@ const forgotPage = async (req, res) => {
         }
 }
 
-
-// const settingPage = async (req, res) => {
-//         let err_msg = req.flash('err_msg');
-//         let success_msg = req.flash('success_msg');
-    
-//         let test = req.session.is_user_logged_in;
-//         if (test == true) {
-//             res.render('profile', { err_msg, success_msg, layout: false, session: req.session});
-//         }
-//             else {
-//                 res.redirect('/dashboard');
-//             }
-// }
-
-// const kycPage = async (req, res) => {
-//             let err_msg = req.flash('err_msg');
-//             let success_msg = req.flash('success_msg');
-        
-//             let test = req.session.is_user_logged_in;
-//             if (test == false) {
-//                 res.redirect('/login');
-//             }
-//                 else {
-//                     res.render('kyc', { err_msg, success_msg, layout: false, session: req.session });
-//                 }
-// }
-
-// const transactionPage = async (req, res) => {
-//         let err_msg = req.flash('err_msg');
-//         let success_msg = req.flash('success_msg');
-    
-//         let test = req.session.is_user_logged_in;
-//         if (test == true) {
-//             res.render('transaction-table', { err_msg, success_msg, layout: false, session: req.session });
-//         }
-//             else {
-//                 res.redirect('/login');
-//             }
-// }
 
 const verifyPage = async (req, res) => {
             let err_msg = req.flash('err_msg');
@@ -273,34 +286,6 @@ const verifyUser = async (req, res) => {
                 }
 }
 
-// const verifyUser = async (req, res) => {
-//     let user_otp = req.body.otp;
-//     let email = req.session.re_usr_email;
-//     let user = await userServices.checkUser(email);
-//     if (user) {
-        
-//         if (user.otp === user_otp) {
-//             let userUpdated = await userServices.updateEmailStatus(user._id);
-//             if (userUpdated) {
-//                 req.session.is_user_logged_in = true;
-//                 req.session.success = true;
-//                 req.session.re_us_id = userLogin._id;
-//                 req.session.re_usr_name = userLogin.name;
-//                 req.session.re_usr_email = userLogin.email;
-//                 res.redirect('login');
-//             }
-//             else {
-//                 req.flash('err_msg', 'Please enter correct secret code.');
-//                 res.redirect('verify-account');
-//             }
-//         }
-//     }
-//     else {
-//         req.flash('err_msg', 'Something went wrong.');
-//         res.redirect('verify-account');
-//     }
-// }
-
 
 
 const submitForgot = async (req, res) => {
@@ -339,9 +324,7 @@ const submitForgot = async (req, res) => {
 module.exports = {
     sessionHeader,
     dashboardPage,
-    // transactionPage,
     referral,
-    // settingPage,
     signupPage,
     LoginPost,
     submitUser,
@@ -349,11 +332,8 @@ module.exports = {
     verifyPage,
     verifyUser,
     submitForgot,
-    // kycPage,
     loginPage,
     walletSuccess,
-    buyPage,
-    ReceivePage,
     sendPage,
     logout
 

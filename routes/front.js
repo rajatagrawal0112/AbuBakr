@@ -22,9 +22,35 @@ router.use(userControllers.sessionHeader);
 
 router.get('/login', userControllers.loginPage);
 
-router.get('/buy-coin', userControllers.buyPage);
+//***************** get recive-rowan **************//
+router.get('/receive', isUser, function (req, res) {
+  err_msg = req.flash('err_msg');
+  success_msg = req.flash('success_msg');
+  var walletid = req.query.walletid;
+  var test = req.session.is_user_logged_in;
+  if (test != true) {
+    res.redirect('/Login');
+  } else {
+    Userwallet.findOne({ '_id': walletid }, function (err, response) {
+      if (err) { console.log('Something is worng to find login status.') }
+      else {
+        if (response != "" && response != undefined) {
+          let walletdetails = response;
+          let qr_txt = walletdetails.wallet_address;
+          var qr_png = qr.imageSync(qr_txt, { type: 'png' })
+          let qr_code_file_name = new Date().getTime() + '.png';
+          fs.writeFileSync('./public/wallet_qr_image/' + qr_code_file_name, qr_png, (err) => {
+            if (err) { console.log(err); }
+          });
+          res.render('receive', { err_msg, success_msg, walletdetails, qr_code_file_name, layout: false, session: req.session });
+        }
+      }
+    });
+  }
+});
 
-router.get('/receive', userControllers.ReceivePage);
+
+// router.get('/receive', userControllers.ReceivePage);
 
 router.get('/send-uwct', userControllers.sendPage);
 
@@ -32,11 +58,6 @@ router.get('/signup', userControllers.signupPage);
 
 router.get('/forgot-pass', userControllers.forgotPage);
 
-// router.get('/transaction-table', userControllers.transactionPage);
-
-// router.get('/profile', userControllers.settingPage);
-
-// router.get('/kyc',isUser, userControllers.kycPage);
 
 //***************** verify email **************// 
 router.get('/verify-account', userControllers.verifyPage);
@@ -53,7 +74,7 @@ router.get('/terms-condition', function (req, res) {
   res.render('terms-condition');
 });
 
-
+router.get('/send-uwct', userControllers.sendPage);
 //***************** get create wallet **************//
 router.get('/Create-wallet', isUser, blockchainController.createWallet);
 
@@ -65,14 +86,12 @@ router.post('/Verify-key', isUser, blockchainController.verifyWallet);
 router.post('/submit-create-wallet', isUser, blockchainController.submitWallet);
 
 
-
 //***************** get Wallet-success **************//
 router.get('/Create-wallet-success', userControllers.walletSuccess);
-// router.get('/Create-wallet-success', isUser, function (req, res) {
-//   res.render('Create-wallet');
-// });
+
 
 router.get('/Create-wallet-success', userControllers.walletSuccess);
+
 
 router.get('/change-password', isUser, function (req, res) {
   var test = req.session.is_user_logged_in;
@@ -135,7 +154,7 @@ router.post('/update-profile', isUser, async function (req, res) {
   }
 });
 
-// //***************** post changes password **************//
+// // //***************** post changes password **************//
 // router.post('/submit-change-pass', isUser, function (req, res) {
 //   if (req.body.new_password == req.body.new_password2) {
 //     var user_id = req.session.re_us_id;
@@ -314,6 +333,161 @@ router.get('/transaction-table', isUser, function (req, res) {
     });
   }
 });
+
+//***************** get Send-rowan **************//
+// router.get('/send-uwct', isUser, async function (req, res) {
+//   let err_msg = req.flash('err_msg');
+//   let success_msg = req.flash('success_msg');
+//   let walletid = req.query.walletid;
+//   let type = req.query.type;
+//   let test = req.session.is_user_logged_in;
+
+//   let rates = await userServices.getRates();
+//   // let usdValue = rates.usdValue;
+//   let etherValue = rates.etherValue;
+//   let bnbValue = rates.bnbValue;
+//   let value;
+
+//   if (test != true) {
+//     res.redirect('/login');
+//   } else {
+//     const walletdetails = await Userwallet.findOne({ '_id': walletid });
+
+//     if (walletdetails) {
+//       let coinbalance
+
+//       if (type == 'eth') {
+//         coinbalance = await balanceMainETH(walletdetails.wallet_address);
+//         value = 1 / etherValue;
+//       }
+//       else if (type == 'bnb') {
+//         coinbalance = await balanceMainBNB(walletdetails.wallet_address);
+//         value = 1 / bnbValue;
+//       }
+//       else if (type == 'artw') {
+//         coinbalance = await coinBalanceBNB(walletdetails.wallet_address);
+//         value = 1 / usdValue;
+//       }
+//       value = Math.round(value * 100) / 100;
+//       res.render('/send-uwct', { err_msg, success_msg, walletdetails, layout: false, session: req.session, coinbalance, type, walletid, value, usdValue, etherValue, bnbValue });
+//     }
+//     else {
+//       console.log("somethig went wrong with login status")
+//     }
+
+
+//   }
+// });
+
+
+router.get('/buy-coin', isUser, async function (req, res) {
+  error = req.flash('err_msg');
+  success = req.flash('success_msg');
+  var test = req.session.is_user_logged_in;
+  if (test != true) {
+    res.redirect('/Login');
+  } else {
+    var user_id = req.session.re_us_id;
+    let btcresult = await Tokensettings.findOne()
+    // var btc = btcresult.btcValue;
+    // var eth = btcresult.etherValue;
+    Importwallet.findOne({ 'user_id': user_id, 'login_status': 'login' }, function (err, loginwallet) {
+      if (err) {
+        console.log("Something went wrong");
+      }
+      else {
+        if (loginwallet != "" && loginwallet != undefined) {
+          Userwallet.findOne({ '_id': loginwallet.wallet_id }, function (err, result) {
+            if (err) { console.log("Something went wrong"); }
+            else {
+              wallet_details = result;
+              import_wallet_id = loginwallet._id;
+              let wallet_creation = result.created_at;
+              let indiaTime = new Date().toLocaleString("en-US", { timeZone: "Europe/London" });
+              indiaTime = new Date(indiaTime);
+              let today = indiaTime.toLocaleString();
+              let wallet_time_difference = calculateHours(new Date(wallet_creation), new Date(today));
+              let rown_bal = coinBalanceBNB(wallet_details.wallet_address);
+              res.render('buy-coin', { error, success, wallet_details, btc, eth, import_wallet_id, rown_bal, layout: false, session: req.session, crypto })
+            }
+          });
+        }
+        else {
+          req.flash('err_msg', 'Sorry!, please import or create a wallet first.');
+          res.redirect('/dashboard');
+        }
+      }
+    })
+  }
+});
+
+
+router.post('/ETH', isUser, async function (req, res) {
+  // const form = formidable({ multiples: true });
+  // form.parse(req, (err, fields, files) => {
+  //     if (err) {
+  //       console.log("------------err---------- ",err);
+  //     }
+  console.log("Hello from ETH");
+  console.log("fields========== ", req.body);
+  var user_id = req.body.user_id;
+  var rwn_count = req.body.artweth;
+  Tokensettings.findOne({}).then(rowan_rate => {
+    var rate_per_rwn = rowan_rate.etherValue;
+    // var rate_per_rwn = req.body.rate_per_rowan;
+    console.log("------------ETH ", rate_per_rwn);
+    var total_amnt = (rwn_count) * (rate_per_rwn);
+    console.log("-----------Total amount ", total_amnt);
+    console.log(total_amnt);
+    var sender_wallet_address = req.body.eth_wallet_address_eth;
+    var trnsaction_Id = req.body.transaction_id;
+    var rwn_wallet_address = req.body.wallet_address;
+    var imageFile = req.files;
+    var image;
+    if (!imageFile) {
+      image = ""
+    } else {
+      image = req.files.image.name;
+    }
+    var payment_type = "ETH";
+    var created_at = new Date();
+
+    const order = new OrderDetails({
+      user_id: user_id,
+      rwn_count: rwn_count,
+      rate_per_rwn: rate_per_rwn,
+      total_amnt: total_amnt,
+      trnsaction_Id: trnsaction_Id,
+      rwn_wallet_address: rwn_wallet_address,
+      sender_wallet_address: sender_wallet_address,
+      image: image,
+      payment_type: payment_type,
+      created_at: created_at
+    })
+    order.save()
+    console.log("details",order)
+      .then(result => {
+        // var imgpath = 'public/tx_proof/'+ image;
+        // let testFile = fs.readFileSync(req.files.image.path);
+        // let testBuffer = new Buffer(testFile);
+        // fs.writeFile(imgpath, testBuffer, function (err) {
+        // if (err) return console.log(err);
+        // console.log('Hello World > helloworld.txt');
+        // });
+        req.flash("success_msg", "Thankyou!, Request has been sent successfully and you will get the ARTW in your account after your payment verification.");
+        res.redirect('/buy-coin');
+      })
+      .catch(err => {
+        console.log("-----------err--------------- ", err);
+        req.flash("err_msg", "Sorry!, we were unable to send your data, please try one more time.");
+        res.redirect('/buy-coin');
+      })
+  }).catch(err1 => {
+
+  })
+
+  // })    
+})
 
 
 module.exports = router;

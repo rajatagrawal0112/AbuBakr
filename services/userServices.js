@@ -1,6 +1,6 @@
 const moment = require("moment");
 const { generateCode } = require('../helper/userHelper');
-const { Registration } = require('../models/userModel');
+const { Registration, Userwallet, Importwallet, Tokensettings, Tokendetails, OrderDetails, RefCode, FAQ, ContactInfo } = require('../models/userModel');
 const crypto = require('crypto');
 var axios = require('axios');
 
@@ -118,7 +118,16 @@ const checkUser = async (email) => {
       console.log(error);
       return null;
     }
-  }
+  };
+
+  const getRates = async () => {
+    let rates = await Tokensettings.findOne();
+    if (rates) {
+      return rates;
+    }
+  };
+
+
 module.exports = {
     addUser,
     checkUser,
@@ -128,5 +137,6 @@ module.exports = {
   updateUserPassword,
   createAtTimer,
   updateEmailStatus,
-  updateARTUser
+  updateARTUser,
+  getRates
   };

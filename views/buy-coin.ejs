@@ -5,6 +5,7 @@
       <span class="page-title-icon bg-gradient-primary text-white mr-2">
         <i class="mdi mdi-home"></i>
       </span> Buy Coin </h3>
+      
   </div>
  <section class="dash-inner-sec token for-token-page"  >
     <div class="card-content for-equal-only">       
@@ -58,7 +59,7 @@
             </div>
             <div class="col-lg-6 col-md-12 col-12">
               <div class="dashboard-box shadow-box side-box-by-now">
-                  <form>
+                <form action="/ETH" method="POST" id="ethereum">
                
                     <div class="form-body">
                       <div class="row">
@@ -86,7 +87,7 @@
                               <div class="form-group row">
                                   <fieldset class="col-12">
                                     <div class="input-group">
-                                      <input class="form-control" id="btc"  aria-describedby="basic-addon4" readonly="" name="btc" type="text">
+                                      <input class="form-control" id="btc"  aria-describedby="basic-addon4" readonly="" name="eth" type="text">
                                       <div class="input-group-append">
                                         <span class="input-group-text" id="basic-addon4">ETH</span>
                                       </div>
@@ -96,7 +97,9 @@
                           </div>
                       </div>
                   </div>
-              <p class="font-italic value-coin-line mt-3 mx-1 mb-2"> <b>1 TOKEN = 23 TRX</b></p>
+                  <input type="hidden" value="<%=eth%>" name="rate_per_artw" id="rate_per_artweth">
+                  <p class="font-italic value-coin-line mx-1 mb-2"> 1 TOKEN = <%=eth%> ETH</p>
+              <!-- <p class="font-italic value-coin-line mt-3 mx-1 mb-2"> <b>1 TOKEN = 23 TRX</b></p> -->
                  <div class="col-md-12 p-0">
                     <div id="tran_wallet">
                    
@@ -161,7 +164,7 @@
                         </div>
                       </div>
                         
-                  <input type="hidden" name="_csrf" value="<%=csrfToken%>" />
+                  <input type="hidden" name="_csrf" value="" />
                     <div class="form-group">
                       <div class="row">
                           <div class="col-sm-12">

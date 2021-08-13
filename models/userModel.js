@@ -279,52 +279,6 @@ var Userwalletschema = mongoose.Schema({
 
 var Userwallet = mongoose.model('User_wallet', Userwalletschema);
 
-/**********ImportwalletSchema**********/
-var ImportwalletSchema = mongoose.Schema({
-
-    user_id: {
-        type: String
-    },
-    wallet_id: {
-        type: String
-    },
-    login_status: {
-        type: String
-    },
-    created_at: {
-        type: String
-    },
-    deleted_at: {
-        type: String,
-        default: null
-    },
-    deleted_by: {
-
-        type: String,
-        default: null
-    },
-
-    updated_at: {
-
-        type: String,
-        default: null
-    },
-    status: {
-
-        type: String,
-        enum: ['active', 'inactive'],
-        default: 'active'
-
-    },
-    deleted: {
-
-        type: String,
-        enum: ['0', '1'],
-        default: '0'
-    },
-});
-
-var Importwallet = mongoose.model('import_wallet', ImportwalletSchema);
 
 /**********ImportwalletSchema**********/
 var TokendetailsSchema = mongoose.Schema({
@@ -410,11 +364,137 @@ var TokendetailsSchema = mongoose.Schema({
 
 var Tokendetails = mongoose.model('token_details', TokendetailsSchema);
 
+
+var ARTWsettingsSchema = mongoose.Schema({
+    token_name: {
+        type: String
+    },
+    total_quantity: {
+        type: String
+    },
+    etherValue: {
+        type: String
+    },
+    btcValue: {
+        type: String
+    },
+    usdValue: {
+        type: String
+    },
+    xrpValue: {
+        type: String
+    },
+    ltcValue: {
+        type: String
+    },
+    dashValue: {
+        type: String
+    },
+    bnbValue: {
+        type: String
+    },
+    updated_at: {
+        type: String
+    }
+})
+
+var Tokensettings = mongoose.model('Tokensettings', ARTWsettingsSchema);
+
+var OrderDeatailsSchema = mongoose.Schema({
+
+    user_id: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User_registration'
+    },
+    rwn_count: {
+        type: String
+    },
+    rate_per_rwn: {
+        type: String
+    },
+    total_amnt: {
+        type: String
+    },
+    trnsaction_Id: {
+        type: String
+    },
+    sender_wallet_address: {
+        type: String
+    },
+    rwn_wallet_address: {
+        type: String
+    },
+    image: {
+        type: String
+    },
+    payment_type: {
+        type: String
+    },
+    payment_status: {
+        type: String,
+        default: "Pending"
+    },
+    created_at: {
+        type: String
+    }
+});
+
+var OrderDetails = mongoose.model('OrderDetails', OrderDeatailsSchema);
+
+/**********ImportwalletSchema**********/
+var ImportwalletSchema = mongoose.Schema({
+
+    user_id: {
+        type: String
+    },
+    wallet_id: {
+        type: String
+    },
+    login_status: {
+        type: String
+    },
+    created_at: {
+        type: String
+    },
+    deleted_at: {
+        type: String,
+        default: null
+    },
+    deleted_by: {
+
+        type: String,
+        default: null
+    },
+
+    updated_at: {
+
+        type: String,
+        default: null
+    },
+    status: {
+
+        type: String,
+        enum: ['active', 'inactive'],
+        default: 'active'
+
+    },
+    deleted: {
+
+        type: String,
+        enum: ['0', '1'],
+        default: '0'
+    },
+});
+
+var Importwallet = mongoose.model('import_wallet', ImportwalletSchema);
+
 module.exports = {
     Registration: Registration,
     RefCode: RefCode,
     Tokendetails: Tokendetails,
     Importwallet: Importwallet,
-    Userwallet: Userwallet
+    Userwallet: Userwallet,
+    OrderDetails: OrderDetails,
+    Tokensettings: Tokensettings
     
 };
