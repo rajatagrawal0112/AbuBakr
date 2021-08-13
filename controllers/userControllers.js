@@ -50,7 +50,6 @@ const dashboardPage = async (req, res) => {
         let rates = await userServices.getRates();
         let usdValue = rates.usdValue;
         let etherValue = rates.etherValue;
-        console.log("ethhhvalue",etherValue)
         // let btcValue = rates.btcValue;
         // let bnbValue = rates.bnbValue;
         let loginwallet = await blockchainServices.importWalletFindId(user_id);
@@ -71,16 +70,17 @@ const dashboardPage = async (req, res) => {
                 let balance = await blockchainServices.getCoinBalance(wallet_details.wallet_address);
                 let rown_bal = balance;
                 // let bnbBalance = await balanceMainBNB(wallet_details.wallet_address);
-                // let ethBalance = await balanceMainETH(wallet_details.wallet_address);
-                // let coinbalance = await coinBalanceBNB(wallet_details.wallet_address);
-                // let usd_value = Math.round(usdValue * coinbalance * 100) / 100;
-                // let usd_actual = (1 / parseFloat(usdValue)) * coinbalance;
+                let ethBalance = await balanceMainETH(wallet_details.wallet_address);
+                let coinbalance = await coinBalanceETH(wallet_details.wallet_address);
+                // let usdbalance = await usdBalanceUSD(wallet_details.wallet_address);
+                let usd_value = Math.round(usdValue * coinbalance * 100) / 100;
+                let usd_actual = (1 / parseFloat(usdValue)) * coinbalance;
                 // let bnb_value = (1 / parseFloat(bnbValue)) * bnbBalance;
-                // let eth_value = (1 / parseFloat(etherValue)) * ethBalance;
-                // let full_value = usd_actual + bnb_value + eth_value;
-                // full_value = Math.round(full_value * 100) / 100;
+                let eth_value = (1 / parseFloat(etherValue)) * ethBalance;
+                let full_value = coinbalance + eth_value;
+                full_value = Math.round(full_value * 100) / 100;
                 // res.render('dashboard', { err_msg, success_msg, ref_code, wallet_details, usdValue, etherValue, btcValue, bnbValue, import_wallet_id, balance, rown_bal, layout: false, session: req.session, crypto, all_transaction, wallet_time_difference, moment, bnbBalance, coinbalance, usd_value, ethBalance, full_value });
-                res.render('dashboard', { err_msg, success_msg, ref_code, wallet_details,  import_wallet_id, balance, rown_bal, layout: false, session: req.session, crypto, all_transaction, wallet_time_difference, moment});
+                res.render('dashboard', { err_msg, success_msg, ref_code, wallet_details, full_value, usdValue, ethBalance, etherValue, import_wallet_id, balance, rown_bal, layout: false, session: req.session, crypto, all_transaction, wallet_time_difference, moment, coinbalance, usd_value,});
             
             }
         }

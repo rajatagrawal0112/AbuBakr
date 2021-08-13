@@ -407,8 +407,8 @@ router.get('/buy-coin', isUser, async function (req, res) {
               indiaTime = new Date(indiaTime);
               let today = indiaTime.toLocaleString();
               let wallet_time_difference = calculateHours(new Date(wallet_creation), new Date(today));
-              let rown_bal = coinBalanceBNB(wallet_details.wallet_address);
-              res.render('buy-coin', { error, success, wallet_details, btc, eth, import_wallet_id, rown_bal, layout: false, session: req.session, crypto })
+              // let rown_bal = coinBalanceBNB(wallet_details.wallet_address);
+              res.render('buy-coin', { error, success, wallet_details,  import_wallet_id,  layout: false, session: req.session, crypto })
             }
           });
         }
