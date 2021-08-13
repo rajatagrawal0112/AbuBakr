@@ -75,7 +75,7 @@ background: linear-gradient(to right, #371f74 0%,#88158c 100%); /* W3C, IE10+, F
 }
 .sec-banner {
     height: 100vh;
-    background-image: url(../images/new-img/banner.png);
+    background-image: url(../images/banner.png);
     background-size: 100% 100%;
     background-position: top center;
     background-repeat: no-repeat;

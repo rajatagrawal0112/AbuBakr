@@ -1,7 +1,9 @@
-<%- include('header') %>
-
-
-
+<% if(session.wallet){ %>
+  <%- include('header') %>
+ <% }else{ %>
+  <%- include('uheader') %>
+ <% }%>
+ 
    <div class="heading-row mb-20">
     <div class="row align-item-center">
        <div class="col-lg-6">
