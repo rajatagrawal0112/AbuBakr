@@ -19,6 +19,7 @@ var isUser = auth.isUser;
 //************ to get user data on header using session **********//
 router.use(userControllers.sessionHeader);
 
+router.get('/', userControllers.landingPage);
 
 router.get('/login', userControllers.loginPage);
 

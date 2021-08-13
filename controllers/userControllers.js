@@ -33,6 +33,18 @@ const logout = async (req, res) => {
     res.redirect('/login');
 }
 
+const landingPage = async (req, res) => {
+    let rates = await userServices.getRates();
+    if (rates) {
+        res.render('index', {
+            token_values: rates
+        });
+    }
+    else {
+        res.render('index');
+    }
+}
+
 
 const dashboardPage = async (req, res) => {
     console.log("Welcome to dashboard")
@@ -344,6 +356,7 @@ module.exports = {
     loginPage,
     walletSuccess,
     sendPage,
-    logout
+    logout,
+    landingPage
 
 };
