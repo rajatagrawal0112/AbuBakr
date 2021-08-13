@@ -70,15 +70,15 @@ const submitWallet = async (req, res) => {
             // }
             // console.log("reward",signupReward)
             // await AdminCoinTransfer(address, signupReward);
-            // let userwallet = await blockchainServices.userWalletFindWallet(address);
-            // await blockchainServices.importWalletEntry(user_id, userwallet._id, created)
+            let userwallet = await blockchainServices.userWalletFindWallet(address);
+            await blockchainServices.importWalletEntry(user_id, userwallet._id, created)
             res.redirect('/Create-wallet-success?wallet=' + Buffer.from(address).toString('base64'));
         }
         else {
             req.flash('err_msg', 'Something went wrong.');
             res.redirect('/Create-wallet-dash');
         }
-   
+        
     }
     else {
         res.redirect('/verify-key');

@@ -2,6 +2,8 @@ const moment = require("moment");
 const crypto = require('crypto');
 const { createWalletHelper,checkWalletPrivateHelper} = require('../helper/ethHelper');
 const { Registration, Userwallet, RefCode, Importwallet } = require('../models/userModel');
+const {Tokendetails} = require('../models/userModel');
+
 
 const createWallet = async () => {
     let newData = await createWalletHelper();
@@ -94,6 +96,59 @@ const importWalletFindId = async (id) => {
     }
 };
 
+const importWalletEntry = async (user_id, id, created) => {
+    const importwalletDataObject = {
+        user_id: user_id,
+        wallet_id: id,
+        login_status: 'login',
+        created_at: created,
+        status: 'active',
+        deleted: '0'
+    };
+    try {
+      const importwallet = new Importwallet(importwalletDataObject);
+      await importwallet.save();
+      return importwalletDataObject;
+    } catch (error) {
+      console.log("Error", error.message);
+    }
+};
+
+const userWalletFindId = async (id) => {
+    let userwallet = await Userwallet.findOne({'_id': id});
+    if(userwallet){
+        return userwallet;
+    }
+};
+
+const findTransactions = async (address) => {
+    let transactions  = await Tokendetails.find({ $or: [{ 'receiver_wallet_address': address }, { 'sender_wallet_address': address }] }).sort([['auto', -1]]).exec();
+    if(transactions){
+        return transactions;
+    }
+};
+
+const findTransactionsDate = async (address, date) => {
+    let created_at = moment(date).format('YYYY-MM-DD');
+    console.log(created_at);
+    let transactions  = await Tokendetails.find({ "created_at": created_at, $or: [{ 'receiver_wallet_address': address }, { 'sender_wallet_address': address }] }).sort([['auto', -1]]).exec();
+    if(transactions){
+        return transactions;
+    }
+};
+
+const getCoinBalance = async (account) => {
+    let balance;
+    try {
+        balance = await coinBalanceBNB(account);
+    } catch (error) {
+        balance = 0;
+    }
+    return balance;
+};
+
+
+
 module.exports = {
     createWallet,
     createHash,
@@ -102,5 +157,10 @@ module.exports = {
     userWalletFindWallet,
     checkTxStatus,
     ethRate,
-    importWalletFindId 
+    importWalletFindId,
+    importWalletEntry,
+    userWalletFindId,
+    findTransactions,
+    findTransactionsDate,
+    getCoinBalance
 };
