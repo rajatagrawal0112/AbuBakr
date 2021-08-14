@@ -24,7 +24,7 @@ router.get('/', userControllers.landingPage);
 router.get('/login', userControllers.loginPage);
 
 //***************** get recive-rowan **************//
-router.get('/receive', isUser, function (req, res) {
+router.get('/receive-artw', isUser, function (req, res) {
   err_msg = req.flash('err_msg');
   success_msg = req.flash('success_msg');
   var walletid = req.query.walletid;
@@ -36,14 +36,14 @@ router.get('/receive', isUser, function (req, res) {
       if (err) { console.log('Something is worng to find login status.') }
       else {
         if (response != "" && response != undefined) {
-          let walletdetails = response;
-          let qr_txt = walletdetails.wallet_address;
-          var qr_png = qr.imageSync(qr_txt, { type: 'png' })
+          let wallet_details = response;
+          let qr_txt = wallet_details.wallet_address;
+          // var qr_png = qr.imageSync(qr_txt, { type: 'png' })
           let qr_code_file_name = new Date().getTime() + '.png';
-          fs.writeFileSync('./public/wallet_qr_image/' + qr_code_file_name, qr_png, (err) => {
-            if (err) { console.log(err); }
-          });
-          res.render('receive', { err_msg, success_msg, walletdetails, qr_code_file_name, layout: false, session: req.session });
+          // fs.writeFileSync('./public/wallet_qr_image/' + qr_code_file_name, qr_png, (err) => {
+            // if (err) { console.log(err); }
+          // });
+          res.render('receive', { err_msg, success_msg, wallet_details, qr_code_file_name, layout: false, session: req.session });
         }
       }
     });
