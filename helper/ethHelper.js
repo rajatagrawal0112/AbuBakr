@@ -37,6 +37,14 @@ const balanceMainETH = async (account) => {
     }
 };
 
+const usdBalanceUSD = async (account) => {
+    let balance = await web3js.usd.getBalance(account);
+    if(balance){
+        balance = balance / Math.pow(10,18);
+        return balance;
+    }
+};
+
 const coinBalanceETH = async (account) => {
         let tokenContract = new web3js.eth.Contract(coinABI, coinAddress);
         let balance;
@@ -96,6 +104,7 @@ module.exports = {
     AdminCoinTransfer,
     checkWalletPrivateHelper,
     balanceMainETH,
-    coinBalanceETH
+    coinBalanceETH,
+    usdBalanceUSD
     
 }

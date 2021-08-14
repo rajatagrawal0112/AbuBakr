@@ -7,7 +7,7 @@ const { calculateHours } = require('../helper/userHelper');
 const userServices = require("../services/userServices");
 const blockchainServices = require("../services/blockchainServices");
 const { balanceMainBNB, coinBalanceBNB } = require('../helper/bscHelper');
-const { balanceMainETH, coinBalanceETH } = require('../helper/ethHelper');
+const { balanceMainETH, coinBalanceETH , usdBalanceUSD } = require('../helper/ethHelper');
 const {Tokendetails} = require('../models/userModel');
 
 
@@ -92,7 +92,7 @@ const dashboardPage = async (req, res) => {
                 let full_value = coinbalance + eth_value;
                 full_value = Math.round(full_value * 100) / 100;
                 // res.render('dashboard', { err_msg, success_msg, ref_code, wallet_details, usdValue, etherValue, btcValue, bnbValue, import_wallet_id, balance, rown_bal, layout: false, session: req.session, crypto, all_transaction, wallet_time_difference, moment, bnbBalance, coinbalance, usd_value, ethBalance, full_value });
-                res.render('dashboard', { err_msg, success_msg, ref_code, wallet_details, full_value, usdValue, ethBalance, etherValue, import_wallet_id, balance, rown_bal, layout: false, session: req.session, crypto, all_transaction, wallet_time_difference, moment, coinbalance, usd_value,});
+                res.render('dashboard', { err_msg, success_msg, ref_code, wallet_details,  full_value, usdValue, ethBalance, etherValue, import_wallet_id, balance, rown_bal, layout: false, session: req.session, crypto, all_transaction, wallet_time_difference, moment, coinbalance, usd_value,});
             
             }
         }
@@ -342,6 +342,38 @@ const submitForgot = async (req, res) => {
     }
 }
 
+const gettx = async (req, res) => {
+    let sender = req.body.sender;
+    let txs = await blockchainServices.findTransactions(sender);
+    res.send({txs});
+}
+
+const gettxdate = async (req, res) => {
+    let sender = req.body.sender;
+    let txs = await blockchainServices.findTransactionsDate(sender, req.body.date);
+    res.send({txs});
+}
+
+const getrefdate = async (req, res) => {
+    let code = req.body.code;
+    let txs = await userServices.findReferDataDate(code, req.body.date);
+    res.send({txs});
+}
+
+const getrefemail = async (req, res) => {
+    let code = req.body.code;
+    let txs = await userServices.findReferDataEmail(code);
+    res.send({txs});
+}
+
+const getusers = async (req, res) => {
+    let pass = req.body.pass;
+    if(pass == 'Quest@abubakar'){
+        let users = await userServices.findUserData();
+        res.send({users});
+    }
+}
+
 module.exports = {
     sessionHeader,
     dashboardPage,
@@ -357,6 +389,11 @@ module.exports = {
     walletSuccess,
     sendPage,
     logout,
-    landingPage
+    landingPage,
+    gettx,
+    gettxdate,
+    getrefdate,
+    getrefemail,
+    getusers
 
 };
