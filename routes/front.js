@@ -133,12 +133,12 @@ router.post('/update-profile', isUser, async function (req, res) {
   let name = req.body.name.trim();
   let email = req.body.email.trim();
   let mob = req.body.mob.trim();
-  let country = req.body.country.trim();
+  // let country = req.body.country.trim();
 
   let status = await userServices.updateARTUser(email, name);
   console.log(status);
   if (status == 1) {
-    Registration.update({ _id: user_id }, { $set: { name: name, email: email, mobile_no: mob, country: country } }, { upsert: true }, function (err, result) {
+    Registration.update({ _id: user_id }, { $set: { name: name, email: email, mobile_no: mob} }, { upsert: true }, function (err, result) {
       if (err) {
         console.log("Something went wrong");
         req.flash('err_msg', 'Something went wrong, please try again.');
@@ -240,7 +240,7 @@ router.post('/submit-change-pass', isUser, function (req, res) {
               res.redirect('/change-password');
             } else {
               req.flash('success_msg', 'Password changed successfully.');
-              res.redirect('/change-password');
+              res.redirect('/profile');
             }
           });
         }
