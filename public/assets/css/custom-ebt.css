@@ -1,10 +1,13 @@
+.partner-slider{
+
+}
 
 .partner-slider .item{
 padding: 20px;
 }
 
 .partner-slider .partner-box {
-    background-image: url(../images/new-img/golden-bg.png);
+    background-image: url(../images/golden-bg.png);
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
@@ -261,7 +264,7 @@ content: "";
     /* font-size: 33px; */
 }
 .bg-ifram {
-    background-image: url(../images/new-img/golden-bg.png);
+    background-image: url(../images/golden-bg.png);
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
