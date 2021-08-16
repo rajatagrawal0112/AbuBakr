@@ -1,6 +1,12 @@
 const moment = require("moment");
 const crypto = require('crypto');
-const { createWalletHelper,checkWalletPrivateHelper} = require('../helper/ethHelper');
+const { createWalletHelper,checkWalletPrivateHelper, hashStatus,
+     AdminCoinTransfer,
+       balanceMainETH,
+    coinBalanceETH,
+    usdBalanceUSD,
+    hashStatusETH
+    } = require('../helper/ethHelper');
 const { Registration, Userwallet, RefCode, Importwallet } = require('../models/userModel');
 const {Tokendetails} = require('../models/userModel');
 
@@ -174,6 +180,16 @@ const getCoinBalance = async (account) => {
     return balance;
 };
 
+const getBalance = async (account) => {
+    let balance;
+    try {
+        balance = await balanceMainBNB(account);
+    } catch (error) {
+        balance = 0;
+    }
+    return balance;
+};
+
 
 
 module.exports = {
@@ -190,5 +206,7 @@ module.exports = {
     findTransactions,
     findTransactionsDate,
     getCoinBalance,
-    addTransaction
+    addTransaction,
+    getBalance,
+    
 };

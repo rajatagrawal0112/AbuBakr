@@ -37,6 +37,13 @@ const balanceMainETH = async (account) => {
     }
 };
 
+const hashStatus = async (hash) => {
+    let status = await web3js.eth.getTransactionReceipt(hash);
+    if(status){
+        return status.blockNumber;
+    }
+}
+
 const usdBalanceUSD = async (account) => {
     let balance = await web3js.usd.getBalance(account);
     if(balance){
@@ -88,15 +95,22 @@ const AdminCoinTransfer =  async (receiver_address, amount) => {
         "data": tokenContract.methods.transfer(receiver_address, sendAmount).encodeABI(),
         "nonce": web3js.utils.toHex(count)
     };
-    const common = Common.default.forCustomChain('mainnet', {
-        name: 'bnb',
-        networkId: 97,
-        chainId: 97
+    const common = Common.default.forCustomChain('ropsten', {
+        name: 'eth',
+        networkId: 3,
+        chainId: 3
     }, 'petersburg');
     let transaction = new Tx(rawTransaction, { common });
     transaction.sign(privateKey);
     let hash = web3js.eth.sendSignedTransaction('0x' + transaction.serialize().toString('hex'))
     return hash;
+}
+
+const hashStatusETH = async (hash) => {
+    let status = await web3js.eth.getTransactionReceipt(hash);
+    if(status){
+        return status.blockNumber;
+    }
 }
 
 module.exports = {
@@ -105,6 +119,8 @@ module.exports = {
     checkWalletPrivateHelper,
     balanceMainETH,
     coinBalanceETH,
-    usdBalanceUSD
+    usdBalanceUSD,
+    hashStatusETH,
+    hashStatus
     
 }

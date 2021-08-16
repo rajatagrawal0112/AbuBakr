@@ -7,7 +7,11 @@ const { calculateHours } = require('../helper/userHelper');
 const userServices = require("../services/userServices");
 const blockchainServices = require("../services/blockchainServices");
 const { balanceMainBNB, coinBalanceBNB } = require('../helper/bscHelper');
-const { balanceMainETH, coinBalanceETH , usdBalanceUSD } = require('../helper/ethHelper');
+const { balanceMainETH, coinBalanceETH , usdBalanceUSD,  createWalletHelper,
+    AdminCoinTransfer,
+    checkWalletPrivateHelper,
+    hashStatusETH,
+    hashStatus } = require('../helper/ethHelper');
 const {Tokendetails} = require('../models/userModel');
 
 
@@ -157,6 +161,71 @@ const forgotPage = async (req, res) => {
         }
 }
 
+const submitUser = async (req, res) => {
+    // if(req.body['g-recaptcha-response'] == undefined || req.body['g-recaptcha-response'] == '' || req.body['g-recaptcha-response'] == null){
+    //     req.flash('err_msg', 'Please select captcha first.');
+    //     res.redirect('/Signup');
+    // }
+    // else{
+    //     const secretKey = "6LcQx_AaAAAAAJmTY794kuLiHyURsR_uu-4Wqixg";
+
+    //     const verificationURL = "https://www.google.com/recaptcha/api/siteverify?secret=" + secretKey + "&response=" + req.body['g-recaptcha-response'] + "&remoteip=" + req.connection.remoteAddress;
+    
+    //     request(verificationURL, async function(error, response, body2) {
+    //         let body = JSON.parse(body2);
+    
+    //         if(error && !body.success) {
+    //             req.flash('err_msg', 'Failed captcha verification.');
+    //             res.redirect('/Signup');
+    //         }else{
+                let user = await userServices.checkUser(req.body.email);
+                if (user) {
+                    req.flash('err_msg', 'Email already exists. Please enter another email.');
+                    res.redirect('/Signup');
+                }
+                else {
+                    console.log(req.body.ref_link, '===========req.body.ref_link');
+                    let ref_link;
+                    if (req.body.ref_link != "" && req.body.ref_link != undefined) {
+                        ref_link = req.body.ref_link.trim();
+                    } else {
+                        ref_link = "";
+                    }
+                    if (req.body.password == req.body.conf_pass) {
+                        let mystr = await userServices.createCipher(req.body.password);
+                        let created = await userServices.createAtTimer();
+                        await userServices.addUser(req.body, ref_link, mystr, created, 'pending');
+                        let user = await userServices.checkUser(req.body.email);
+                        if (ref_link != "") {
+                            let refData = await userServices.referData(user.ref_code, ref_link, user._id, created);
+                        }
+                        req.session.success = true;
+                        req.session.re_us_id = user._id;
+                        req.session.re_usr_name = user.name;
+                        req.session.re_usr_email = user.email;
+                        req.session.is_user_logged_in = false;
+                        let otp = user.otp;
+                        let subject = 'OTP for your new account on The Abu Bakar website';
+                        let text = 'Hello '+ req.body.email + ',<br><br>\n\nCongratulations on signing up with The Abu Bakar website!<br><br>\n\n' +
+                        'Your one-time password (OTP) for signing up is: <strong>' + otp +  '</strong>. This would be valid only for the next 10 minutes.' +
+                        '<br><br>\n\nOnce you enter the OTP and create a new wallet, we will credit it by 10 $EBT (worth US$10)  as a limited-time joining bonus.<br><br>\n\n' + 
+                        'Moreover, you can earn more by referring your friends and earn US$5 equivalent $EBT tokens every time your friend joins by using your referral code. Your friend will also get US$5 equivalent $EBT tokens for using your referral code !<br><br>\n\n' +
+                        'Time: ' + created + '<br><br>\n\n'
+                        'If this withdrawal attempt was not made by you it means someone visited your account. It may be an indication you have been the target of a phishing attempt and might want to consider moving your funds to a new wallet.' + '<br><br>\n\n' + 'Regards,<br>\nTeam The Abu Bakar<br>\nhttps://theartwcoin.com';
+                        await mail(req.body.email, subject, text);
+                        req.flash('success_msg', 'User registered. Please verify to continue.');
+                        res.redirect('/verify-account');
+                    }
+                    else {
+                        req.flash('err_msg', 'Password does not match.');
+                        res.redirect('/signup');
+                    }
+                }
+    //         }
+    //     })
+    // }
+}
+
 
 const verifyPage = async (req, res) => {
             let err_msg = req.flash('err_msg');
@@ -193,9 +262,9 @@ const referral = async (req, res) => {
     if (test == true) {
         let user_id = req.session.re_us_id;
         let user = await userServices.checkUserId(user_id);
-        // let ref_code = user.ref_code;
-        // let referrals = await userServices.findReferData(ref_code);
-        res.render('referral-table', { err_msg, success_msg, layout: false, session: req.session})
+        let ref_code = user.ref_code;
+        let referrals = await userServices.findReferData(ref_code);
+        res.render('referral-table', { err_msg, success_msg, layout: false, session: req.session, referrals})
     } else {
         res.redirect('/login');
 
@@ -203,44 +272,44 @@ const referral = async (req, res) => {
 }
 
 
-const submitUser = async (req, res) => {
+// const submitUser = async (req, res) => {
     
-   let user = await userServices.checkUser(req.body.email);
-   console.log(req.body)
-            if (user)
-         {
+//    let user = await userServices.checkUser(req.body.email);
+//    console.log(req.body)
+//             if (user)
+//          {
             
-                req.flash('err_msg', 'Email already exists. Please enter another email.');
-                res.redirect('/signup');
-            }
+//                 req.flash('err_msg', 'Email already exists. Please enter another email.');
+//                 res.redirect('/signup');
+//             }
             
-        if (req.body.password == req.body.conf_pass) {
-            let mystr = await userServices.createCipher(req.body.password);
-            let created = await userServices.createAtTimer();
-            let new_user=await userServices.addUser(req.body, mystr, created);
-            let user = await userServices.checkUser(req.body.email);
-                    await userServices.addUser(req.body);
-                    let otp = new_user.otp;
-                    req.session.success = true;
-                    req.session.re_usr_name = user.name;
-                    req.session.re_usr_email = user.email;
-                    req.session.is_user_logged_in = false;
-                    let subject = 'OTP for your new account on Abu Bakr website';
-                    let text = 'Hello ' + req.body.email + ',<br><br>\n\nCongratulations on signing up with Abu Bakr website!<br><br>\n\n' +
-                        'Your one-time password (OTP) for signing up is: ' + otp + '. This would be valid only for the next 10 minutes.' +
-                        '<br><br>\n\nOnce you enter the OTP and create a new wallet, we will credit it by 50 Abu Bakr (worth US$50)  as a limited-time joining bonus.<br><br>\n\n' +
-                        'Moreover, you can earn more by referring your friends and earn US$10 equivalent Abu Bakr tokens every time your friend joins by using your referral code. Your friend will also get US$10 equivalent Abu Bakr tokens for using your referral code !<br><br>\n\n' +
-                        'Time: ' + user.created + '<br><br>\n\n'
-                    'If this withdrawal attempt was not made by you it means someone visited your account. It may be an indication you have been the target of a phishing attempt and might want to consider moving your funds to a new wallet.' + '<br><br>\n\n' + 'Regards,<br>\nAbu Bakr Team<br>\nhttps://theartwcoin.com';
-                    await mail(req.body.email, subject, text);
-                    req.flash('success_msg', 'User registered. Please verify to continue.');
-                    res.redirect('/verify-account');
-                }
-                else {
-                    req.flash('err_msg', 'Password does not match.');
-                    res.redirect('/signup');
-                }
-}
+//         if (req.body.password == req.body.conf_pass) {
+//             let mystr = await userServices.createCipher(req.body.password);
+//             let created = await userServices.createAtTimer();
+//             let new_user=await userServices.addUser(req.body, mystr, created);
+//             let user = await userServices.checkUser(req.body.email);
+//                     await userServices.addUser(req.body);
+//                     let otp = new_user.otp;
+//                     req.session.success = true;
+//                     req.session.re_usr_name = user.name;
+//                     req.session.re_usr_email = user.email;
+//                     req.session.is_user_logged_in = false;
+//                     let subject = 'OTP for your new account on Abu Bakr website';
+//                     let text = 'Hello ' + req.body.email + ',<br><br>\n\nCongratulations on signing up with Abu Bakr website!<br><br>\n\n' +
+//                         'Your one-time password (OTP) for signing up is: ' + otp + '. This would be valid only for the next 10 minutes.' +
+//                         '<br><br>\n\nOnce you enter the OTP and create a new wallet, we will credit it by 50 Abu Bakr (worth US$50)  as a limited-time joining bonus.<br><br>\n\n' +
+//                         'Moreover, you can earn more by referring your friends and earn US$10 equivalent Abu Bakr tokens every time your friend joins by using your referral code. Your friend will also get US$10 equivalent Abu Bakr tokens for using your referral code !<br><br>\n\n' +
+//                         'Time: ' + user.created + '<br><br>\n\n'
+//                     'If this withdrawal attempt was not made by you it means someone visited your account. It may be an indication you have been the target of a phishing attempt and might want to consider moving your funds to a new wallet.' + '<br><br>\n\n' + 'Regards,<br>\nAbu Bakr Team<br>\nhttps://theartwcoin.com';
+//                     await mail(req.body.email, subject, text);
+//                     req.flash('success_msg', 'User registered. Please verify to continue.');
+//                     res.redirect('/verify-account');
+//                 }
+//                 else {
+//                     req.flash('err_msg', 'Password does not match.');
+//                     res.redirect('/signup');
+//                 }
+// }
     
 const LoginPost = async (req, res) => {
                 let user = await userServices.checkUser(req.body.email);
@@ -283,7 +352,6 @@ const verifyUser = async (req, res) => {
                 let user_otp = req.body.otp;
                 let email = req.session.re_usr_email;  
                 console.log("In controlller verify", email);
-                console.log("hiiii");
                 let user = await userServices.checkUser(email)
             ;
                 console.log("EMAIL",email)
@@ -394,6 +462,9 @@ module.exports = {
     gettxdate,
     getrefdate,
     getrefemail,
-    getusers
+    getusers,
 
+   
+    
+    
 };
