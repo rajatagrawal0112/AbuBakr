@@ -153,8 +153,7 @@
 </div>
 </div>
 <div class="card-body table-responsive">
-<% if(all_transaction !="" && all_transaction!=null)
-{ %>
+
 <table class="table">
 <thead>
 <tr>
@@ -168,6 +167,9 @@
 
 </tr>
 </thead>
+
+<% if(all_transaction !="" && all_transaction!=null)
+{ %>
 <tbody id="user_tr">
 <input type="text" value="<%-address%>" name="sender" id="sender" hidden>
 <% 
