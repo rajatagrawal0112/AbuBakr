@@ -14,7 +14,8 @@ var isUser = function(req, res, next) {
 }
 
 module.exports = {
-    isUser:isUser
+    isUser:isUser,
+    isAdmin:isAdmin
 }
 
 
