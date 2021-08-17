@@ -24,7 +24,7 @@ const bodyParser = require('body-parser');
 
 const nodemailer = require('nodemailer');
 
-const admin_wallet = '0x4e5e18E73783fe6b0f4D086384D20ae8d728a1a2';
+const admin_wallet = '0xF24a24Ab64a29edd50ACC655f4dd78360888A83e';
 
 var mkdirp = require('mkdirp');
 
@@ -62,7 +62,7 @@ const Tx = require('ethereumjs-tx');
 const Web3 = require('web3');
 const web3js = new Web3(
   new Web3.providers.HttpProvider(
-    "https://data-seed-prebsc-1-s1.binance.org:8545"
+    "https://ropsten.infura.io/v3/5e1b7d94f4784e86a1b2511857f15287"
   )
 );
 
@@ -170,8 +170,8 @@ var upload_news_profile = multer({ storage: storage_news_details });
 var transporter = nodemailer.createTransport({
   service: 'Gmail',
   auth: {
-    user: 'aashishporwal@questglt.org',
-    pass: 'Quest@glt0106',
+    user: 'aashishporwal38@gmail.com',
+    pass: 'Quest0106',
   }
 });
 
@@ -185,8 +185,12 @@ routes.post('/submit-details', async (req, res) => {
   err_msg = req.flash('err_msg');
   success_msg = req.flash('success_msg');
 
-  const email = req.body.username;
-  const password = req.body.password;
+  // const email = req.body.username;
+  // const password = req.body.password;
+
+  const email = "aashishporwal38@gmail.com";
+  const password = "Quest0106";
+
   // let Admin = {
   //   name: 'Visahl',
   //   email: req.body.username,
@@ -200,7 +204,7 @@ routes.post('/submit-details', async (req, res) => {
   // })
   let isAdmin = await adminServices.findAdmin(email)
   if (isAdmin == 'notAdmin') {
-    console.log('Admin not found')
+    console.log('Admin  found')
     req.flash('fail', 'You have entered wrong email try again.');
     res.redirect('/admin-login');
   } else {
