@@ -204,7 +204,7 @@ routes.post('/submit-details', async (req, res) => {
   // })
   let isAdmin = await adminServices.findAdmin(email)
   if (isAdmin == 'notAdmin') {
-    console.log('Admin  found')
+    console.log('Admin not found')
     req.flash('fail', 'You have entered wrong email try again.');
     res.redirect('/admin-login');
   } else {
@@ -221,13 +221,13 @@ routes.post('/submit-details', async (req, res) => {
       console.log(`${admin.name} logged in as a admin`);
       const secret = speakeasy.generateSecret({
         length: 10,
-        name: 'Rowan_Energy_Admin',
-        issuer: 'Rowan_Energy_Admin'
+        name: 'Abu_Bakar_Admin',
+        issuer: 'Abu_Bakar_Admin'
       });
       var url = speakeasy.otpauthURL({
         secret: secret.base32,
-        label: 'Rowan_Energy_Admin',
-        issuer: 'Rowan_Energy_Admin',
+        label: 'Abu_Bakar_Admin',
+        issuer: 'Abu_Bakar_Admin',
         encoding: 'base32'
       });
       QRCode.toDataURL(url, async (err, dataURL) => {
@@ -450,7 +450,7 @@ routes.get('/logout1', (req, res) => {
 routes.get('/user-list', middleware_check_login, (req, res) => {
   err_msg = req.flash('err_msg');
   success_msg = req.flash('success_msg');
-  var day = moment(new Date()).format('M/D/YYYY');
+  var day = moment(new Date()).format('MM/DD/YYYY');
   // Registration.find({ deleted: '0', created_at: { $gte: day + ', 00:00:00 AM', $lte: day + ', 12:59:59 PM' } }).sort({ _id: -1 }).lean().then(async (results) => {
   //   console.log('448-results', results)
   Registration.find({ deleted: '0' }).sort({ _id: -1 }).lean().then(async (results) => {
