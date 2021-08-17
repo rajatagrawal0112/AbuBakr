@@ -1,104 +1,143 @@
 <%- include('header') -%>
 
-  <div class="heading-row mb-20">
-    <div class="row align-item-center">
-       <div class="col-lg-6">
-          <h3 class="page-title"><span class="page-title-icon bg-gradient-primary text-white mr-2"><i class="mdi mdi-file-image"></i></span> User List </h3>
-       </div>
+<style type="text/css">
+  td {
+    max-width: 150px !important;
+    overflow: hidden !important
+  }
+
+  #example_wrapper .dataTables_filter {
+    display: none !important;
+  }
+</style>
+<div class="heading-row mb-20">
+  <div class="row align-item-center">
+    <div class="col-lg-6">
+      <h3 class="page-title"><span class="page-title-icon bg-gradient-primary text-white mr-2"><i
+            class="mdi mdi-phone"></i></span> User List </h3>
+    </div>
+    <div class="col-lg-6">
+
+    </div>
   </div>
-  </div>
-  <div class="row">
-    <div class="col-lg-12 grid-margin stretch-card">
-      <div class="card">
-         <div class="card-header">
-           <div class="row">
+</div>
+<div class="row">
+  <div class="col-lg-12 grid-margin stretch-card">
+
+    <div class="card">
+      <div class="card-header">
+        <form class="new-from-search" method="POST" action="/userListByDate">
+
+          <div class="row align-item-center">
             <div class="col-md-2">
-                  <div class="form-group">
-                    <select id="select-new" class="form-control">
-                        <option>Name</option>
-                        <option>Willian Smith</option>
-                        <option>Dia Firdaus</option>
-                        <option>Zimmy Wu</option>
-                      </select>
-                  </div>
-            </div> 
+              <div class="form-group">
+                <label>From</label>
+                <input type="date" class="form-control" name="getMinDate">
+              </div>
+            </div>
             <div class="col-md-2">
-                  <div class="form-group">
-                    <select id="select-new2" class="form-control">
-                        <option>Unique ID</option>
-                        <option>DE1002</option>
-                        <option>FV3485</option>
-                        
-                      </select>
-                  </div>
-            </div>  
+              <div class="form-group">
+                <label>To</label>
+                <input type="date" class="form-control" name="getMaxDate">
+              </div>
+            </div>
             <div class="col-md-2">
-                  <div class="form-group">
-                    <div class="form-group">
-                       <input type="text" class="form-control" id="datepicker" placeholder="Register On">
-                      </div>
+              
+              <button class="btn btn-common bg-gradient-primary mr-2" style="padding: 9px 12px;"
+                type="submit">Search</button>
+            </div>
+            <div class="col-md-4 ml-auto">
+              <div class="search-wrapper text-right">
+                <div class="input-group">
+                  <input type="text" id="s_field" class="form-control">
+                  <div class="input-group-append">
+                    <button type="button" id="search_btn" class="btn btn-common bg-gradient-primary mr-2"
+                      style="height: auto;padding: 0 12px;min-width: auto;"><i class="fa fa-search"></i></button>
                   </div>
-            </div> 
-             <div class="col-md-2">
-                  <div class="form-group">
-                    <select id="select-new4" class="form-control">
-                        <option>Refferd By</option>
-                        <option>Willian Smith</option>
-                        <option>Dia Firdaus</option>
-                        <option>Zimmy Wu</option>
-                      </select>
-                  </div>
-            </div> 
-             
-                        
-         </div>
-         </div> 
-        <div class="card-body table-responsive">
-          <table class="table">
-            <thead>
-              <tr>
-                <th width="5%">S. No.</th>
-                <th width="10%">unique ID</th>
-                <th width="10%">Name</th>
-                <th width="10%">Email</th>
-                <th width="15%">Registered on</th>
-                <th width="10%">Referred by</th>
-                <th width="10%" class="text-success">Earned</th>
-                <th width="10%" class="text-danger">Spent</th>
-                
-                <th width="10%">Mobile Number</th>
-                <th width="10%">Action</th>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
 
 
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>1</td>
-                <td>DE1002</td>
-                <td>John Doe</td>
-                <td>abc@gmail.com</td>
-                <td>30 June, 2019 | 2:00 PM</td>
-                <td>abc</td>
-                <td class="text-success">+77.99</td>
-                 <td class="text-danger">+77.99</td>
-                <td>67857685768</td>
-                
-                 <td>
-                  <div class="edit-icons">
-                   
-                    <a href="/admin-transaction-table"><i class="mdi mdi-eye"></i></a>
-                  </div>
-                </td>
-              </tr>
+      <div class="card-body table-responsive">
+        <%if(err_msg !="" ){%>
+          <span style="color: red; ">
+            <%= err_msg%>
+          </span>
+          <%}%>
+            <%if(success_msg !="" ){%>
+              <span style="color: #099441; ">
+                <%=success_msg%>
+              </span>
+              <%}%>
+                <table class="table" id="example">
+                  <thead>
+                    <tr>
+                      <th width="10%">S. No.</th>
+                      <th width="20%">Name</th>
+                      <th width="20%">Profile</th>
+                      <th width="25%">Email</th>
+                      <th width="30%">Wallet Address</th>
+                      <th width="30%">Status</th>
+                      <th width="30%">Change Password</th>
+                      <th width="15%">Created At</th>
+                    </tr>
+                  </thead>
+                  <tbody id="tbody">
+                    <% var i=1; if(user_details.length> 0){
+                      user_details.forEach(function(details){
+                      %>
 
-               
-            </tbody>
-          </table>
-        </div>
+                      <tr>
+                        <td>
+                          <%- i %>
+                        </td>
+
+                        <td>
+                          <%- details.name%>
+                        </td>
+                        <%if(details.profile_image){%>
+                          <td> <img src="/upload_user_profile/<%=details.profile_image%>"
+                              style="width: 50px;height: 50px;"></td>
+                          <%}else{%>
+                            <td><img src="admin_assets/images/faces-clipart/pic-1.png"
+                                style="width: 50px;height: 50px;"></td>
+                            <%}%>
+                              <td>
+                                <%- details.email%>
+                              </td>
+
+                              <td>
+                                <%- details.wallet_address%>
+                              </td>
+
+                              <td>
+                                <%- details.status%>
+                                  <%if(details.status=="active" ){%>
+                                    <a href="/deactiveUser?id=<%=details.email%>">Deactive</a>
+                                    <%}else{%>
+                                      <a href="/activeUser?id=<%=details.email%>">Active</a>
+                                      <%}%>
+                              </td>
+                              <td><a href="/edit-user?id=<%=details.email%>">Change Password</a></td>
+                              <td>
+                                <%- details.created_at%>
+                              </td>
+
+
+                      </tr>
+
+                      <% i++; }) } %>
+
+                  </tbody>
+                </table>
       </div>
     </div>
   </div>
+</div>
 
   <%- include('footer') -%>
 

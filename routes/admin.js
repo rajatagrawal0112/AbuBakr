@@ -1153,12 +1153,12 @@ routes.get('/referral', (req, res, next) => {
   var sender_address = req.query.sender_address;
   var user_id = req.query.user_id;
   var orderId = req.query.orderId;
-  var sender_private_key = '0de3838ca99bd85255bc630733f7d72484508cc3a8cd9c03a59d6d97aa9bf83b';
+  var sender_private_key = 'ca45278ef6a080b00e4b38f998362f622fa8a336b9d75f20eb0609e53cfc1d16';
   var privateKey = Buffer.from(sender_private_key, 'hex');
 
   var refID = req.query.refID;
   var user1 = tokenContractABI;
-  var tokenContract = new web3js.eth.Contract(user1, "0xb1b370178BfCe52Db662fbEF0AF0EE7DDB2f5719");
+  var tokenContract = new web3js.eth.Contract(user1, "0xF24a24Ab64a29edd50ACC655f4dd78360888A83e");
   // if(bonusWalletAddress!=""){
   var count_balance1 = parseInt(result);
   rown_bal1 = count_balance1 / Math.pow(10, 7);
@@ -1305,14 +1305,14 @@ routes.get('/artw-token-history', middleware_check_login, (req, res) => {
 
 });
 
-routes.get('/update-token_details',  async (req, res) => {
+routes.get('/update-token',  async (req, res) => {
   err_msg = req.flash('err_msg');
   success_msg = req.flash('success_msg');
   await Tokensettings.findOne().then(async result => {
     console.log("result-------", result);
-    let artw_bal = await bscHelper.coinBalanceBNB(admin_wallet)
+    let ebt_bal = await ethHelper.coinBalanceETH(admin_wallet)
     res.render('admin/front-admin/update-token', {
-      err_msg, success_msg, layout: false, session: req.session, Name: req.session.user_name, profile_image: req.session.profile_image, result, actual_balance: artw_bal
+      err_msg, success_msg, layout: false, session: req.session, Name: req.session.user_name, profile_image: req.session.profile_image, result, actual_balance: ebt_bal
     })
 
   })
@@ -1321,7 +1321,7 @@ routes.get('/update-token_details',  async (req, res) => {
     })
 })
 
-routes.post('/update-token-details', middleware_check_login, (req, res) => {
+routes.post('/update-token-details', (req, res) => {
   console.log("req.body------------- ", req.body);
   var id = req.body.edit_id.trim();
   var token_name = req.body.token_name;
@@ -2052,7 +2052,7 @@ routes.get('/delete-problem', (req, res) => {
 })
 
 //////////*****************solutions********************////////
-routes.get('/solutions',  (req, res) => {
+routes.get('/solution',  (req, res) => {
 
   solutionInfo.find({ deleted: '0' }).then((solutionsDetails) => {
     //console.log(solutionsDetails)
@@ -2082,7 +2082,7 @@ routes.post('/add-new-solution', middleware_check_login, (req, res) => {
       solutionImage = imageFile;
       if (imageFile != "") {
         console.log(files.solutionImage.name)
-        var imgpath = 'public/home/solutions/' + imageFile;
+        var imgpath = 'public/home/solution/' + imageFile;
         let testFile = fs.readFileSync(files.solutionImage.path);
         let testBuffer = new Buffer(testFile);
         fs.writeFile(imgpath, testBuffer, function (err) {
@@ -2106,7 +2106,7 @@ routes.post('/add-new-solution', middleware_check_login, (req, res) => {
     solution.save().then(result => {
       console.log('solution added', result);
       req.flash('success_msg', 'solution added successfully.');
-      res.redirect('/solutions');
+      res.redirect('/solution');
     })
       .catch(err => {
         console.log(err);
@@ -2139,7 +2139,7 @@ routes.post('/edit-solution', middleware_check_login, (req, res) => {
       solutionImage = imageFile;
       if (imageFile != "") {
         console.log(files.solutionImage.name)
-        var imgpath = 'public/home/solutions/' + imageFile;
+        var imgpath = 'public/home/solution/' + imageFile;
         let testFile = fs.readFileSync(files.solutionImage.path);
         let testBuffer = new Buffer(testFile);
         fs.writeFile(imgpath, testBuffer, function (err) {
@@ -2170,11 +2170,11 @@ routes.post('/edit-solution', middleware_check_login, (req, res) => {
     }, { upsert: true }, function (err) {
       if (err) {
         req.flash('err_msg', 'Something went wrong.');
-        res.redirect('/solutions');
+        res.redirect('/solution');
       }
       else {
         req.flash('success_msg', 'solution  updated successfully.');
-        res.redirect('/solutions');
+        res.redirect('/solution');
       }
     })
   });
@@ -2186,7 +2186,7 @@ routes.get('/delete-solution', (req, res) => {
   solutionInfo.findOne({ _id: id, deleted: '0' }).then(async (solution) => {
     solution.deleted = '1'
     await solution.save()
-    res.redirect('/solutions')
+    res.redirect('/solution')
   })
 
 })
@@ -2195,7 +2195,7 @@ routes.get('/delete-solution', (req, res) => {
 routes.get('/token-allocation', (req, res) => {
   tokenAllocation.find({ deleted: '0' }).then((tokenAllocationDetails) => {
     //console.log(solutionsDetails)
-    res.render('admin/front-admin/token-allocations', { err_msg, success_msg, Name: req.session.user_name, profile_image: req.session.profile_image, session: req.session, expressFlash: req.flash(), tokenAllocationDetails })
+    res.render('admin/front-admin/token-allocation', { err_msg, success_msg, Name: req.session.user_name, profile_image: req.session.profile_image, session: req.session, expressFlash: req.flash(), tokenAllocationDetails })
   }, (err) => {
     res.send('Some thing went wrong try again.');
   }).catch((e) => {
@@ -2986,7 +2986,7 @@ routes.get('/delete-terms-n-conditons', (req, res) => {
 
 })
 ////////////**************  Privacy-Policy ************///////////////
-routes.get('/admin-privacy-policy',  (req, res) => {
+routes.get('/privacy-policy',  (req, res) => {
   privacyPolicyInfo.find({ deleted: '0' }).then((privacyPolicyDetais) => {
     res.render('admin/front-admin/privacy-policy', { err_msg, success_msg, Name: req.session.user_name, profile_image: req.session.profile_image, session: req.session, expressFlash: req.flash(), privacyPolicyDetais })
   }, (err) => {
@@ -3022,7 +3022,7 @@ routes.post('/add-admin-privacy-policy', middleware_check_login, (req, res) => {
     privacyPolicy.save().then(result => {
       console.log('data added', result);
       req.flash('success_msg', ' privacyPolicy added successfully.');
-      res.redirect('/admin-privacy-policy');
+      res.redirect('/privacy-policy');
     })
       .catch(err => {
         console.log(err);
@@ -3069,11 +3069,11 @@ routes.post('/edit-admin-privacy-policy', middleware_check_login, (req, res) => 
     }, { upsert: true }, function (err) {
       if (err) {
         req.flash('err_msg', 'Something went wrong.');
-        res.redirect('/admin-privacy-policy');
+        res.redirect('/privacy-policy');
       }
       else {
         req.flash('success_msg', 'privacyPolicy updated successfully.');
-        res.redirect('/admin-privacy-policy');
+        res.redirect('/privacy-policy');
       }
     })
   });
@@ -3085,7 +3085,7 @@ routes.get('/delete-admin-privacy-policy',  (req, res) => {
   privacyPolicyInfo.findOne({ _id: id, deleted: '0' }).then(async (privacyPolicy) => {
     privacyPolicy.deleted = '1'
     await privacyPolicy.save()
-    res.redirect('/admin-privacy-policy')
+    res.redirect('/privacy-policy')
   })
 
 })
@@ -3117,21 +3117,23 @@ routes.get('/feedback-list', (req, res) => {
   res.render('admin/front-admin/feedback-list', { err_msg, success_msg, Name: req.session.user_name, profile_image: req.session.profile_image, session: req.session, expressFlash: req.flash() })
 })
 
-// routes.get('/order-history', middleware_check_login, (req, res) => {
+routes.get('/order-history', (req, res) => {
 
-//   OrderDetails.find({}).then((orderDetails) => {
-//     //console.log(problemDetails)
-//     res.render('admin/front-admin/order-history', { err_msg, success_msg, Name: req.session.user_name, profile_image: req.session.profile_image, session: req.session, expressFlash: req.flash(), orderDetails })
-//   }, (err) => {
-//     res.send('Some thing went wrong try again.');
-//   }).catch((e) => {
-//     res.send('Some thing went wrong try again.');
-//   });
-// })
+  OrderDetails.find({}).then((orderDetails) => {
+    //console.log(problemDetails)
+    res.render('admin/front-admin/order-history', { err_msg, success_msg, Name: req.session.user_name, profile_image: req.session.profile_image, session: req.session, expressFlash: req.flash(), orderDetails })
+  }, (err) => {
+    res.send('Some thing went wrong try again.');
+  }).catch((e) => {
+    res.send('Some thing went wrong try again.');
+  });
+})
 
 routes.get('/admin-referral-table',  (req, res) => {
+  err_msg = req.flash('err_msg');
+  success_msg = req.flash('success_msg');
 
-  res.render('admin/front-admin/referral-table', { err_msg, success_msg, Name: req.session.user_name, profile_image: req.session.profile_image, session: req.session, expressFlash: req.flash() })
+  res.render('admin/front-admin/admin-referral-table', { err_msg, success_msg, Name: req.session.user_name, profile_image: req.session.profile_image, session: req.session, expressFlash: req.flash() })
 })
 
 routes.get('/summary', (req, res) => {
@@ -3146,6 +3148,8 @@ routes.get('/bonus-persent', (req, res) => {
 
 
 routes.get('/admin-transaction-table',  (req, res) => {
+  err_msg = req.flash('err_msg');
+  success_msg = req.flash('success_msg');
   res.render('admin/front-admin/admin-transaction-table', { err_msg, success_msg, Name: req.session.user_name, profile_image: req.session.profile_image, session: req.session, expressFlash: req.flash() })
 })
 
