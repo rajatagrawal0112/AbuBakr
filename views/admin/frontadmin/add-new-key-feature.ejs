@@ -3,12 +3,12 @@
   <div class="heading-row mb-20">
     <div class="row align-item-center">
        <div class="col-lg-6">
-          <h3 class="page-title"><span class="page-title-icon bg-gradient-primary text-white mr-2"><i class="mdi mdi-account-multiple"></i></span> Add New Partner </h3>
+          <h3 class="page-title"><span class="page-title-icon bg-gradient-primary text-white mr-2"><i class="mdi mdi-home"></i></span> About Key Features </h3>
        </div>
         <div class="col-lg-6">
          <div class="text-right">
            <div>
-             <a href="partner-list.ejs" class="btn btn-common bg-gradient-primary">Go Back</a>
+             <a href="/key-features" class="btn btn-common bg-gradient-primary">Go Back</a>
            </div>
          </div>
        </div>
@@ -23,43 +23,17 @@
                  <div>
                    <div class="profile-form mt-20">
                       <div class="row">
-                        <div class="col-md-4">
-                             <div class="form-group">
-                                <label>Partner Logo Image(Size in Pixel 210*65)</label>
-                                <p class="note"></p>
-                                 <div class="border-gray document-upload-box">
-                                       <div class="text-left">
-                                          <div class="uploader-img">
-                                            <img id="user_profile_image_preview" src="assets/images/other/banner-dummy.jpg" class="m-t-5" >
-                                          </div>
-                                           <div class="input-group mb-3 mb-3 verification">
-                                              <input type="text" class="form-control" readonly="" id="text_img_name" data-rule-required="true" data-msg-required="Please select your Id.">
-                                              <span class="input-group-btn">
-                                                <span class="btn btn-common bg-gradient-primary btn-file1">
-                                                Upload <input type="file" id="imgInp6" value="" name="image" accept="image/*" onchange="readURL(this);">
-                                                 <input type="hidden" name="old_image" value="">
-                                                </span>   
-                                              </span>
-                                              <button class="btn btn-common bg-gradient-primary ml-15">Remove</button>
-                                           </div>
-                                       </div>
-                                  </div>
-                              </div>
-                        </div>
+                       
                         <div class="col-md-8">
                             <div class="row">
+                             
                               <div class="col-md-12">
                                  <div class="form-group">
                                     <label>Tittle</label>
                                     <input type="text" class="form-control">
                                   </div>
                               </div>
-                                <div class="col-md-12">
-                                 <div class="form-group">
-                                    <label>URL</label>
-                                    <input type="text" class="form-control">
-                                  </div>
-                              </div> 
+                            
                               <div class="col-md-12">
                                 <div class="form-group">
                                   <label>Status</label>
@@ -70,16 +44,28 @@
                                     </select>
                                    </div>
                                 </div>
-                              </div>                           
-                            </div>                              
+                              </div>
+                            </div>
+                             <div class="row">
+                              <div class="col-md-12">
+                                  <div class="form-group">
+                                    <label>Content</label>
+                                    <textarea class="form-control" name="editor1"></textarea>
+                                  </div>
+                              </div>
+                            </div>
+                           
+                            
+                              
                         </div>
+                      
                       </div>
                     
                       
                      
                      
                   
-                      <div class="popup-btn text-center">
+                      <div class="popup-btn text-left">
                         <a href="" class="btn btn-common bg-gradient-primary">Save</a>
                         <a href="" class="btn btn-common bg-gradient-primary">Cancel</a>
                       </div>
@@ -96,7 +82,7 @@
     </div>
 
 
-    <%- include('layout/footer'); -%>
+<%- include('layout/footer'); -%>
 <script src="https://cdn.ckeditor.com/4.13.1/standard/ckeditor.js"></script>
  <script>
         CKEDITOR.replace( 'editor1' );

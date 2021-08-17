@@ -198,7 +198,7 @@ routes.post('/submit-details', async (req, res) => {
   
     if (Admin.email == 'aashishporwal@questglt.org' && Admin.password == '123456') {
       console.log('Admin found')
-       res.redirect('/main-dashboard');
+       res.redirect('/maindashboard');
     } else {
         res.redirect('/admin-login');
       }
@@ -274,7 +274,7 @@ routes.post('/submit-details', async (req, res) => {
 // })
 
 
-routes.get('/main-dashboard', middleware_check_login, async (req, res) => {
+routes.get('/maindashboard', middleware_check_login, async (req, res) => {
   const total_orders = 0;
   const total_tokens_count = [];
 
@@ -286,11 +286,11 @@ routes.get('/main-dashboard', middleware_check_login, async (req, res) => {
 
   let totalArtwRewardsDestributed = await adminServices.totalArtwRewardsDestributed(total_users_s)
 
-  const ARTW_bal = await ethHelper.coinBalanceETH(admin_wallet) //artw balance
-  console.log(`290-artw`, ARTW_bal)
+  const EBT_bal = await ethHelper.coinBalanceETH(admin_wallet) //artw balance
+  console.log(`290-ebt`, EBT_bal)
 
-  const ebtSold = await adminServices.EBTSold(ARTW_bal)
-  console.log(`290-artwSold`, ebtSold)
+  const ebtSold = await adminServices.EBTSold(EBT_bal)
+  console.log(`290-ebtSold`, ebtSold)
 
   const actual_balance = await ethHelper.balanceMainETH(admin_wallet) //ethereum balance
   console.log(`293-eth`, actual_balance)
@@ -305,8 +305,8 @@ routes.get('/main-dashboard', middleware_check_login, async (req, res) => {
     res.redirect('/admin-login');
   }
   else {
-    res.render('admin/front-admin/main-dashboard.ejs', {
-      Name: req.session.user_name, session: req.session, profile_image: req.session.profile_image, total_orders_s: total_orders, ARTW_balance: ARTW_bal, ether_balance: actual_balance, main_rwn_vault: "0", total_users_s, artwSold, totalArtwRewardsDestributed, usersRegisteredThisMonth
+    res.render('/admin/frontadmin/maindashboard.ejs', {
+      Name: req.session.user_name, session: req.session, profile_image: req.session.profile_image, total_orders_s: total_orders, EBT_balance: EBT_bal, ether_balance: actual_balance, main_rwn_vault: "0", total_users_s, ebtSold, totalArtwRewardsDestributed, usersRegisteredThisMonth
     });
   }
 })

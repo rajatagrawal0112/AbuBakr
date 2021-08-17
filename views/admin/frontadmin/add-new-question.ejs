@@ -3,12 +3,12 @@
   <div class="heading-row mb-20">
     <div class="row align-item-center">
        <div class="col-lg-6">
-          <h3 class="page-title"><span class="page-title-icon bg-gradient-primary text-white mr-2"><i class="mdi mdi-home"></i></span> About Us </h3>
+          <h3 class="page-title"><span class="page-title-icon bg-gradient-primary text-white mr-2"><i class="mdi mdi-comment-question-outline"></i></span> Add New Question </h3>
        </div>
         <div class="col-lg-6">
          <div class="text-right">
            <div>
-             <a href="main-dashboard.ejs" class="btn btn-common bg-gradient-primary">Go Back</a>
+             <a href="/faq-list" class="btn btn-common bg-gradient-primary">Go Back</a>
            </div>
          </div>
        </div>
@@ -25,51 +25,46 @@
                       <div class="row">
                         <div class="col-md-8">
                             <div class="row">
-                              <div class="col-md-12">
+                              <div class="col-md-6">
                                  <div class="form-group">
-                                    <label>Tittle</label>
+                                    <label>FAQ Question</label>
                                     <input type="text" class="form-control">
                                   </div>
                               </div>
-                            </div>
-                             <div class="row">
-                              <div class="col-md-12">
-                                 <div class="form-group">
-                                  <label>File upload(Image Size : 700*600)</label>
-                                  <input type="file" name="img[]" class="file-upload-default">
-                                  <div class="input-group col-xs-12">
-                                    <input type="text" class="form-control file-upload-info" disabled="" placeholder="Upload Image">
-                                    <span class="input-group-append">
-                                      <button class="file-upload-browse btn btn-gradient-primary" type="button">Upload</button>
-                                    </span>
-                                  </div>
+                              <div class="col-md-6">
+                                <div class="form-group">
+                                  <label>Status</label>
+                                   <div class="box">
+                                     <select class="form-control">
+                                      <option>Active</option>
+                                      <option>Inactive</option>
+                                    </select>
+                                   </div>
                                 </div>
                               </div>
-                            </div>                           
+                            </div>
                             <div class="row">
                               <div class="col-md-12">
                                   <div class="form-group">
-                                    <label>Content</label>
+                                    <label>FAQ Answer</label>
                                     <textarea class="form-control" name="editor1"></textarea>
                                   </div>
                               </div>
                             </div>
-                            
+                             <div class="popup-btn text-center">
+                              <a href="" class="btn btn-common bg-gradient-primary">Save</a>
+                              <a href="" class="btn btn-common bg-gradient-primary">Cancel</a>
+                            </div>
                               
                         </div>
-                        <div class="col-md-4">
-                         
-                        </div>
+                       
                       </div>
                     
                       
                      
                      
                   
-                      <div class="popup-btn">
-                        <a href="" class="btn btn-common bg-gradient-primary">Save</a>
-                        <a href="" class="btn btn-common bg-gradient-primary">Cancel</a>
-                      </div>
+                     
                       
                
 
@@ -83,7 +78,7 @@
     </div>
 
 
-<%- include('layout/footer'); -%>
+    <%- include('layout/footer'); -%>
 <script src="https://cdn.ckeditor.com/4.13.1/standard/ckeditor.js"></script>
  <script>
         CKEDITOR.replace( 'editor1' );

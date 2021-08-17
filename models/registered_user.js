@@ -65,6 +65,26 @@ var UserSchema =  new moongoose.Schema({
 		type:String,
 		required:true
 	},
+	qr_secret: {
+
+        type: String,
+
+    },
+    qr_status: {
+
+        type: String,
+
+    },
+    ref_code: {
+
+        type: String,
+
+    },
+    ref_from: {
+
+        type: String,
+
+    },
 
 	created_at: { 
 					type: Date
