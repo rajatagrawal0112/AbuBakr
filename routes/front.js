@@ -23,6 +23,8 @@ router.get('/', userControllers.landingPage);
 
 router.get('/login', userControllers.loginPage);
 
+router.get('/logout', userControllers.logout);
+
 //***************** get recive-rowan **************//
 router.get('/receive-artw', isUser, function (req, res) {
   err_msg = req.flash('err_msg');

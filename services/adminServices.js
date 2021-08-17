@@ -76,12 +76,12 @@ const deactivateUser = async (req, res) => {
 }
 
 
-const artwSold = async (admin_bal) => {
+const EBTSold = async (admin_bal) => {
 
-    const total_ARTW = 300000000000000000000000000;
-    const total = parseFloat(total_ARTW) / Math.pow(10, 18);
-    const artwSold = total - admin_bal
-    return artwSold
+    const total_EBT = 300000000000000000000000000;
+    const total = parseFloat(total_EBT) / Math.pow(10, 18);
+    const ebtSold = total - admin_bal
+    return ebtSold
 }
 
 const totalArtwRewardsDestributed = async (total_users_s) => {
@@ -116,7 +116,7 @@ module.exports = {
     createSession,
     activateUser,
     deactivateUser,
-    artwSold,
+    EBTSold,
     totalArtwRewardsDestributed,
     usersRegisteredThisMonth
 }

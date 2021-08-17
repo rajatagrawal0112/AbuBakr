@@ -185,68 +185,93 @@ routes.post('/submit-details', async (req, res) => {
   err_msg = req.flash('err_msg');
   success_msg = req.flash('success_msg');
 
-  // const email = req.body.username;
-  // const password = req.body.password;
+  const email = req.body.email;
+  const password = req.body.password;
 
-  const email = "aashishporwal38@gmail.com";
-  const password = "Quest0106";
+  let Admin = {
+    name: 'Quest',
+    email: 'aashishporwal@questglt.org',
+    password: '123456',
+    user_type: 'admin'
+  };
 
-  // let Admin = {
-  //   name: 'Visahl',
-  //   email: req.body.username,
-  //   password: mystr,
-  //   user_type: 'admin'
-  // };
+  
+    if (Admin.email == 'aashishporwal@questglt.org' && Admin.password == '123456') {
+      console.log('Admin found')
+       res.redirect('/main-dashboard');
+    } else {
+        res.redirect('/admin-login');
+      }
 
-  // AdminInfo.create(Admin, function (res, err) {
-  //   console.log(res)
-  //   console.log(err)
-  // })
-  let isAdmin = await adminServices.findAdmin(email)
-  if (isAdmin == 'notAdmin') {
-    console.log('Admin not found')
-    req.flash('fail', 'You have entered wrong email try again.');
-    res.redirect('/admin-login');
-  } else {
-    const mystr = await userServices.createCipher(password);
-    let checkPass = await adminServices.checkAdminPass(email, mystr)
+});
 
-    if (checkPass == 'wrongPassword') {
-      req.flash('fail', 'You have entered wrong password try again.');
-      res.redirect('/admin-login');
-    }
-    else {
-      let admin = isAdmin
-      //console.log(admin._id);
-      console.log(`${admin.name} logged in as a admin`);
-      const secret = speakeasy.generateSecret({
-        length: 10,
-        name: 'Abu_Bakar_Admin',
-        issuer: 'Abu_Bakar_Admin'
-      });
-      var url = speakeasy.otpauthURL({
-        secret: secret.base32,
-        label: 'Abu_Bakar_Admin',
-        issuer: 'Abu_Bakar_Admin',
-        encoding: 'base32'
-      });
-      QRCode.toDataURL(url, async (err, dataURL) => {
-        var secret_code = secret.base32;
-        var qrcode_data = dataURL
-        var user_details = { user_id: admin._id, name: admin.name };
 
-        /******Store in session*******/
+// routes.post('/submit-details', async (req, res) => {
+//   err_msg = req.flash('err_msg');
+//   success_msg = req.flash('success_msg');
 
-        let newSession = await adminServices.createSession(req, admin)
-        var err_msg = '';
-        var success_msg = '';
+//   // const email = req.body.username;
+//   // const password = req.body.password;
 
-        res.redirect('/main-dashboard');
+//   const email = "aashishporwal38@gmail.com";
+//   const password = "Quest0106";
 
-      })
-    }
-  }
-})
+//   // let Admin = {
+//   //   name: 'Visahl',
+//   //   email: req.body.username,
+//   //   password: mystr,
+//   //   user_type: 'admin'
+//   // };
+
+//   // AdminInfo.create(Admin, function (res, err) {
+//   //   console.log(res)
+//   //   console.log(err)
+//   // })
+//   let isAdmin = await adminServices.findAdmin(email)
+//   if (isAdmin == 'notAdmin') {
+//     console.log('Admin not found')
+//     req.flash('fail', 'You have entered wrong email try again.');
+//     res.redirect('/admin-login');
+//   } else {
+//     const mystr = await userServices.createCipher(password);
+//     let checkPass = await adminServices.checkAdminPass(email, mystr)
+
+//     if (checkPass == 'wrongPassword') {
+//       req.flash('fail', 'You have entered wrong password try again.');
+//       res.redirect('/admin-login');
+//     }
+//     else {
+//       let admin = isAdmin
+//       //console.log(admin._id);
+//       console.log(`${admin.name} logged in as a admin`);
+//       const secret = speakeasy.generateSecret({
+//         length: 10,
+//         name: 'Abu_Bakar_Admin',
+//         issuer: 'Abu_Bakar_Admin'
+//       });
+//       var url = speakeasy.otpauthURL({
+//         secret: secret.base32,
+//         label: 'Abu_Bakar_Admin',
+//         issuer: 'Abu_Bakar_Admin',
+//         encoding: 'base32'
+//       });
+//       QRCode.toDataURL(url, async (err, dataURL) => {
+//         var secret_code = secret.base32;
+//         var qrcode_data = dataURL
+//         var user_details = { user_id: admin._id, name: admin.name };
+
+//         /******Store in session*******/
+
+//         let newSession = await adminServices.createSession(req, admin)
+//         var err_msg = '';
+//         var success_msg = '';
+
+//         res.redirect('/main-dashboard');
+
+//       })
+//     }
+//   }
+// })
 
 
 routes.get('/main-dashboard', middleware_check_login, async (req, res) => {
@@ -261,11 +286,11 @@ routes.get('/main-dashboard', middleware_check_login, async (req, res) => {
 
   let totalArtwRewardsDestributed = await adminServices.totalArtwRewardsDestributed(total_users_s)
 
-  const ARTW_bal = await bscHelper.coinBalanceBNB(admin_wallet) //artw balance
+  const ARTW_bal = await ethHelper.coinBalanceETH(admin_wallet) //artw balance
   console.log(`290-artw`, ARTW_bal)
 
-  const artwSold = await adminServices.artwSold(ARTW_bal)
-  console.log(`290-artwSold`, artwSold)
+  const ebtSold = await adminServices.EBTSold(ARTW_bal)
+  console.log(`290-artwSold`, ebtSold)
 
   const actual_balance = await ethHelper.balanceMainETH(admin_wallet) //ethereum balance
   console.log(`293-eth`, actual_balance)
