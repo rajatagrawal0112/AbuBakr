@@ -1,5 +1,5 @@
 var isAdmin = function(req, res, next) {
-    res.redirect('/admin');
+    res.redirect('/admin-login');
 }
 
 var isUser = function(req, res, next) {

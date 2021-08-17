@@ -1,36 +1,25 @@
 const express = require('express');
-
 const session = require('express-session');
-
 const flash = require('req-flash');
-
 const multer = require('multer');
 var crypto = require('crypto');
-
 const request = require('request');
+const auth = require('../config/auth');
 // var async = require('async');
 const fs = require('fs');
-
 var speakeasy = require('speakeasy');
 var QRCode = require('qrcode');
 // var bip39 = require('bip39');
-
 // var qr = require('qr-image'); 
 const formidable = require('formidable');
-
+var router = express.Router();
 const routes = require('express').Router();
-
 const bodyParser = require('body-parser');
-
 const nodemailer = require('nodemailer');
-
 const admin_wallet = '0xF24a24Ab64a29edd50ACC655f4dd78360888A83e';
-
 var mkdirp = require('mkdirp');
-
 const bcrypt = require('bcryptjs');
 const { middleware_check_login, check_user_login } = require('../middleware/login_middleware');
-
 const bscHelper = require("../helper/bscHelper")
 const ethHelper = require("../helper/ethHelper")
 const userServices = require("../services/userServices")
@@ -45,9 +34,7 @@ let { Registration, Userwallet, Importwallet, Tokensettings, Tokendetails, Order
 let { VAULT, MVAULT } = require('../models/vault');
 let { VaultRate } = require('../models/vault_admin');
 const { AdminInfo } = require('../models/admin');
-
 const mailer = require('../helper/mailer.js');
-
 const Tx = require('ethereumjs-tx');
 
 // var {Registration,Userwallet,Importwallet,Tokensettings,Tokendetails,OrderDetails,RefCode,FAQ,ContactInfo} = require('../models/userModel');
@@ -55,9 +42,6 @@ const Tx = require('ethereumjs-tx');
 
 // const {BannerInfo,GetInTouch,PartnerInfo,MediaCoverage} = require('../model/schema/home_content');
 // const {POC,POCDaily,EnergyBuyer,CRate,PocInfo,UserBuyer,PocNew,PreOrder,BusinessCompany,InPounds,AdminPocBalances,EmoncmsInput,EmoncmsFeed,EmonDayFeed} = require('../model/schema/poc.js');
-
-
-
 
 const Web3 = require('web3');
 const web3js = new Web3(
@@ -78,7 +62,7 @@ var indiaTime = new Date().toLocaleString("en-US", { timeZone: "Europe/London" }
 var indiaTime = new Date(indiaTime);
 var current_time = indiaTime.toLocaleString();
 
-
+// var isAdmin = auth.isAdmin;
 /****************/
 
 routes.use(bodyParser.urlencoded({ extended: true }))
@@ -198,7 +182,7 @@ routes.post('/submit-details', async (req, res) => {
   
     if (Admin.email == 'aashishporwal@questglt.org' && Admin.password == '123456') {
       console.log('Admin found')
-       res.redirect('/maindashboard');
+       res.redirect('/main-dashboard');
     } else {
         res.redirect('/admin-login');
       }
@@ -274,7 +258,7 @@ routes.post('/submit-details', async (req, res) => {
 // })
 
 
-routes.get('/maindashboard', middleware_check_login, async (req, res) => {
+routes.get('/main-dashboard', async (req, res) => {
   const total_orders = 0;
   const total_tokens_count = [];
 
@@ -305,14 +289,14 @@ routes.get('/maindashboard', middleware_check_login, async (req, res) => {
     res.redirect('/admin-login');
   }
   else {
-    res.render('/admin/frontadmin/maindashboard.ejs', {
+    res.render('admin/front-admin/main-dashboard.ejs', {
       Name: req.session.user_name, session: req.session, profile_image: req.session.profile_image, total_orders_s: total_orders, EBT_balance: EBT_bal, ether_balance: actual_balance, main_rwn_vault: "0", total_users_s, ebtSold, totalArtwRewardsDestributed, usersRegisteredThisMonth
-    });
+    }) 
   }
 })
 
 
-routes.get('/my-profile', middleware_check_login, async (req, res) => {
+routes.get('/my-profile',  async (req, res) => {
 
   // console.log('Session Data',req.session)
   var id = req.session.user_main_id;
@@ -332,7 +316,7 @@ routes.get('/my-profile', middleware_check_login, async (req, res) => {
 });
 
 
-routes.post('/update_profile', middleware_check_login, (req, res) => {
+routes.post('/update_profile',  (req, res) => {
 
   console.log(`299- update_profile`, req.body)
   var id = req.body.id;
@@ -388,7 +372,7 @@ routes.post('/update_profile', middleware_check_login, (req, res) => {
 });
 
 
-routes.get('/change-password-front-admin', middleware_check_login, (req, res) => {
+routes.get('/change-password-front-admin',  (req, res) => {
   err_msg = req.flash('err_msg');
   success_msg = req.flash('success_msg');
   AdminInfo.findOne().then((succ) => {
@@ -472,7 +456,7 @@ routes.get('/logout1', (req, res) => {
 
 
 
-routes.get('/user-list', middleware_check_login, (req, res) => {
+routes.get('/user-list',  (req, res) => {
   err_msg = req.flash('err_msg');
   success_msg = req.flash('success_msg');
   var day = moment(new Date()).format('MM/DD/YYYY');
@@ -503,7 +487,7 @@ routes.get('/user-list', middleware_check_login, (req, res) => {
 
 /******************************************************************************************/
 
-routes.post('/userListByDate', middleware_check_login, (req, res, next) => {
+routes.post('/userListByDate',  (req, res, next) => {
   // var newDate = req.body.getDate;
   var newMinDate = req.body.getMinDate;
   var newMaxDate = req.body.getMaxDate;
@@ -1321,13 +1305,13 @@ routes.get('/artw-token-history', middleware_check_login, (req, res) => {
 
 });
 
-routes.get('/update-token_details', middleware_check_login, async (req, res) => {
+routes.get('/update-token_details',  async (req, res) => {
   err_msg = req.flash('err_msg');
   success_msg = req.flash('success_msg');
   await Tokensettings.findOne().then(async result => {
     console.log("result-------", result);
     let artw_bal = await bscHelper.coinBalanceBNB(admin_wallet)
-    res.render('admin/front-admin/update-token-settings', {
+    res.render('admin/front-admin/update-token', {
       err_msg, success_msg, layout: false, session: req.session, Name: req.session.user_name, profile_image: req.session.profile_image, result, actual_balance: artw_bal
     })
 
@@ -1588,7 +1572,7 @@ routes.post('/update_set_stake', middleware_check_login, (req, res) => {
 
 /********************************* Home Banner   ****************************/
 
-routes.get('/home-banner-details', middleware_check_login, (req, res) => {
+routes.get('/home-banner-details', (req, res) => {
 
   err_msg = req.flash('err_msg');
   success_msg = req.flash('success_msg');
@@ -1613,7 +1597,7 @@ routes.get('/home-banner-details', middleware_check_login, (req, res) => {
   // });
 });
 
-routes.get('/add-new-banner', middleware_check_login, (req, res) => {
+routes.get('/add-new-banner', (req, res) => {
 
   AdminInfo.findOne().then((succ) => {
 
@@ -1630,7 +1614,7 @@ routes.get('/add-new-banner', middleware_check_login, (req, res) => {
   });
 });
 
-routes.post('/add_banner', middleware_check_login, (req, res) => {
+routes.post('/add_banner', (req, res) => {
   const form = formidable({ multiples: true });
   form.parse(req, (err, fields, files) => {
     var imageFile = typeof files.banner_image !== "undefined" ? files.banner_image.name : "";
@@ -1669,7 +1653,7 @@ routes.post('/add_banner', middleware_check_login, (req, res) => {
   });
 });
 
-routes.get('/edit-banner', middleware_check_login, (req, res) => {
+routes.get('/edit-banner',  (req, res) => {
 
   var banner_id = req.query.id;
   console.log(banner_id)
@@ -1689,7 +1673,7 @@ routes.get('/edit-banner', middleware_check_login, (req, res) => {
   });
 });
 
-routes.post('/update_banner', middleware_check_login, (req, res) => {
+routes.post('/update_banner',  (req, res) => {
   const form = formidable({ multiples: true });
   form.parse(req, (err, fields, files) => {
 
@@ -1742,7 +1726,7 @@ routes.post('/update_banner', middleware_check_login, (req, res) => {
 
 });
 
-routes.get('/delete-banner', middleware_check_login, (req, res) => {
+routes.get('/delete-banner', (req, res) => {
 
   var current_time = Date.now();
 
@@ -1774,7 +1758,7 @@ routes.get('/delete-banner', middleware_check_login, (req, res) => {
 
 // ***************************************************************************************//
 
-routes.get('/key-features', middleware_check_login, (req, res) => {
+routes.get('/key-features', (req, res) => {
   KeyFeaturesInfo.find({ deleted: '0' }).then((keyFeatures) => {
     res.render('admin/front-admin/key-features', { err_msg, success_msg, Name: req.session.user_name, profile_image: req.session.profile_image, session: req.session, expressFlash: req.flash(), keyFeatures })
   }, (err) => {
@@ -1785,12 +1769,12 @@ routes.get('/key-features', middleware_check_login, (req, res) => {
 })
 
 
-routes.get('/add-key-features', middleware_check_login, (req, res) => {
+routes.get('/add-new-key-features',  (req, res) => {
 
-  res.render('admin/front-admin/add-key-features', { err_msg, success_msg, Name: req.session.user_name, profile_image: req.session.profile_image, session: req.session, expressFlash: req.flash() })
+  res.render('admin/front-admin/add-new-key-features', { err_msg, success_msg, Name: req.session.user_name, profile_image: req.session.profile_image, session: req.session, expressFlash: req.flash() })
 })
 
-routes.post('/add-key-features', middleware_check_login, (req, res) => {
+routes.post('/add-new-key-features',  (req, res) => {
 
 
   const form = formidable({ multiples: true });
@@ -1834,14 +1818,14 @@ routes.post('/add-key-features', middleware_check_login, (req, res) => {
 })
 
 
-routes.get('/edit-key-features', middleware_check_login, (req, res) => {
+routes.get('/edit-key-features', (req, res) => {
 
   var feature_id = req.query.id;
   console.log(feature_id)
   KeyFeaturesInfo.findOne({ _id: feature_id, deleted: '0' }).then((featureDetail) => {
     console.log('featureDetail', featureDetail);
 
-    res.render('admin/front-admin/edit-keyfeature.ejs', { Name: req.session.user_name, profile_image: req.session.profile_image, session: req.session, expressFlash: req.flash(), featureDetail });
+    res.render('admin/front-admin/edit-key-feature.ejs', { Name: req.session.user_name, profile_image: req.session.profile_image, session: req.session, expressFlash: req.flash(), featureDetail });
 
   }, (err) => {
 
@@ -1855,7 +1839,7 @@ routes.get('/edit-key-features', middleware_check_login, (req, res) => {
 });
 
 
-routes.post('/update-key-features', middleware_check_login, (req, res) => {
+routes.post('/update-key-features', (req, res) => {
   console.log('1832', req.body)
 
   const form = formidable({ multiples: true });
@@ -1912,7 +1896,7 @@ routes.post('/update-key-features', middleware_check_login, (req, res) => {
 });
 
 
-routes.get('/delete-key-feature', middleware_check_login, (req, res) => {
+routes.get('/delete-key-feature', (req, res) => {
 
 
   id = req.query.id
@@ -1932,7 +1916,7 @@ routes.get('/delete-key-feature', middleware_check_login, (req, res) => {
 ///////////////////*******problem************//////////////////////////
 
 
-routes.get('/problem', middleware_check_login, (req, res) => {
+routes.get('/problem', (req, res) => {
   problemInfo.find({ deleted: '0' }).then((problemDetails) => {
     //console.log(problemDetails)
     res.render('admin/front-admin/problem', { err_msg, success_msg, Name: req.session.user_name, profile_image: req.session.profile_image, session: req.session, expressFlash: req.flash(), problemDetails })
@@ -2056,7 +2040,7 @@ routes.post('/edit-problem', middleware_check_login, (req, res) => {
   })
 })
 
-routes.get('/delete-problem', middleware_check_login, (req, res) => {
+routes.get('/delete-problem', (req, res) => {
   console.log('In delete problem')
   id = req.query.id
   problemInfo.findOne({ _id: id, deleted: '0' }).then(async (problem) => {
@@ -2068,7 +2052,7 @@ routes.get('/delete-problem', middleware_check_login, (req, res) => {
 })
 
 //////////*****************solutions********************////////
-routes.get('/solutions', middleware_check_login, (req, res) => {
+routes.get('/solutions',  (req, res) => {
 
   solutionInfo.find({ deleted: '0' }).then((solutionsDetails) => {
     //console.log(solutionsDetails)
@@ -2196,7 +2180,7 @@ routes.post('/edit-solution', middleware_check_login, (req, res) => {
   });
 })
 
-routes.get('/delete-solution', middleware_check_login, (req, res) => {
+routes.get('/delete-solution', (req, res) => {
   console.log('In delete solution')
   id = req.query.id
   solutionInfo.findOne({ _id: id, deleted: '0' }).then(async (solution) => {
@@ -2208,7 +2192,7 @@ routes.get('/delete-solution', middleware_check_login, (req, res) => {
 })
 
 ////////////************* token-allocation ******************//////////
-routes.get('/token-allocation', middleware_check_login, (req, res) => {
+routes.get('/token-allocation', (req, res) => {
   tokenAllocation.find({ deleted: '0' }).then((tokenAllocationDetails) => {
     //console.log(solutionsDetails)
     res.render('admin/front-admin/token-allocations', { err_msg, success_msg, Name: req.session.user_name, profile_image: req.session.profile_image, session: req.session, expressFlash: req.flash(), tokenAllocationDetails })
@@ -2332,7 +2316,7 @@ routes.post('/edit-token-allocation', middleware_check_login, (req, res) => {
   });
 })
 
-routes.get('/delete-token-allocation', middleware_check_login, (req, res) => {
+routes.get('/delete-token-allocation', (req, res) => {
 
   console.log('In delete token-allocation')
   id = req.query.id
@@ -2349,7 +2333,7 @@ routes.get('/delete-token-allocation', middleware_check_login, (req, res) => {
 
 ////////////****************ROADMAP*******************////////////
 
-routes.get('/roadmap', middleware_check_login, (req, res) => {
+routes.get('/roadmap',  (req, res) => {
   milestone.find({ deleted: '0' }).then((milestoneData) => {
 
     res.render('admin/front-admin/roadmap', { err_msg, success_msg, Name: req.session.user_name, profile_image: req.session.profile_image, session: req.session, expressFlash: req.flash(), milestoneData })
@@ -2365,7 +2349,7 @@ routes.get('/roadmap', middleware_check_login, (req, res) => {
   });
 })
 
-routes.get('/add-new-milestone', middleware_check_login, (req, res) => {
+routes.get('/add-new-milestone', (req, res) => {
   err_msg = req.flash('err_msg');
   success_msg = req.flash('success_msg');
 
@@ -2373,7 +2357,7 @@ routes.get('/add-new-milestone', middleware_check_login, (req, res) => {
 
 })
 
-routes.post('/add-new-milestone', middleware_check_login, async (req, res) => {
+routes.post('/add-new-milestone', async (req, res) => {
   console.log(req.body)
   const milestoneObject = {
     duration: req.body.Duration,
@@ -2394,7 +2378,7 @@ routes.post('/add-new-milestone', middleware_check_login, async (req, res) => {
   }
 })
 
-routes.get('/edit-milestone', middleware_check_login, (req, res) => {
+routes.get('/edit-milestone', (req, res) => {
   id = req.query.id
   milestone.findOne({ _id: id, deleted: '0' }).then((milestone) => {
     res.render('admin/front-admin/edit-milestone', { err_msg, success_msg, Name: req.session.user_name, profile_image: req.session.profile_image, session: req.session, expressFlash: req.flash(), milestone })
@@ -2405,7 +2389,7 @@ routes.get('/edit-milestone', middleware_check_login, (req, res) => {
   });
 })
 
-routes.post('/edit-milestone', middleware_check_login, (req, res) => {
+routes.post('/edit-milestone', (req, res) => {
   console.log('In edit milestone')
   id = req.query.id
   milestone.findOne({ _id: id, deleted: '0' }).then(async (milestone) => {
@@ -2423,7 +2407,7 @@ routes.post('/edit-milestone', middleware_check_login, (req, res) => {
   });
 })
 
-routes.get('/delete-milestone', middleware_check_login, (req, res) => {
+routes.get('/delete-milestone', (req, res) => {
 
   console.log('In edit milestone')
   id = req.query.id
@@ -2442,7 +2426,7 @@ routes.get('/delete-milestone', middleware_check_login, (req, res) => {
 
 //////////////*************whitepaper*****************//////////////
 
-routes.get('/whitepaper', middleware_check_login, (req, res) => {
+routes.get('/whitepaper',  (req, res) => {
   whitepaperInfo.find({ deleted: '0' }).then((whitePaperData) => {
 
     res.render('admin/front-admin/whitepaper', { err_msg, success_msg, Name: req.session.user_name, profile_image: req.session.profile_image, session: req.session, expressFlash: req.flash(), whitePaperData })
@@ -2607,7 +2591,7 @@ routes.post('/edit-whitepaper', middleware_check_login, (req, res) => {
   });
 })
 
-routes.get('/delete-whitepaper', middleware_check_login, (req, res) => {
+routes.get('/delete-whitepaper', (req, res) => {
   console.log('In delete blog')
   id = req.query.id
   whitepaperInfo.findOne({ _id: id, deleted: '0' }).then(async (whitepaper) => {
@@ -2619,14 +2603,14 @@ routes.get('/delete-whitepaper', middleware_check_login, (req, res) => {
 })
 
 ///////////***************blogs ****************///////////////////
-routes.get('/blog-list', middleware_check_login, async (req, res) => {
+routes.get('/blog-list',async (req, res) => {
 
   let blogdetails = await blogInfo.find({ deleted: '0' })
 
   res.render('admin/front-admin/blog-list', { err_msg, success_msg, Name: req.session.user_name, profile_image: req.session.profile_image, session: req.session, expressFlash: req.flash(), blogdetails })
 })
 
-routes.get('/add-new-blog', middleware_check_login, (req, res) => {
+routes.get('/add-new-blog', (req, res) => {
 
   res.render('admin/front-admin/add-new-blog', { err_msg, success_msg, Name: req.session.user_name, profile_image: req.session.profile_image, session: req.session, expressFlash: req.flash() })
 })
@@ -2644,7 +2628,7 @@ function getFormattedDate() {
 
 }
 
-routes.post('/add-new-blog', middleware_check_login, (req, res) => {
+routes.post('/add-new-blog', (req, res) => {
 
   console.log(req.body)
   date = getFormattedDate()
@@ -2688,7 +2672,7 @@ routes.post('/add-new-blog', middleware_check_login, (req, res) => {
   });
 })
 
-routes.get('/delete-blog', middleware_check_login, (req, res) => {
+routes.get('/delete-blog', (req, res) => {
   console.log('In delete blog')
   id = req.query.id
   blogInfo.findOne({ _id: id, deleted: '0' }).then(async (blog) => {
@@ -2699,7 +2683,7 @@ routes.get('/delete-blog', middleware_check_login, (req, res) => {
 
 })
 
-routes.get('/edit-blog', middleware_check_login, (req, res) => {
+routes.get('/edit-blog', (req, res) => {
   id = req.query.id
   console.log('In dit blog', id)
   blogInfo.findOne({ _id: id, deleted: '0' }).then((blog) => {
@@ -2712,7 +2696,7 @@ routes.get('/edit-blog', middleware_check_login, (req, res) => {
 })
 
 
-routes.post('/edit-blog', middleware_check_login, (req, res) => {
+routes.post('/edit-blog',  (req, res) => {
 
   console.log('In edit blog')
   let blog_image
@@ -2771,7 +2755,7 @@ routes.post('/edit-blog', middleware_check_login, (req, res) => {
 })
 
 /////////////************faq list       *************/////////////////
-routes.get('/faq-list', middleware_check_login, (req, res) => {
+routes.get('/faq-list',  (req, res) => {
 
   FAQ.find({ deleted: '0' }).then((questionDetails) => {
 
@@ -2789,12 +2773,12 @@ routes.get('/faq-list', middleware_check_login, (req, res) => {
 
 })
 
-routes.get('/add-new-question', middleware_check_login, (req, res) => {
+routes.get('/add-new-question',  (req, res) => {
 
   res.render('admin/front-admin/add-new-question', { err_msg, success_msg, Name: req.session.user_name, profile_image: req.session.profile_image, session: req.session, expressFlash: req.flash() })
 })
 
-routes.post('/add-new-question', middleware_check_login, (req, res) => {
+routes.post('/add-new-question', (req, res) => {
 
 
   const form = formidable({ multiples: true });
@@ -2884,7 +2868,7 @@ routes.post('/edit-question', middleware_check_login, (req, res) => {
   })
 })
 
-routes.get('/delete-question', middleware_check_login, (req, res) => {
+routes.get('/delete-question',  (req, res) => {
   console.log('In delete question')
   id = req.query.id
   FAQ.findOne({ _id: id, deleted: '0' }).then(async (question) => {
@@ -2895,10 +2879,10 @@ routes.get('/delete-question', middleware_check_login, (req, res) => {
 
 })
 /////////////************* terms-n-conditions ************//////////////
-routes.get('/terms-n-conditions', middleware_check_login, (req, res) => {
+routes.get('/terms-n-conditons',  (req, res) => {
   termsAndConditionInfo.find({ deleted: '0' }).then((termsAndConditionDetails) => {
 
-    res.render('admin/front-admin/terms-n-conditions', { err_msg, success_msg, Name: req.session.user_name, profile_image: req.session.profile_image, session: req.session, expressFlash: req.flash(), termsAndConditionDetails })
+    res.render('admin/front-admin/terms-n-conditons', { err_msg, success_msg, Name: req.session.user_name, profile_image: req.session.profile_image, session: req.session, expressFlash: req.flash(), termsAndConditionDetails })
 
   }, (err) => {
 
@@ -2913,13 +2897,13 @@ routes.get('/terms-n-conditions', middleware_check_login, (req, res) => {
 
 })
 
-routes.get('/add-terms-n-conditions', middleware_check_login, (req, res) => {
+routes.get('/add-terms-n-conditons', middleware_check_login, (req, res) => {
 
-  res.render('admin/front-admin/add-terms-n-conditions', { err_msg, success_msg, Name: req.session.user_name, profile_image: req.session.profile_image, session: req.session, expressFlash: req.flash() })
+  res.render('admin/front-admin/add-terms-n-conditons', { err_msg, success_msg, Name: req.session.user_name, profile_image: req.session.profile_image, session: req.session, expressFlash: req.flash() })
 })
 
 
-routes.post('/add-terms-n-conditions', middleware_check_login, (req, res) => {
+routes.post('/add-terms-n-conditons', middleware_check_login, (req, res) => {
   const form = formidable({ multiples: true });
   form.parse(req, (err, fields, files) => {
 
@@ -2935,7 +2919,7 @@ routes.post('/add-terms-n-conditions', middleware_check_login, (req, res) => {
     termsAndCondition.save().then(result => {
       console.log('data added', result);
       req.flash('success_msg', 'termsAndCondition added successfully.');
-      res.redirect('/terms-n-conditions');
+      res.redirect('/terms-n-conditons');
     })
       .catch(err => {
         console.log(err);
@@ -2943,10 +2927,10 @@ routes.post('/add-terms-n-conditions', middleware_check_login, (req, res) => {
   });
 })
 
-routes.get('/edit-terms-n-conditions', middleware_check_login, (req, res) => {
+routes.get('/edit-terms-n-conditons', middleware_check_login, (req, res) => {
   let id = req.query.id;
   termsAndConditionInfo.findOne({ _id: id, deleted: '0' }).then((termsAndCondition) => {
-    res.render('admin/front-admin/edit-terms-n-conditions', { Name: req.session.user_name, profile_image: req.session.profile_image, session: req.session, expressFlash: req.flash(), termsAndCondition });
+    res.render('admin/front-admin/edit-terms-n-conditons', { Name: req.session.user_name, profile_image: req.session.profile_image, session: req.session, expressFlash: req.flash(), termsAndCondition });
 
   }, (err) => {
 
@@ -2960,7 +2944,7 @@ routes.get('/edit-terms-n-conditions', middleware_check_login, (req, res) => {
 
 })
 
-routes.post('/edit-terms-n-conditions', middleware_check_login, (req, res) => {
+routes.post('/edit-terms-n-conditons', middleware_check_login, (req, res) => {
 
   const form = formidable({ multiples: true });
   form.parse(req, (err, fields, files) => {
@@ -2981,28 +2965,28 @@ routes.post('/edit-terms-n-conditions', middleware_check_login, (req, res) => {
     }, { upsert: true }, function (err) {
       if (err) {
         req.flash('err_msg', 'Something went wrong.');
-        res.redirect('/terms-n-conditions');
+        res.redirect('/terms-n-conditons');
       }
       else {
-        req.flash('success_msg', 'terms-n-conditions updated successfully.');
-        res.redirect('/terms-n-conditions');
+        req.flash('success_msg', 'terms-n-conditons updated successfully.');
+        res.redirect('/terms-n-conditons');
       }
     })
   })
 })
 
-routes.get('/delete-terms-n-conditions', middleware_check_login, (req, res) => {
-  console.log('In delete terms-n-conditions')
+routes.get('/delete-terms-n-conditons', (req, res) => {
+  console.log('In delete terms-n-conditons')
   id = req.query.id
   termsAndConditionInfo.findOne({ _id: id, deleted: '0' }).then(async (termsAndCondition) => {
     termsAndCondition.deleted = '1'
     await termsAndCondition.save()
-    res.redirect('/terms-n-conditions')
+    res.redirect('/terms-n-conditons')
   })
 
 })
 ////////////**************  Privacy-Policy ************///////////////
-routes.get('/admin-privacy-policy', middleware_check_login, (req, res) => {
+routes.get('/admin-privacy-policy',  (req, res) => {
   privacyPolicyInfo.find({ deleted: '0' }).then((privacyPolicyDetais) => {
     res.render('admin/front-admin/privacy-policy', { err_msg, success_msg, Name: req.session.user_name, profile_image: req.session.profile_image, session: req.session, expressFlash: req.flash(), privacyPolicyDetais })
   }, (err) => {
@@ -3095,7 +3079,7 @@ routes.post('/edit-admin-privacy-policy', middleware_check_login, (req, res) => 
   });
 })
 
-routes.get('/delete-admin-privacy-policy', middleware_check_login, (req, res) => {
+routes.get('/delete-admin-privacy-policy',  (req, res) => {
   console.log('In delete privacyPolicy')
   id = req.query.id
   privacyPolicyInfo.findOne({ _id: id, deleted: '0' }).then(async (privacyPolicy) => {
@@ -3107,28 +3091,28 @@ routes.get('/delete-admin-privacy-policy', middleware_check_login, (req, res) =>
 })
 
 ////////////****************privacy policy ***************////////////////
-routes.get('/admin-cookie-policy', middleware_check_login, (req, res) => {
+routes.get('/admin-cookie-policy',  (req, res) => {
 
   res.render('admin/front-admin/cookie-policy', { err_msg, success_msg, Name: req.session.user_name, profile_image: req.session.profile_image, session: req.session, expressFlash: req.flash() })
 })
 
-routes.get('/referral-policy', middleware_check_login, (req, res) => {
+routes.get('/referral-policy', (req, res) => {
 
   res.render('admin/front-admin/referral-policy', { err_msg, success_msg, Name: req.session.user_name, profile_image: req.session.profile_image, session: req.session, expressFlash: req.flash() })
 })
 
-routes.get('/contact-list', middleware_check_login, (req, res) => {
+routes.get('/contact-list',  (req, res) => {
 
   res.render('admin/front-admin/contact-list', { err_msg, success_msg, Name: req.session.user_name, profile_image: req.session.profile_image, session: req.session, expressFlash: req.flash() })
 })
 
-routes.get('/basic-details', middleware_check_login, (req, res) => {
+routes.get('/basic-details',(req, res) => {
 
   res.render('admin/front-admin/basic-details', { err_msg, success_msg, Name: req.session.user_name, profile_image: req.session.profile_image, session: req.session, expressFlash: req.flash() })
 })
 
 
-routes.get('/feedback-list', middleware_check_login, (req, res) => {
+routes.get('/feedback-list', (req, res) => {
 
   res.render('admin/front-admin/feedback-list', { err_msg, success_msg, Name: req.session.user_name, profile_image: req.session.profile_image, session: req.session, expressFlash: req.flash() })
 })
@@ -3145,28 +3129,28 @@ routes.get('/feedback-list', middleware_check_login, (req, res) => {
 //   });
 // })
 
-routes.get('/admin-referral-table', middleware_check_login, (req, res) => {
+routes.get('/admin-referral-table',  (req, res) => {
 
   res.render('admin/front-admin/referral-table', { err_msg, success_msg, Name: req.session.user_name, profile_image: req.session.profile_image, session: req.session, expressFlash: req.flash() })
 })
 
-routes.get('/summary', middleware_check_login, (req, res) => {
+routes.get('/summary', (req, res) => {
 
   res.render('admin/front-admin/summary', { err_msg, success_msg, Name: req.session.user_name, profile_image: req.session.profile_image, session: req.session, expressFlash: req.flash() })
 })
 
-routes.get('/bonus-persent', middleware_check_login, (req, res) => {
+routes.get('/bonus-persent', (req, res) => {
 
   res.render('admin/front-admin/bonus-persent', { err_msg, success_msg, Name: req.session.user_name, profile_image: req.session.profile_image, session: req.session, expressFlash: req.flash() })
 })
 
 
-routes.get('/transaction-table', middleware_check_login, (req, res) => {
-  res.render('admin/front-admin/transaction-table', { err_msg, success_msg, Name: req.session.user_name, profile_image: req.session.profile_image, session: req.session, expressFlash: req.flash() })
+routes.get('/admin-transaction-table',  (req, res) => {
+  res.render('admin/front-admin/admin-transaction-table', { err_msg, success_msg, Name: req.session.user_name, profile_image: req.session.profile_image, session: req.session, expressFlash: req.flash() })
 })
 
 /////////////////////////////////////////////////////////////////
-routes.get('/site-info', middleware_check_login, (req, res) => {
+routes.get('/site-info',  (req, res) => {
 
   err_msg = req.flash('err_msg');
   success_msg = req.flash('success_msg');
@@ -3246,7 +3230,7 @@ routes.post('/update_siteinfo', middleware_check_login, (req, res) => {
 
 /******************************OUR PARTNER****************************************/
 
-routes.get('/partner-list', middleware_check_login, (req, res) => {
+routes.get('/partner-list', (req, res) => {
 
   err_msg = req.flash('err_msg');
   success_msg = req.flash('success_msg');
@@ -3268,14 +3252,14 @@ routes.get('/partner-list', middleware_check_login, (req, res) => {
   // });
 });
 
-routes.get('/add-new-partner', middleware_check_login, (req, res) => {
+routes.get('/add-new-partner', (req, res) => {
 
   res.render('admin/front-admin/add-new-partner.ejs', { Name: req.session.user_name, profile_image: req.session.profile_image, session: req.session, expressFlash: req.flash() });
 
 
 });
 
-routes.post('/add_partner', middleware_check_login, (req, res) => {
+routes.post('/add_partner',  (req, res) => {
   // console.log("---------------------- ",req.body," ",req.files);
   const form = formidable({ multiples: true });
   form.parse(req, (err, fields, files) => {
@@ -3324,7 +3308,7 @@ routes.post('/add_partner', middleware_check_login, (req, res) => {
 
 });
 
-routes.get('/edit-partner', middleware_check_login, (req, res) => {
+routes.get('/edit-partner',  (req, res) => {
 
   var id = req.query.id;
 
@@ -3344,7 +3328,7 @@ routes.get('/edit-partner', middleware_check_login, (req, res) => {
 });
 
 
-routes.post('/update_partner', middleware_check_login, (req, res) => {
+routes.post('/update_partner',  (req, res) => {
   // console.log("---------------------- ",req.body," ",req.files);
   const form = formidable({ multiples: true });
   form.parse(req, (err, fields, files) => {
@@ -3399,7 +3383,7 @@ routes.post('/update_partner', middleware_check_login, (req, res) => {
 
 });
 
-routes.get('/delete-partner', middleware_check_login, (req, res) => {
+routes.get('/delete-partner',  (req, res) => {
 
   var current_time = Date.now();
 
@@ -3435,7 +3419,7 @@ routes.get('/delete-partner', middleware_check_login, (req, res) => {
 
 
 
-routes.get('/our-team', middleware_check_login, (req, res) => {
+routes.get('/our-team',  (req, res) => {
 
   err_msg = req.flash('err_msg');
   success_msg = req.flash('success_msg');
@@ -3461,13 +3445,13 @@ routes.get('/our-team', middleware_check_login, (req, res) => {
 
 
 
-routes.get('/add-new-member', middleware_check_login, (req, res) => {
+routes.get('/add-new-member', (req, res) => {
 
   res.render('admin/front-admin/add-new-member.ejs', { Name: req.session.user_name, profile_image: req.session.profile_image, session: req.session, expressFlash: req.flash() });
 
 });
 
-routes.post('/add_member', middleware_check_login, (req, res) => {
+routes.post('/add_member',  (req, res) => {
   console.log("add member")
   const form = formidable({ multiples: true });
   form.parse(req, (err, fields, files) => {
@@ -3519,7 +3503,7 @@ routes.post('/add_member', middleware_check_login, (req, res) => {
   })
 });
 
-routes.get('/edit-member', middleware_check_login, (req, res) => {
+routes.get('/edit-member',  (req, res) => {
 
   var member_id = req.query.id;
 
@@ -3538,7 +3522,7 @@ routes.get('/edit-member', middleware_check_login, (req, res) => {
   });
 });
 
-routes.post('/update_member', middleware_check_login, (req, res) => {
+routes.post('/update_member', (req, res) => {
   const form = formidable({ multiples: true });
   form.parse(req, (err, fields, files) => {
     var member_id = fields.id;
@@ -3595,7 +3579,7 @@ routes.post('/update_member', middleware_check_login, (req, res) => {
   })
 });
 
-routes.get('/delete-team-member', middleware_check_login, (req, res) => {
+routes.get('/delete-team-member', (req, res) => {
 
   var current_time = Date.now();
 

@@ -5,6 +5,15 @@ dotenv.config();
 var indexroutes = require("./routes");
 const app = express();
 const session = require('express-session');
+
+const hbs = require('hbs');
+var http = require('http');
+var https = require('https');
+const cookieParser = require('cookie-parser');
+var fs = require('fs-extra');
+const routes = require('./routes/index.js');
+const probit = require('./routes/probit.js');
+
 const mongoose = require("mongoose");
 mongoose.connect("mongodb://localhost/AbuBakr",
 { useUnifiedTopology: true } ,
@@ -35,5 +44,32 @@ app.use(flash())
 app.use("/", indexroutes);
 console.log(process.env.ADMIN)
 
+app.use(cookieParser('keyboard cat'));
+app.use(session({ 
+    secret: 'keyboard cat',
+    resave: false,
+    saveUninitialized: true,
+    cookie: { maxAge: 60000 }
+}));
+
+// hbs.registerPartials(__dirname + '/views/admin/admin-login/partials');
+
+app.get('*', function(req,res,next) {
+   res.locals.cart  = req.session.cart;
+   res.locals.user  = req.user || null;
+   next();
+});
+
+app.use('/', routes);
+
+ app.engine('ejs', require('ejs').renderFile);
+ app.set('view engine', 'ejs');
+
+ app.get('/', (req, res) => {
+    res.send('Hello World!')
+    res.setHeader('X-Foo', 'bar')
+   })
+ // Set 'views' directory for any views 
+ // being rendered res.render()
 const PORT = 9000;
 app.listen(PORT, () => console.log(`App listening on port ${PORT}!`));
