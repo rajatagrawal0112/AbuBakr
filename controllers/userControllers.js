@@ -428,6 +428,7 @@ const verifyUser = async (req, res) => {
                         let userUpdated = await userServices.updateEmailStatus(user._id);
                         if (userUpdated) {
                             req.session.is_user_logged_in = false;
+                            req.flash('success_msg', 'Redirecting the User to homepage for Login');
                             res.redirect('/login');
                         }
                         else {

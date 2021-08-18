@@ -29,7 +29,6 @@
    <!--  <link href="../assets/css/custom-home-new.css" rel="stylesheet"/> -->
     <link href="../assets/css/custom-llc.css" rel="stylesheet"/>
     <link href="../assets/css/custom-ebt.css" rel="stylesheet"/>
-   
  
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -58,6 +57,44 @@
     display: block;
     font-size: 25px;
 }  
+
+
+.video-stream-sec {
+        border-top: 1px solid #d7b64d;
+        border-bottom: 1px solid #d7b64d;
+        background-color: rgba(0,0,0,0.5);
+        padding: 90px 0 60px;
+        margin: 60px 0 20px;
+        background-image: url(assets/images/bg-network.jpg);
+         background-position: center left; 
+        background-repeat: no-repeat;
+        background-size: contain;
+        background-blend-mode: multiply;
+    }
+    .header-main.index-header .nav-link.sign-up-btn.purple-btn-index.golden-btn{
+        margin-left: 10px;
+        background-image: url(assets/images/golden-bg.png);
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: center;
+        color: #fff !important;
+        font-weight: normal;
+        text-shadow: 2px 2px #000 !important;
+        font-size: 16px !important;
+        animation: zoom-in-zoom-out 1s ease infinite;
+    }
+    @keyframes zoom-in-zoom-out {
+      0% {
+        transform: scale(1, 1);
+      }
+      50% {
+        transform: scale(1.03, 1.03);
+      }
+      100% {
+        transform: scale(1, 1);
+      }
+    }
+   
 
 </style>
 
@@ -89,16 +126,23 @@
                     
                     <li class="nav-item">
                         <a class="nav-link" href="#roadmap">Roadmap</a>
+
+                        
+                    
                     </li>
                     <li class="nav-item">
                         <a class="nav-link " href="#team">EBT Team</a>
-                    </li>
+                    
                     <li class="nav-item">
                         <a class="nav-link" href="#contact">Contact Us</a>
                     </li>
                      <li class="nav-item">
                         <a class="nav-link sign-up-btn purple-btn-index" href="login">Login</a>
                     </li>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link sign-up-btn purple-btn-index golden-btn" href="#live-stream">Live Streaming</a>
+                </li>
                   
                 </ul>
             </div>
@@ -447,11 +491,20 @@
     </div>
 </section>
 
+<section class="video-stream-sec  page-section" id="live-stream">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 ml-auto">
+                 <h4 class="common-big-heading text-center mb-5">Live Video Streaming</h4>
+                 <div class="bg-ifram">
+                  <iframe width="100%" height="290" src="https://www.youtube.com/embed/Vrs1j3qZ8w0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+               </div>
+            </div>
+        </div>
+    </div>
+</section>
 
     
-
-
-
 <section class="rocket-fuel-sec  page-section" id="team">
     <div class="container">
         <div class="row">
