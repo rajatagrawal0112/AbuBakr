@@ -68,7 +68,7 @@
                                   <label class="col-2 label-control" for="projectinput1">BUY<span style="color:red;">*</span></label>
                                   <fieldset class="col-10">
                                     <div class="input-group">
-                                      <input type="text" class="form-control" data-rule-number="true" onkeyup="multiply()"  name="rowan" id="rowan" data-rule-min="1" data-msg-min="You have to buy minimum 1 $EBT." data-rule-required="true" data-msg-required="Please enter value in digit." aria-describedby="basic-addon4" >
+                                      <input type="text" class="form-control" data-rule-number="true" onkeyup="multiply()"  name="ebt" id="ebt" data-rule-min="1" data-msg-min="You have to buy minimum 1 $EBT." data-rule-required="true" data-msg-required="Please enter value in digit." aria-describedby="basic-addon4" onchange="multiby(this.value,`<%=ebt%>`)" >
                                       <div class="input-group-append">
                                         <span class="input-group-text" id="basic-addon4">$EBT</span>
                                       </div>
@@ -87,7 +87,7 @@
                               <div class="form-group row">
                                   <fieldset class="col-12">
                                     <div class="input-group">
-                                      <input class="form-control" id="btc"  aria-describedby="basic-addon4" readonly="" name="eth" type="text">
+                                      <input class="form-control" id="eth"  aria-describedby="basic-addon4" value="" readonly="" name="eth" type="text">
                                       <div class="input-group-append">
                                         <span class="input-group-text" id="basic-addon4">ETH</span>
                                       </div>
@@ -97,8 +97,8 @@
                           </div>
                       </div>
                   </div>
-                  <input type="hidden" value="" name="rate_per_artw" id="rate_per_artweth">
-                  <p class="font-italic value-coin-line mx-1 mb-2"> 1 $EBT = ETH</p>
+                  <input type="hidden" value="<%=ebt%>" name="rate_per_ebt" id="rate_per_ebteth">
+                  <p class="font-italic value-coin-line mx-1 mb-2"> 1 $EBT = <%=ebt%>ETH</p>
               <!-- <p class="font-italic value-coin-line mt-3 mx-1 mb-2"> <b>1 TOKEN = 23 TRX</b></p> -->
                  <div class="col-md-12 p-0">
                     <div id="tran_wallet">
@@ -215,5 +215,11 @@
     $(function () {
       initializeFileUploads();
     });
+  </script>
+  <script>
+    function multiby(val,nem){
+      let n = parseFloat(val)*parseFloat(nem);
+      document.getElementById("eth").value=n;
+    };
   </script>
 

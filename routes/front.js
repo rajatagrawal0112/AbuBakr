@@ -55,7 +55,7 @@ router.get('/receive-artw', isUser, function (req, res) {
 
 // router.get('/receive', userControllers.ReceivePage);
 
-router.get('/send-uwct', userControllers.sendPage);
+router.get('/send-EBT', userControllers.sendPage);
 
 router.get('/signup', userControllers.signupPage);
 
@@ -77,7 +77,7 @@ router.get('/terms-condition', function (req, res) {
   res.render('terms-condition');
 });
 
-router.get('/send-uwct', userControllers.sendPage);
+router.get('/send-EBT', userControllers.sendPage);
 //***************** get create wallet **************//
 router.get('/Create-wallet', isUser, blockchainController.createWallet);
 
@@ -340,7 +340,7 @@ router.get('/transaction-table', isUser, function (req, res) {
 });
 
 //***************** get Send-rowan **************//
-// router.get('/send-uwct', isUser, async function (req, res) {
+// router.get('/send-EBT', isUser, async function (req, res) {
 //   let err_msg = req.flash('err_msg');
 //   let success_msg = req.flash('success_msg');
 //   let walletid = req.query.walletid;
@@ -374,7 +374,7 @@ router.get('/transaction-table', isUser, function (req, res) {
 //         value = 1 / usdValue;
 //       }
 //       value = Math.round(value * 100) / 100;
-//       res.render('/send-uwct', { err_msg, success_msg, walletdetails, layout: false, session: req.session, coinbalance, type, walletid, value, usdValue, etherValue, bnbValue });
+//       res.render('/send-EBT', { err_msg, success_msg, walletdetails, layout: false, session: req.session, coinbalance, type, walletid, value, usdValue, etherValue, bnbValue });
 //     }
 //     else {
 //       console.log("somethig went wrong with login status")
@@ -385,17 +385,56 @@ router.get('/transaction-table', isUser, function (req, res) {
 // });
 
 
-router.get('/buy-coin', isUser, async function (req, res) {
+// router.get('/buy-coin', isUser, async function (req, res) {
+//   error = req.flash('err_msg');
+//   success = req.flash('success_msg');
+//   var test = req.session.is_user_logged_in;
+//   if (test != true) {
+//     res.redirect('/Login');
+//   } else {
+//     var user_id = req.session.re_us_id;
+//   Tokensettings.findOne().then(btcresult => {  
+//     // var btc = btcresult.btcValue;
+//     var eth = btcresult.etherValue;
+//     Importwallet.findOne({ 'user_id': user_id, 'login_status': 'login' }, function (err, loginwallet) {
+//       if (err) {
+//         console.log("Something went wrong");
+//       }
+//       else {
+//         if (loginwallet != "" && loginwallet != undefined) {
+//           Userwallet.findOne({ '_id': loginwallet.wallet_id }, function (err, result) {
+//             if (err) { console.log("Something went wrong"); }
+//             else {
+//               wallet_details = result;
+//               import_wallet_id = loginwallet._id;
+//               let wallet_creation = result.created_at;
+//               let indiaTime = new Date().toLocaleString("en-US", { timeZone: "Europe/London" });
+//               indiaTime = new Date(indiaTime);
+//               let today = indiaTime.toLocaleString();
+//               let wallet_time_difference = calculateHours(new Date(wallet_creation), new Date(today));
+//               // let rown_bal = coinBalanceBNB(wallet_details.wallet_address);
+//               res.render('buy-coin', { error, success, wallet_details,  import_wallet_id,  layout: false, session: req.session, crypto,eth })
+//             }
+//           });
+//         }
+//         else {
+//           req.flash('err_msg', 'Sorry!, please import or create a wallet first.');
+//           res.redirect('/dashboard');
+//         }
+//       }
+//     })
+//   }
+// });
+
+
+router.get('/buy-coin', isUser, function (req, res) {
+  // var error ="";
+  // var success = "";
   error = req.flash('err_msg');
   success = req.flash('success_msg');
-  var test = req.session.is_user_logged_in;
-  if (test != true) {
-    res.redirect('/Login');
-  } else {
-    var user_id = req.session.re_us_id;
-    let btcresult = await Tokensettings.findOne()
-    // var btc = btcresult.btcValue;
-    // var eth = btcresult.etherValue;
+  var user_id = req.session.re_us_id;
+  Tokensettings.findOne().then(btcresult => {
+    var ebt = btcresult.etherValue;
     Importwallet.findOne({ 'user_id': user_id, 'login_status': 'login' }, function (err, loginwallet) {
       if (err) {
         console.log("Something went wrong");
@@ -405,26 +444,16 @@ router.get('/buy-coin', isUser, async function (req, res) {
           Userwallet.findOne({ '_id': loginwallet.wallet_id }, function (err, result) {
             if (err) { console.log("Something went wrong"); }
             else {
-              wallet_details = result;
-              import_wallet_id = loginwallet._id;
-              let wallet_creation = result.created_at;
-              let indiaTime = new Date().toLocaleString("en-US", { timeZone: "Europe/London" });
-              indiaTime = new Date(indiaTime);
-              let today = indiaTime.toLocaleString();
-              let wallet_time_difference = calculateHours(new Date(wallet_creation), new Date(today));
-              // let rown_bal = coinBalanceBNB(wallet_details.wallet_address);
-              res.render('buy-coin', { error, success, wallet_details,  import_wallet_id,  layout: false, session: req.session, crypto })
+              var wallet_address = result.wallet_address;
+              res.render('buy-coin', { error, success, wallet_address, user_id, ebt });
             }
-          });
-        }
-        else {
-          req.flash('err_msg', 'Sorry!, please import or create a wallet first.');
-          res.redirect('/dashboard');
+          })
         }
       }
     })
-  }
+  })
 });
+
 
 
 router.post('/ETH', isUser, async function (req, res) {

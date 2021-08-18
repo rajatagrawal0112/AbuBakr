@@ -49,6 +49,72 @@ const landingPage = async (req, res) => {
     }
 }
 
+const transactionManagement = async function (req, res) {
+    var profile_pic = req.session.profile;
+    var first_name = req.session.name;
+    var admin_id = req.session.admin_id;
+    success_msg = req.flash('success_msg');
+    err_msg = req.flash('err_msg');
+    let userTransaction = [];
+    let userTransInfo = {
+        username: "",
+        credit: "",
+        debit: "",
+        date: "",
+        userId: '',
+        status:""
+    }
+    try {
+       
+        // let dollarPrice= priceOfXLM['XLMUSDT']; 
+     let transactionData = await transactionSchema.find({}).sort({_id:-1});
+  // console.log(transactionSchema);
+     // let transactionData = await transactionSchema.find({});
+    // console.log("TransData:::::::::",transactionData);
+         let k=0;
+        for (let i = 0; i < transactionData.length; i++) {
+            let userDet=await Registration.findOne({_id:transactionData[i].userId});
+            let user_name='';
+            if(userDet){
+             user_name=userDet.name;
+           
+            }else{
+               // continue;
+               user_name="Unknown"
+            }
+               if(transactionData[i].operation=='Send'||transactionData[i].operation=='Sell'){
+                    userTransInfo.debit=transactionData[i].amount+transactionData[i].coinname;
+                    userTransInfo.credit='';
+               }else{
+                userTransInfo.credit=transactionData[i].amount+transactionData[i].coinname;
+                userTransInfo.debit='';
+               }
+            userTransInfo.username=user_name;
+          
+           // let date=;
+        //    var now = new Date(transactionData[i].date);
+            var dt = dateTime.create(transactionData[i].date);
+            var trans_date = dt.format('d/m/Y');
+            userTransInfo.date=trans_date;
+            userTransInfo.userId=transactionData[i].userId;
+            userTransInfo.status=transactionData[i].status;
+            userTransaction[k] = userTransInfo;
+            userTransInfo={};
+            k++;
+        }
+        res.render('admin/front-admin/admin-transaction-table', {
+            // wallet_list     :   WALLET_LIST_DATA,
+            userTransaction,
+            profile_pic,
+            first_name,
+            success_msg,
+            err_msg
+        })
+    } catch (err) {
+        console.log(err);
+        throw err;
+    }
+}
 
 const dashboardPage = async (req, res) => {
     console.log("Welcome to dashboard")
@@ -126,7 +192,7 @@ const loginPage = async (req, res) => {
 
 
 const sendPage = async (req, res) => {
-    res.render('send-uwct')  
+    res.render('send-EBT')  
 }
 
 const signupPage = async (req, res) => {
@@ -264,6 +330,7 @@ const referral = async (req, res) => {
         let user = await userServices.checkUserId(user_id);
         let ref_code = user.ref_code;
         let referrals = await userServices.findReferData(ref_code);
+
         res.render('referral-table', { err_msg, success_msg, layout: false, ref_code, session: req.session, referrals})
     } else {
         res.redirect('/login');
@@ -463,6 +530,7 @@ module.exports = {
     getrefdate,
     getrefemail,
     getusers,
+    transactionManagement
 
    
     
