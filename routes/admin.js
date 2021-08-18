@@ -24,6 +24,9 @@ const bscHelper = require("../helper/bscHelper")
 const ethHelper = require("../helper/ethHelper")
 const userServices = require("../services/userServices")
 const adminServices = require("../services/adminServices")
+const userController=require('../controllers/userControllers');
+
+
 
 // const {mongoose} = require('../config/config');
 // const {AdminInfo,RECDetails,Tokensettings,ContactInfo} = require('../model/schema/admin');
@@ -57,6 +60,8 @@ var moment = require('moment');
 var { Stake, MainStake, StakeRate } = require('../models/staking');
 const admin = require('../models/admin');
 const { listeners } = require('process');
+
+// router.get('/admin-transaction-table',userController.transactionManagement);
 
 var indiaTime = new Date().toLocaleString("en-US", { timeZone: "Europe/London" });
 var indiaTime = new Date(indiaTime);
@@ -268,9 +273,9 @@ routes.get('/main-dashboard', async (req, res) => {
   let usersRegisteredThisMonth = await adminServices.usersRegisteredThisMonth()
   console.log(usersRegisteredThisMonth)
 
-  let totalArtwRewardsDestributed = await adminServices.totalArtwRewardsDestributed(total_users_s)
+  let totalEBTRewardsDestributed = await adminServices.totalEBTRewardsDestributed(total_users_s)
 
-  const EBT_bal = await ethHelper.coinBalanceETH(admin_wallet) //artw balance
+  const EBT_bal = await ethHelper.coinBalanceETH(admin_wallet) //$EBT balance
   console.log(`290-ebt`, EBT_bal)
 
   const ebtSold = await adminServices.EBTSold(EBT_bal)
@@ -290,7 +295,7 @@ routes.get('/main-dashboard', async (req, res) => {
   }
   else {
     res.render('admin/front-admin/main-dashboard.ejs', {
-      Name: req.session.user_name, session: req.session, profile_image: req.session.profile_image, total_orders_s: total_orders, EBT_balance: EBT_bal, ether_balance: actual_balance, main_rwn_vault: "0", total_users_s, ebtSold, totalArtwRewardsDestributed, usersRegisteredThisMonth
+      Name: req.session.user_name, session: req.session, profile_image: req.session.profile_image, total_orders_s: total_orders, EBT_balance: EBT_bal, ether_balance: actual_balance, main_rwn_vault: "0", total_users_s, ebtSold, totalEBTRewardsDestributed, usersRegisteredThisMonth
     }) 
   }
 })
@@ -636,7 +641,7 @@ routes.post('/update-password-user', (req, res) => {
           'We suggest you to please change your password after successfully logging in on the portal using the above password :\n\n' +
 
           'Here is the change password link: http://' + req.headers.host + '/Profile' + '\n\n' +
-          'Thanks and Regards,' + '\n' + 'ARTW Team' + '\n\n',
+          'Thanks and Regards,' + '\n' + '$EBT Team' + '\n\n',
       };
       smtpTransport.sendMail(mailOptions, function (err) {
         console.log(err);
@@ -882,7 +887,7 @@ routes.post('/submit-token', async (req, res, next) => {
                                           payment_status: 'pending',
                                           created_at: created_at,
                                           status: 'active',
-                                          token_type: 'ARTW',
+                                          token_type: '$EBT',
                                           transaction_type: 'Send'
 
                                         });
@@ -1206,7 +1211,7 @@ routes.get('/referral', (req, res, next) => {
                         payment_status: 'pending',
                         created_at: created_at,
                         status: 'active',
-                        token_type: 'ARTW',
+                        token_type: '$EBT',
                         transaction_type: 'Send',
                         referred_to_name: bonusUser.name,
                         referred_to_email: bonusUser.email,

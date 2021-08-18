@@ -84,7 +84,7 @@ const EBTSold = async (admin_bal) => {
     return ebtSold
 }
 
-const totalArtwRewardsDestributed = async (total_users_s) => {
+const totalEBTRewardsDestributed = async (total_users_s) => {
     let reffers = await RefCode.count({})
     let rewardsDistributed = (total_users_s * 10) + (reffers * 5)
     return rewardsDistributed
@@ -117,6 +117,6 @@ module.exports = {
     activateUser,
     deactivateUser,
     EBTSold,
-    totalArtwRewardsDestributed,
+    totalEBTRewardsDestributed,
     usersRegisteredThisMonth
 }

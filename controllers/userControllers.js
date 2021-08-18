@@ -162,7 +162,7 @@ const dashboardPage = async (req, res) => {
                 let full_value = coinbalance + eth_value;
                 full_value = Math.round(full_value * 100) / 100;
                 // res.render('dashboard', { err_msg, success_msg, ref_code, wallet_details, usdValue, etherValue, btcValue, bnbValue, import_wallet_id, balance, rown_bal, layout: false, session: req.session, crypto, all_transaction, wallet_time_difference, moment, bnbBalance, coinbalance, usd_value, ethBalance, full_value });
-                res.render('dashboard', { err_msg, success_msg, ref_code, wallet_details,  full_value, usdValue, ethBalance, etherValue, import_wallet_id, balance, rown_bal, layout: false, session: req.session, crypto, all_transaction, wallet_time_difference, moment, coinbalance, usd_value,});
+                res.render('dashboard', { err_msg, success_msg, ref_code, wallet_details, usd_value,  full_value, usdValue, ethBalance, etherValue, import_wallet_id, balance, rown_bal, layout: false, session: req.session, crypto, all_transaction, wallet_time_difference, moment, coinbalance, usd_value,});
             
             }
         }
