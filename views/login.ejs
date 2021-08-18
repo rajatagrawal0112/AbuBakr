@@ -39,6 +39,11 @@
         <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
+    <style>
+      .error_validate {
+        color: red;
+      }
+    </style>
    
 </head>
 <body class="index-body">
@@ -54,6 +59,12 @@
             <div class="col-md-4">
                 <div class="login-form-box">
                     <h2>Login</h2>
+                    <% if(err_msg!=undefined){ %>
+                      <span class="error_validate flash_msg"><%= err_msg %></span>
+                    <% }%>
+                    <% if(success_msg!=undefined){ %>
+                      <span class="succ_flash_msg" style="color: green;"><%= success_msg %></span>
+                    <% }%>
                     
                     <form action="login" method="POST">
 

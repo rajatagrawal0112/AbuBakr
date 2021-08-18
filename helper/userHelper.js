@@ -23,7 +23,7 @@ const addtokensettings = async function () {
     console.log(token)
 }
 
-addtokensettings();
+
 
 function generateCode() {
     var string = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';

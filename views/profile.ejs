@@ -89,26 +89,29 @@
                     
                     
                     <div class="tab-pane fade" id="info2" role="tabpanel" aria-labelledby="profile-tab">
-                    <form>
+                      <form method="POST" action="/submit-change-pass" id="password_form">
                       <div class="dashboard-box">
                         <div class="create-wallet-block profile-input-form">
                             <div class="row">
                               <div class="col-md-4">
                                 <div class="form-group text-left">
                                   <label>Current Password</label>
-                                  <input class="form-control" type="password" placeholder="*******">
+                                  <!-- <input class="form-control" type="password" placeholder="*******"> -->
+                                  <input class="form-control" type="password" id="password" name="password" placeholder="Current Password" data-rule-minlength="5" data-rule-maxlength="75" data-rule-required="true"  data-msg-required="Please enter current password.">
                                 </div>
                               </div>
                               <div class="col-md-4">
                                 <div class="form-group text-left">
                                   <label>New Password</label>
-                             <input class="form-control" type="password" placeholder="*******">
+                             <!-- <input class="form-control" type="password" placeholder="*******"> -->
+                             <input class="form-control" type="password" id="new_password" name="new_password" placeholder="New Password"  data-rule-minlength="5" data-rule-maxlength="75" data-rule-required="true"  data-msg-required="Please enter new password.">
                                 </div>
                               </div>
                               <div class="col-md-4">
                                 <div class="form-group text-left">
                                    <label>Confirm Password</label>
-                             <input class="form-control" type="password" placeholder="*******">
+                             <!-- <input class="form-control" type="password" placeholder="*******"> -->
+                             <input class="form-control" type="password" id="confrm_password" name="confrm_password"  data-rule-equalto="#new_password" placeholder="confirm password" data-rule-minlength="5" data-rule-maxlength="75" data-rule-required="true"  data-msg-required="Please enter confirm new password." data-msg-equalto="Please enter the same value again.">
                                 </div>
                               </div>
                             </div>

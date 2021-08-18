@@ -264,7 +264,7 @@ const referral = async (req, res) => {
         let user = await userServices.checkUserId(user_id);
         let ref_code = user.ref_code;
         let referrals = await userServices.findReferData(ref_code);
-        res.render('referral-table', { err_msg, success_msg, layout: false, session: req.session, referrals})
+        res.render('referral-table', { err_msg, success_msg, layout: false, ref_code, session: req.session, referrals})
     } else {
         res.redirect('/login');
 
