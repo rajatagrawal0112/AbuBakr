@@ -190,7 +190,7 @@ all_transaction.forEach(function (transaction) {
           <td width="15%"><a href="https://ropsten.etherscan.io/address/<%-transaction.sender_wallet_address%>" target="_blank"><%-transaction.sender_wallet_address%></a></td>
           <td width="15%"><a href="https://ropsten.etherscan.io/address/<%-transaction.receiver_wallet_address%>" target="_blank"><%-transaction.receiver_wallet_address%></a></td>
           <% } else {%>
-            <td width="20%" ><a href="https://testnet.bscscan.com/tx/<%-transaction.hash%>" target="_blank"><%-transaction.hash%> </a></td>
+            <td width="20%" ><a href="https://ropsten.etherscan.io/tx/<%-transaction.hash%>" target="_blank"><%-transaction.hash%> </a></td>
             <td width="15%"><a href="https://ropsten.etherscan.io/address/<%-transaction.sender_wallet_address%>" target="_blank"><%-transaction.sender_wallet_address%></a></td>
             <td width="15%"><a href="https://ropsten.etherscan.io/address/<%-transaction.receiver_wallet_address%>" target="_blank"><%-transaction.receiver_wallet_address%></a></td>
           <% } %>                                
@@ -273,9 +273,9 @@ $(document).ready( function () {
               else{
                 $('#user_tr').append(`<tr><td>${i+1}</td>
                   <td>${ tr_date}</td>
-                  <td><a href="https://testnet.bscscan.com/tx/${element.hash}" target="_blank">${ element.hash}</a></td>
-                  <td><a href="https://testnet.bscscan.com/address/${element.sender_wallet_address}" target="_blank">${ element.sender_wallet_address}</a></td>
-                  <td><a href="https://testnet.bscscan.com/address/${element.receiver_wallet_address}" target="_blank">${ element.receiver_wallet_address}</a></td>
+                  <td><a href="https://ropsten.etherscan.io/tx/${element.hash}" target="_blank">${ element.hash}</a></td>
+                  <td><a href="https://ropsten.etherscan.io/address/${element.sender_wallet_address}" target="_blank">${ element.sender_wallet_address}</a></td>
+                  <td><a href="https://ropsten.etherscan.io/address/${element.receiver_wallet_address}" target="_blank">${ element.receiver_wallet_address}</a></td>
                   <td>${ element.payment_status.charAt(0).toUpperCase()+ element.payment_status.slice(1)}</td>
                   <td>${ element.amount} ${element.token_type}</td></tr>`);
                   i++;

@@ -277,7 +277,7 @@ const submitUser = async (req, res) => {
                         '<br><br>\n\nOnce you enter the OTP and create a new wallet, we will credit it by 10 $EBT (worth US$10)  as a limited-time joining bonus.<br><br>\n\n' + 
                         'Moreover, you can earn more by referring your friends and earn US$5 equivalent $EBT tokens every time your friend joins by using your referral code. Your friend will also get US$5 equivalent $EBT tokens for using your referral code !<br><br>\n\n' +
                         'Time: ' + created + '<br><br>\n\n'
-                        'If this withdrawal attempt was not made by you it means someone visited your account. It may be an indication you have been the target of a phishing attempt and might want to consider moving your funds to a new wallet.' + '<br><br>\n\n' + 'Regards,<br>\nTeam The Abu Bakar<br>\nhttps://theartwcoin.com';
+                        'If this withdrawal attempt was not made by you it means someone visited your account. It may be an indication you have been the target of a phishing attempt and might want to consider moving your funds to a new wallet.' + '<br><br>\n\n' + 'Regards,<br>\nTeam The Abu Bakar<br>\nhttps://ebtico.com';
                         await mail(req.body.email, subject, text);
                         req.flash('success_msg', 'User registered. Please verify to continue.');
                         res.redirect('/verify-account');
@@ -367,7 +367,7 @@ const referral = async (req, res) => {
 //                         '<br><br>\n\nOnce you enter the OTP and create a new wallet, we will credit it by 50 Abu Bakr (worth US$50)  as a limited-time joining bonus.<br><br>\n\n' +
 //                         'Moreover, you can earn more by referring your friends and earn US$10 equivalent Abu Bakr tokens every time your friend joins by using your referral code. Your friend will also get US$10 equivalent Abu Bakr tokens for using your referral code !<br><br>\n\n' +
 //                         'Time: ' + user.created + '<br><br>\n\n'
-//                     'If this withdrawal attempt was not made by you it means someone visited your account. It may be an indication you have been the target of a phishing attempt and might want to consider moving your funds to a new wallet.' + '<br><br>\n\n' + 'Regards,<br>\nAbu Bakr Team<br>\nhttps://theartwcoin.com';
+//                     'If this withdrawal attempt was not made by you it means someone visited your account. It may be an indication you have been the target of a phishing attempt and might want to consider moving your funds to a new wallet.' + '<br><br>\n\n' + 'Regards,<br>\nAbu Bakr Team<br>\nhttps://ebtico.com';
 //                     await mail(req.body.email, subject, text);
 //                     req.flash('success_msg', 'User registered. Please verify to continue.');
 //                     res.redirect('/verify-account');
@@ -466,7 +466,7 @@ const submitForgot = async (req, res) => {
             let text = 'Hello ' + req.body.email + ',<br><br>\n\n' +
                 'Your one-time password (OTP) for change password is: ' + otp +
                 '<br><br>\n\n' + 'This would be valid for only for the next 10 minutes<br><br>\n\n' +
-                'If this password change attempt was not made by you it means someone visited your account. It may be an indication you have been the target of a phishing attempt and might want to consider moving your funds to a new wallet.' + '<br><br>\n\n' + 'Regards,<br>\nAbu Bakr Team<br>\nhttps://theartwcoin.com';
+                'If this password change attempt was not made by you it means someone visited your account. It may be an indication you have been the target of a phishing attempt and might want to consider moving your funds to a new wallet.' + '<br><br>\n\n' + 'Regards,<br>\nAbu Bakr Team<br>\nhttps://ebtico.com';
             await mail(req.body.email, subject, text);
             req.flash('success_msg', 'Password has been sent successfully to your registered email.');
             res.redirect('/forgot-pass');

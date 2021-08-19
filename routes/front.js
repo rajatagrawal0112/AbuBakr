@@ -26,7 +26,7 @@ router.get('/login', userControllers.loginPage);
 router.get('/logout', userControllers.logout);
 
 //***************** get recive-rowan **************//
-router.get('/receive-artw', isUser, function (req, res) {
+router.get('/receive-ebt', isUser, function (req, res) {
   err_msg = req.flash('err_msg');
   success_msg = req.flash('success_msg');
   var walletid = req.query.walletid;
@@ -508,7 +508,7 @@ router.post('/ETH', isUser, async function (req, res) {
         // if (err) return console.log(err);
         // console.log('Hello World > helloworld.txt');
         // });
-        req.flash("success_msg", "Thankyou!, Request has been sent successfully and you will get the ARTW in your account after your payment verification.");
+        req.flash("success_msg", "Thankyou!, Request has been sent successfully and you will get the ebt in your account after your payment verification.");
         res.redirect('/buy-coin');
       })
       .catch(err => {
