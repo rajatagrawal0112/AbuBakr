@@ -94,6 +94,7 @@ flex-wrap: wrap;
 
 .form-control {
     border-radius: 5px;
+    color: #fff !important;
 }
 .copy-id-dash.input-group.input-dash .form-control {
     border: none !important;
@@ -108,6 +109,12 @@ flex-wrap: wrap;
 }
 .checkbox a {
     color: #fbe393;
+}
+.sidebar .nav .nav-item .nav-link .menu-title {
+    color: #ddd;
+}
+.sidebar .nav .nav-item.hover-open .nav-link .menu-title {
+    color: #000;
 }
 .checkbox .cr {
     border: 1px solid #ff3598;
@@ -142,6 +149,7 @@ flex-wrap: wrap;
     padding: 0 15px;
     border-radius: 5px;
     height: 38px !important;
+    color: #fff !important;
 }
 
 .profile-input-form.create-wallet-block .form-group .input-group .nice-select {
