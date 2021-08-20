@@ -4,7 +4,7 @@ async function mail(to_mail, mail_subject, mail_content) {
 
     const mailOptions = {
         to: to_mail,
-        from: 'shanakhan@questglt.org',
+        from: 'info@ebitco.com',
         subject: mail_subject,
         html: mail_content
     };
@@ -20,8 +20,8 @@ async function mail(to_mail, mail_subject, mail_content) {
         service: 'gmail',
         host: 'smtp.gmail.com',
         auth: {
-            user: 'shanakhan@questglt.org',
-            pass: 'MomDad@789'
+            user: 'info@ebitco.com',
+            pass: 'bitebitco'
         }
     });
 
