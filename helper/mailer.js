@@ -4,7 +4,7 @@ async function mail(to_mail, mail_subject, mail_content) {
 
     const mailOptions = {
         to: to_mail,
-        from: 'shanakhan@questglt.org',
+        from: 'ebticoglt@gmail.com',
         subject: mail_subject,
         html: mail_content
     };
