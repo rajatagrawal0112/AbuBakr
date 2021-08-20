@@ -465,43 +465,41 @@ router.post('/ETH', isUser, async function (req, res) {
   console.log("Hello from ETH");
   console.log("fields========== ", req.body);
   var user_id = req.body.user_id;
-  var rwn_count = req.body.artweth;
-  Tokensettings.findOne({}).then(rowan_rate => {
-    var rate_per_ebt = rowan_rate.etherValue;
+  var ebt_count = req.body.ebt;
+  Tokensettings.findOne({}).then(ebt_rate => {
+    var rate_per_ebt = ebt_rate.etherValue;
     // var rate_per_rwn = req.body.rate_per_rowan;
-    console.log("------------ETH ", rate_per_ebt);
-    var total_amnt = (rwn_count) * (rate_per_ebt);
-    console.log("-----------Total amount ", total_amnt);
-    console.log(total_amnt);
-    var sender_wallet_address = req.body.eth_wallet_address;
-    var trnsaction_Id = req.body.transaction_id;
-    var ebt_wallet_address = req.body.wallet_address;
-    var imageFile = req.files;
-    var image;
-    if (!imageFile) {
-      image = ""
-    } else {
-      image = req.files.image.name;
-    }
+    var total_amnt = (ebt_count) * (rate_per_ebt);
+    var eth_wallet_address = req.body.eth_wallet_address;
+    var transaction_Id = req.body.transaction_id;
+    // var sender_wallet_address = req.body.wallet_address;
+    var imageFile = req.body.transactionImage;
+    // var image;
+    // if (!imageFile) {
+    //   image = ""
+    // } else {
+    //   image = req.files.image.name;
+    //   console.log("vvvvvvvvv");
+    // }
     var payment_type = "ETH";
     var created_at = new Date();
-
+    // console.log("-----------Total amount ",payment_type, created_at, total_amnt,eth_wallet_address,transaction_Id,imageFile);
     const order = new OrderDetails({
       user_id: user_id,
       ebt_count: ebt_count,
       rate_per_ebt: rate_per_ebt,
       total_amnt: total_amnt,
-      trnsaction_Id: trnsaction_Id,
-      ebt_wallet_address: ebt_wallet_address,
-      sender_wallet_address: sender_wallet_address,
-      image: image,
+      transaction_Id: transaction_Id,
+      // sender_wallet_address: sender_wallet_address,
+      eth_wallet_address: eth_wallet_address,
+      image: imageFile,
       payment_type: payment_type,
       created_at: created_at
     })
     order.save()
     console.log("details",order).then(result => {
-        var imgpath = 'public/tx_proof/'+ image;
-        let testFile = fs.readFileSync(req.files.image.path);
+        var imgpath = 'public/tx_proof/'+ imageFile;
+        let testFile = fs.readFileSync(req.files.imageFile.path);
         let testBuffer = new Buffer(testFile);
         fs.writeFile(imgpath, testBuffer, function (err) {
         if (err) return console.log(err);
@@ -518,7 +516,7 @@ router.post('/ETH', isUser, async function (req, res) {
   }).catch(err1 => {
 
   })
-
+  res.redirect('/dashboard');
   // })    
 })
 

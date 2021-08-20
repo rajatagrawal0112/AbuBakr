@@ -948,22 +948,22 @@ var OrderDeatailsSchema = mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User_registration'
     },
-    rwn_count: {
+    ebt_count: {
         type: String
     },
-    rate_per_rwn: {
+    rate_per_ebt: {
         type: String
     },
     total_amnt: {
         type: String
     },
-    trnsaction_Id: {
+    transaction_Id: {
         type: String
     },
     sender_wallet_address: {
         type: String
     },
-    rwn_wallet_address: {
+    eth_wallet_address: {
         type: String
     },
     image: {

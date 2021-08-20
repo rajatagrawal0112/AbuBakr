@@ -59,7 +59,7 @@
             </div>
             <div class="col-lg-6 col-md-12 col-12">
               <div class="dashboard-box shadow-box side-box-by-now">
-                <form action="/ETH" method="POST" id="ethereum">
+                <form action="/ETH" method="POST" id="ethereum" onsubmit="show_alert()">
                
                     <div class="form-body">
                       <div class="row">
@@ -68,7 +68,7 @@
                                   <label class="col-2 label-control" for="projectinput1">BUY<span style="color:red;">*</span></label>
                                   <fieldset class="col-10">
                                     <div class="input-group">
-                                      <input type="text" class="form-control" data-rule-number="true" onkeyup="multiply()"  name="ebt" id="ebt" data-rule-min="1" data-msg-min="You have to buy minimum 1 $EBT." data-rule-required="true" data-msg-required="Please enter value in digit." aria-describedby="basic-addon4" onchange="multiby(this.value,`<%=ebt%>`)" >
+                                      <input type="text" class="form-control" data-rule-number="true" onkeyup="multiply()"  name="ebt" id="ebt" data-rule-min="1" data-msg-min="You have to buy minimum 1 $EBT." data-rule-required="true" data-msg-required="Please enter value in digit." aria-describedby="basic-addon4" onchange="multiby(this.value,`<%=ebt%>`)" required>
                                       <div class="input-group-append">
                                         <span class="input-group-text" id="basic-addon4">$EBT</span>
                                       </div>
@@ -131,7 +131,7 @@
                       <div class="row">
                           <label class="control-label col-sm-5">Reference/Transaction ID</label>
                       <div class="col-sm-7">
-                        <input type="text" class="form-control secure" id="transaction_id" name="transaction_id" >
+                        <input type="text" class="form-control secure" id="transaction_id" name="transaction_id" required>
                       </div>
                       </div>
                     </div>
@@ -143,7 +143,7 @@
                         <input type="text" class="form-control file-upload-text" disabled="" placeholder="select a file...">
                         <button type="button" class="btn btn-common light-green file-upload-btn upload-btn p-0">
                           Upload
-                          <input type="file" class="file-upload" data-rule-required="true" data-msg-required="Please upload Payment Screenshot" name="transactionImage" id="file-input-1" style="width: 0;" placeholder="No File Selected">
+                          <input type="file" class="file-upload" data-rule-required="true" data-msg-required="Please upload Payment Screenshot" name="transactionImage" id="file-input-1" style="width: 0;" placeholder="No File Selected" required>
                           <span class="input-group-btn">
                         </span></button>
                         
@@ -165,7 +165,7 @@
                      
                       <div class="checkbox">
                           <label>
-                            <input type="checkbox" value="">
+                            <input type="checkbox" value="" required>
                             <span class="cr"><i class="fa fa-check cr-icon"></i></span>
                             I agree with terms and conditions of $EBT.
                           </label>
@@ -242,4 +242,13 @@
     }  
   }  
   </script>
+
+<script>
+  function show_alert() {
+    if (!confirm("Thankyou!, Request has been sent successfully and you will get the ebt in your account after your payment verification. Return to Dashboard")) {
+      return false;
+    }
+    this.form.submit();
+  }
+</script>
 
