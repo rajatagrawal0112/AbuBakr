@@ -8,7 +8,7 @@ const {AdminCoinTransfer} = require('../helper/ethHelper');
 
 const { balanceMainETH, ETHTransfer } = require('../helper/ethHelper');
 
-const signupReward = '50';
+const signupReward = '10';
 const referReward = '10';
 const coinFees = '1';
 const adminAddress = process.env.ADMIN;
