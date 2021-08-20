@@ -467,15 +467,15 @@ router.post('/ETH', isUser, async function (req, res) {
   var user_id = req.body.user_id;
   var rwn_count = req.body.artweth;
   Tokensettings.findOne({}).then(rowan_rate => {
-    var rate_per_rwn = rowan_rate.etherValue;
+    var rate_per_ebt = rowan_rate.etherValue;
     // var rate_per_rwn = req.body.rate_per_rowan;
-    console.log("------------ETH ", rate_per_rwn);
-    var total_amnt = (rwn_count) * (rate_per_rwn);
+    console.log("------------ETH ", rate_per_ebt);
+    var total_amnt = (rwn_count) * (rate_per_ebt);
     console.log("-----------Total amount ", total_amnt);
     console.log(total_amnt);
-    var sender_wallet_address = req.body.eth_wallet_address_eth;
+    var sender_wallet_address = req.body.eth_wallet_address;
     var trnsaction_Id = req.body.transaction_id;
-    var rwn_wallet_address = req.body.wallet_address;
+    var ebt_wallet_address = req.body.wallet_address;
     var imageFile = req.files;
     var image;
     if (!imageFile) {
@@ -488,26 +488,25 @@ router.post('/ETH', isUser, async function (req, res) {
 
     const order = new OrderDetails({
       user_id: user_id,
-      rwn_count: rwn_count,
-      rate_per_rwn: rate_per_rwn,
+      ebt_count: ebt_count,
+      rate_per_ebt: rate_per_ebt,
       total_amnt: total_amnt,
       trnsaction_Id: trnsaction_Id,
-      rwn_wallet_address: rwn_wallet_address,
+      ebt_wallet_address: ebt_wallet_address,
       sender_wallet_address: sender_wallet_address,
       image: image,
       payment_type: payment_type,
       created_at: created_at
     })
     order.save()
-    console.log("details",order)
-      .then(result => {
-        // var imgpath = 'public/tx_proof/'+ image;
-        // let testFile = fs.readFileSync(req.files.image.path);
-        // let testBuffer = new Buffer(testFile);
-        // fs.writeFile(imgpath, testBuffer, function (err) {
-        // if (err) return console.log(err);
-        // console.log('Hello World > helloworld.txt');
-        // });
+    console.log("details",order).then(result => {
+        var imgpath = 'public/tx_proof/'+ image;
+        let testFile = fs.readFileSync(req.files.image.path);
+        let testBuffer = new Buffer(testFile);
+        fs.writeFile(imgpath, testBuffer, function (err) {
+        if (err) return console.log(err);
+        console.log('Hello World > helloworld.txt');
+        });
         req.flash("success_msg", "Thankyou!, Request has been sent successfully and you will get the ebt in your account after your payment verification.");
         res.redirect('/buy-coin');
       })

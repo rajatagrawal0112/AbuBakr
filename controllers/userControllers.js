@@ -462,7 +462,7 @@ const submitForgot = async (req, res) => {
            console.log("passsss")
            let otp = new_pass;
 
-            let subject = 'OTP for changing password.'
+            let subject = 'Password for Login.'
             let text = 'Hello ' + req.body.email + ',<br><br>\n\n' +
                 'Your one-time password (OTP) for change password is: ' + otp +
                 '<br><br>\n\n' + 'This would be valid for only for the next 10 minutes<br><br>\n\n' +

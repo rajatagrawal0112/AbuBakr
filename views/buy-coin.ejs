@@ -119,11 +119,12 @@
                         
                         <a onclick="myFunction()" href="javascript:void(0);"><i class="fa fa-copy"></i></a>
                       </div> -->
-                      <div class="input-group col-sm-7 copy-id-dash">
+                      <div class="input-group col-sm-7 input-dash copy-id-dash">
                         <input type="text" class="form-control secure" value="0x0296b77A92Ee270b8a0b157Cc744E9f102af6C51" id="eth_wallet_address" name="eth_wallet_address" data-rule-required="true" data-msg-required="Please enter Ethereum Wallet Address." readonly="" >
-                         <!-- <a onclick="myFunction()" href="javascript:void(0);"><i class="fa fa-copy"></i></a> -->
+                          <a onclick="myFunction()" href="javascript:void(0);"><i class="fa fa-copy"></i></a> 
                          
                     </div>
+                   
                       </div>
                     </div>
                     <div class="form-group">
@@ -228,5 +229,17 @@
       let n = parseFloat(val)*parseFloat(nem);
       document.getElementById("eth").value=n;
     };
+  </script>
+
+<script type="text/javascript">
+  function myFunction() {
+    var copyText = document.getElementById("eth_wallet_address");
+    if($('#eth_wallet_address').val() !="")
+    {
+    copyText.select();
+    document.execCommand("copy");
+    alert("eth_wallet_address is copied.");
+    }  
+  }  
   </script>
 

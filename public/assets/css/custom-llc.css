@@ -668,4 +668,8 @@ html {
       outline: none;
       box-shadow: none;
   }
+  .header-main.index-header .nav-link.sign-up-btn.purple-btn-index.golden-btn{
+      margin-left: 0 !important;
+      margin-top: 10px;
+  }
   }

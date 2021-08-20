@@ -137,6 +137,8 @@ flex-wrap: wrap;
     font-size: 14px;
     padding: 10px 15px;
     height: auto;
+    background-color: #000 !important;
+    border-radius: 10px !important;
 }
 
 .table.dataTable.no-footer td a{
@@ -150,6 +152,22 @@ flex-wrap: wrap;
     border-radius: 5px;
     height: 38px !important;
     color: #fff !important;
+}
+ .copy-id-dash a {
+    display: block;
+    height: 30px;
+    /* background-color: red; */
+    width: 30px;
+    background: #d5b44a;
+    background: -webkit-linear-gradient(left, rgba(213, 180, 74,1) 0%,rgba(251, 227, 147,1) 100%);
+    background: linear-gradient(to right, rgba(213, 180, 74,1) 0%,rgba(251, 227, 147,1) 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#d5b44a ', endColorstr='#fbe393',GradientType=1 );
+    margin: 0 10px;
+    border-radius: 5px;
+    color: #fff !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .profile-input-form.create-wallet-block .form-group .input-group .nice-select {

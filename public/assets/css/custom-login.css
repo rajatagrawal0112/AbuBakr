@@ -548,16 +548,16 @@ html {
   @media (max-width: 768px){
   
   .login-sec {
-      padding-top: 30%;
-      min-height: auto;
+      padding-top: 40%;
+      min-height: 100vh;
       display: block;
+      background-image: none;
+      height: auto;
   }
-  
-  .login-form-box {
-      background-color: #fff;
-      border-radius: 10px;
-      padding: 20px;
-  }
+  .logo-box {
+    left: 30px;
+}
+
   .for-mobile {
       display: flex !important;
   }
