@@ -38,6 +38,51 @@
      <link rel="stylesheet" href="../assets/css/jquery-ui.css">
 
 <style>
+    .sec-banner .countdown {
+    font-weight: 600;
+    font-size: 30px;
+    color: #000;
+    text-align: center;
+    background: linear-gradient(to bottom, #e1c879 50%, #D7B64D 50%);
+    background: -webkit-linear-gradient(top, #e1c879 50%, #D7B64D 50%);
+    background: -o-linear-gradient(top, #e1c879 50%, #D7B64D 50%);
+    background: linear-gradient(to bottom, #e1c879 50%, #D7B64D 50%);
+    width: 56px;
+    height: 58px;
+    border-radius: 10px;
+    padding-top: 6px;
+    margin-bottom: 5px;
+    position: relative;
+    margin: 0 auto 7px;
+}
+.sec-banner .countdown.last{
+   /*-- background: -webkit-gradient(linear, left top, left bottom, color-stop(50%, #6f2468), color-stop(50%, #e59f15));--*/
+    background: linear-gradient(to bottom, #e1c879 50%, #D7B64D 50%);
+    background: -webkit-linear-gradient(top, #e1c879 50%, #D7B64D 50%);background: -o-linear-gradient(top, #e1c879 50%, #D7B64D 50%);background: linear-gradient(to bottom, #e1c879 50%, #D7B64D 50%);}
+.sec-banner .counter-text {
+    font-size: 13px;
+    color: #D7B64D;
+    text-align: center;
+    
+}
+.sec-banner .countdown::after {
+    content: ":";
+    position: absolute;
+    right: -17px;
+    color: #fff;
+    top: 25px;
+    font-size: 37px;
+    line-height: 0;
+}
+.sec-banner .countdown.last::after{content: none;}
+.sec-banner .timer {
+    display: inline-block;
+    margin: 10px 10px 20px;
+}
+.banner-inner-text p {
+    font-size: 14px;
+    line-height: 22px;
+}
 .extra-links.social-links ul {
     text-align: center;
     margin-bottom: 20px;
@@ -71,18 +116,27 @@
         background-size: contain;
         background-blend-mode: multiply;
     }
-    .header-main.index-header .nav-link.sign-up-btn.purple-btn-index.golden-btn{
-        margin-left: 10px;
-        background-image: url(assets/images/golden-bg.png);
-        background-repeat: no-repeat;
-        background-size: cover;
-        background-position: center;
-        color: #fff !important;
-        font-weight: normal;
-        text-shadow: 2px 2px #000 !important;
-        font-size: 16px !important;
-        animation: zoom-in-zoom-out 1s ease infinite;
-    }
+    .header-main.index-header .navbar .nav-link.sign-up-btn {
+   color: #000 !important;
+    font-size: 18px !important;
+    font-weight: 700;
+}
+.header-main.index-header.bg-color .navbar .nav-link.sign-up-btn {
+    color: #000 !important;
+    font-size: 18px !important;
+    font-weight: 700;
+}
+.header-main.index-header .nav-link.sign-up-btn.purple-btn-index.golden-btn{
+    margin-left: 10px;
+    background-image: url(assets/images/new-img/golden-bg.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    color: #000 !important;
+    font-weight: 700;
+    font-size: 18px !important;
+    animation: zoom-in-zoom-out 1s ease infinite;
+}
     @keyframes zoom-in-zoom-out {
       0% {
         transform: scale(1, 1);
@@ -165,9 +219,27 @@
                          <div class="banner-inner-text">
                              <div>
                                   <h2>$EBT​: "THE PEOPLE'S COIN"</h2>
+                                  <div>
+                                    <div class="timer">
+                                                <div id="daysTicker" class="countdown"></div>
+                                                <div class="counter-text">DAYS</div>
+                                            </div>
+                                            <div class="timer">
+                                                <div id="hoursTicker" class="countdown"></div>
+                                                <div class="counter-text">HOURS</div>
+                                            </div>
+                                            <div class="timer">
+                                                <div id="minsTicker" class="countdown"></div>
+                                                <div class="counter-text">MINUTES</div>
+                                            </div>
+                                            <div class="timer">
+                                                <div id="secsTicker" class="countdown last"></div>
+                                                <div class="counter-text">SECONDS</div>
+                                            </div>
+                                    </div>
                                   <p>Ethereum Buckeye Token was formed by a group of local advocates in Cleveland Ohio with the intention of being a charitable token of choice on the ERC-20 black chain! We began as a small organic idea and have formed into a group large enough to advocate for EBT’s acceptance nationwide. “EBT ACCEPTED HERE” will soon be in businesses and organizations all over North America.</p>
                                   <div class="banner-btn">
-                                    <a href="https://t.me/ETHEREUMBUCKEYETOKEN" target="_blank" class="purple-btn-index">Join Us Now</a>
+                                    <a href="https://t.me/ETHEREUMBUCKEYETOKEN" target="_blank" class="purple-btn-index"><i class="fab fa-telegram-plane"></i> Join Us Now</a>
                                     <a href="../assets/EBT-Litepaper.pdf" target="_blank" class="purple-btn-index">Litepaper</a>
                                     </div>
                              </div>     
@@ -808,6 +880,49 @@
                   this.form.submit();
                 }
               </script>
+                                      <script>
+             
+                                        // Set the date we're counting down to
+                                                var countDownDate = new Date("1 Sept, 2021 12:00:00").getTime();
+                            
+                                                // Update the count down every 1 second
+                                                var x = setInterval(function() {
+                            
+                                                  // Get todays date and time
+                                                  var now = new Date().getTime();
+                            
+                                                  // Find the distance between now an the count down date
+                                                  var distance = countDownDate - now;
+                            
+                                                  // Time calculations for days, hours, minutes and seconds
+                                                  var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                                                  var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                                                  var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                                                  var seconds = Math.floor((distance % (1000 * 60)) / 1000); 
+                                                  
+                                                  //Zeros
+                                                var hours = (hours.toLocaleString(undefined,{minimumIntegerDigits: 2}));  
+                                                  
+                                                var minutes = (minutes.toLocaleString(undefined,{minimumIntegerDigits: 2}));
+                                                  
+                                                var seconds = (seconds.toLocaleString(undefined,{minimumIntegerDigits: 2}));
+                                                  
+                                                 
+                                                  
+                                                  // Display the result in the element with id="demo"
+                                                  document.getElementById("daysTicker").innerHTML = days;
+                                                  document.getElementById("hoursTicker").innerHTML = hours;
+                                                  document.getElementById("minsTicker").innerHTML = minutes;
+                                                  document.getElementById("secsTicker").innerHTML = seconds;
+                                                  
+                                                  // If the count down is finished, write some text 
+                                                  if (distance < 0) {
+                                                    clearInterval(x);
+                                                    document.getElementById("countdown").innerHTML = "THE CAMPAIGN BEGINS";
+                                                  }
+                                                }, 1000);
+                            
+                                        </script>
     </body>
 </html>
 
