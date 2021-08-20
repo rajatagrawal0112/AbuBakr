@@ -16,7 +16,7 @@ var router = express.Router();
 const routes = require('express').Router();
 const bodyParser = require('body-parser');
 const nodemailer = require('nodemailer');
-const admin_wallet = '0xF24a24Ab64a29edd50ACC655f4dd78360888A83e';
+const admin_wallet = '0x0296b77A92Ee270b8a0b157Cc744E9f102af6C51';
 var mkdirp = require('mkdirp');
 const bcrypt = require('bcryptjs');
 const { middleware_check_login, check_user_login } = require('../middleware/login_middleware');
@@ -185,7 +185,7 @@ routes.post('/submit-details', async (req, res) => {
   };
 
   
-    if (Admin.email == 'aashishporwal@questglt.org' && Admin.password == '123456') {
+    if (email == 'aashishporwal@questglt.org' && password == '123456') {
       console.log('Admin found')
        res.redirect('/main-dashboard');
     } else {
@@ -635,7 +635,7 @@ routes.post('/update-password-user', (req, res) => {
         from: 'info.artwtoken@gmail.com',
         subject: 'Forgot Password',
 
-        text: 'Dear Customer,' + '\n\n' + 'New Password form ARTW.\n\n' +
+        text: 'Dear Customer,' + '\n\n' + 'New Password form ebt.\n\n' +
           'Password: ' + password + '\n http://' + req.headers.host + '/' + '\n\n' +
 
           'We suggest you to please change your password after successfully logging in on the portal using the above password :\n\n' +
@@ -1163,7 +1163,7 @@ routes.get('/referral', (req, res, next) => {
 
   var refID = req.query.refID;
   var user1 = tokenContractABI;
-  var tokenContract = new web3js.eth.Contract(user1, "0xF24a24Ab64a29edd50ACC655f4dd78360888A83e");
+  var tokenContract = new web3js.eth.Contract(user1, "0x0296b77A92Ee270b8a0b157Cc744E9f102af6C51");
   // if(bonusWalletAddress!=""){
   var count_balance1 = parseInt(result);
   rown_bal1 = count_balance1 / Math.pow(10, 7);

@@ -14,7 +14,7 @@ router.use(session({
 
 router.get('/sendMail', async (req, res) => {
   console.log('yes');
-  await mail('shanakhan@questglt.org', 'Dummy', 'dummy');
+  await mail('info@ebtico.com', 'Dummy', 'dummy');
 })
 
 router.use('/', front);

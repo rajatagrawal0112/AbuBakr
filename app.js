@@ -69,23 +69,25 @@ app.use('/', routes);
     res.send('Hello World!')
     res.setHeader('X-Foo', 'bar')
    })
-   
-var options = {
 
-key: fs.readFileSync('/etc/letsencrypt/live/ebtico.com/privkey.pem', 'utf8'),
+// var options = {
 
-cert: fs.readFileSync('/etc/letsencrypt/live/ebtico.com/cert.pem', 'utf8'),
+// key: fs.readFileSync('/etc/letsencrypt/live/ebtico.com/privkey.pem', 'utf8'),
 
-ca: fs.readFileSync('/etc/letsencrypt/live/ebtico.com/chain.pem', 'utf8')
+// cert: fs.readFileSync('/etc/letsencrypt/live/ebtico.com/cert.pem', 'utf8'),
+
+// ca: fs.readFileSync('/etc/letsencrypt/live/ebtico.com/chain.pem', 'utf8')
     
-};
+// };
 
-console.log('3009')
-// Create an HTTP service.
-http.createServer(app).listen(4000); 
-// Create an HTTPS service identical to the HTTP service.
-https.createServer(options, app).listen(443);
+// console.log('3009')
+// // Create an HTTP service.
+// http.createServer(app).listen(4000); 
+// // Create an HTTPS service identical to the HTTP service.
+// https.createServer(options, app).listen(443);
+
+
  // Set 'views' directory for any views 
  // being rendered res.render()
-const PORT = 9001;
+const PORT = 443;
 app.listen(PORT, () => console.log(`App listening on port ${PORT}!`));
