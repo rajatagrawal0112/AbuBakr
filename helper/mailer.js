@@ -20,10 +20,10 @@ async function mail(to_mail, mail_subject, mail_content) {
         service: 'gmail',
         host: 'smtp.gmail.com',
         auth: {
-            //  user: 'ebticoglt@gmail.com',
-            //     pass: 'bitebitco'
-            user: 'shanakhan@questglt.org',
-            pass: 'MomDad@789'
+             user: 'ebticoglt@gmail.com',
+                pass: 'bitebitco'
+            // user: 'shanakhan@questglt.org',
+            // pass: 'MomDad@789'
         }
     });
 
