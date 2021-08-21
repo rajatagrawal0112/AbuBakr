@@ -386,7 +386,9 @@ const LoginPost = async (req, res) => {
                     let userLogin = await userServices.checkUserPass(req.body.email.trim(), mystr);
                    
                     if (userLogin) {
+
                        // let status = userLogin.status;
+
                         let status="active";
                         let email_status = userLogin.email_verify;
                     
