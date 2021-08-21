@@ -270,7 +270,7 @@ const submitUser = async (req, res) => {
                         req.session.re_usr_name = user.name;
                         req.session.re_usr_email = user.email;
                         req.session.is_user_logged_in = false;
-                        let otp = user.otp;
+                       /* let otp = user.otp;
                         let subject = 'OTP for your new account on The Abu Bakar website';
                         let text = 'Hello '+ req.body.email + ',<br><br>\n\nCongratulations on signing up with The Abu Bakar website!<br><br>\n\n' +
                         'Your one-time password (OTP) for signing up is: <strong>' + otp +  '</strong>. This would be valid only for the next 10 minutes.' +
@@ -278,9 +278,9 @@ const submitUser = async (req, res) => {
                         'Moreover, you can earn more by referring your friends and earn US$5 equivalent $EBT tokens every time your friend joins by using your referral code. Your friend will also get US$5 equivalent $EBT tokens for using your referral code !<br><br>\n\n' +
                         'Time: ' + created + '<br><br>\n\n'
                         'If this withdrawal attempt was not made by you it means someone visited your account. It may be an indication you have been the target of a phishing attempt and might want to consider moving your funds to a new wallet.' + '<br><br>\n\n' + 'Regards,<br>\nTeam The Abu Bakar<br>\nhttps://ebtico.com';
-                        await mail(req.body.email, subject, text);
+                        await mail(req.body.email, subject, text);*/
                         req.flash('success_msg', 'User registered. Please verify to continue.');
-                        res.redirect('/verify-account');
+                        res.redirect('/login');
                     }
                     else {
                         req.flash('err_msg', 'Password does not match.');
@@ -386,7 +386,8 @@ const LoginPost = async (req, res) => {
                     let userLogin = await userServices.checkUserPass(req.body.email.trim(), mystr);
                    
                     if (userLogin) {
-                        let status = userLogin.status;
+                       // let status = userLogin.status;
+                        let status="active";
                         let email_status = userLogin.email_verify;
                     
 
