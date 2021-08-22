@@ -434,7 +434,7 @@ router.get('/buy-coin', isUser, function (req, res) {
   success = req.flash('success_msg');
   var user_id = req.session.re_us_id;
   Tokensettings.findOne().then(btcresult => {
-    var ebt = btcresult.usdValue;
+    var ebt = btcresult.etherValue;
     Importwallet.findOne({ 'user_id': user_id, 'login_status': 'login' }, function (err, loginwallet) {
       if (err) {
         console.log("Something went wrong");
