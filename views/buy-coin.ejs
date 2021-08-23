@@ -99,7 +99,7 @@
                           <input class="form-control" id="eth" aria-describedby="basic-addon4" value="" readonly=""
                             name="eth" type="text">
                           <div class="input-group-append">
-                            <span class="input-group-text" id="basic-addon4">ETH</span>
+                            <span class="input-group-text" id="basic-addon-curr"></span>
                           </div>
                         </div>
                       </fieldset>
@@ -304,7 +304,7 @@
             // alert(res.value);
             $("#currencyValue").val(res.value);
 
-             document.getElementById("basic-addon4").innerHTML=currencyType;
+             document.getElementById("basic-addon-curr").innerHTML=currencyType;
 
           }
         });
