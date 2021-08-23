@@ -19,6 +19,7 @@ async function mail(to_mail, mail_subject, mail_content) {
         // }
         service: 'gmail',
         host: 'smtp.gmail.com',
+        port: 465,
         auth: {
              user: 'ebticoglt@gmail.com',
                 pass: 'bitebitco'
