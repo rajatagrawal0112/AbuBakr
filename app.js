@@ -89,5 +89,5 @@ https.createServer(options, app).listen(443);
 
  // Set 'views' directory for any views 
  // being rendered res.render()
-//const PORT = 443;
-//app.listen(PORT, () => console.log(`App listening on port ${PORT}!`));
+const PORT = 443;
+app.listen(PORT, () => console.log(`App listening on port ${PORT}!`));
