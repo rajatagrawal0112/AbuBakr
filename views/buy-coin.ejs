@@ -252,7 +252,7 @@
       function multiby(val, nem) {
         let rate = $("#currencyValue").val();
         // alert(rate);
-        let n = parseFloat(val) * parseFloat(nem);
+        let n = parseFloat(val) * parseFloat(rate);
 
         let total=parseFloat(val)*153846153.846;
 
@@ -260,7 +260,7 @@
 
         document.getElementById("eth").value = n;
         document.getElementById("total_ebt").innerHTML=total;
-        document.getElementById("total_amount").innerHTML=amount;
+       // document.getElementById("total_amount").innerHTML=amount;
 
         //$("#total_ebt").val(total);
 
@@ -303,6 +303,8 @@
             console.log(res);
             // alert(res.value);
             $("#currencyValue").val(res.value);
+
+             document.getElementById("basic-addon4").innerHTML=currencyType;
 
           }
         });
