@@ -109,7 +109,7 @@
               </div>
               <input type="hidden" value="<%=ebt%>" name="rate_per_ebt" id="rate_per_ebteth">
              
-              <p  class="">1EBT = 0.0000000065$</p>  
+              <p  class="font-italic value-coin-line mx-1 mb-2">1EBT = 0.0000000065$</p>  
 
               <p class="font-italic value-coin-line mx-1 mb-2"id="total_ebt"> </p>
               <p class="font-italic value-coin-line mx-1 mb-2"id="total_amount"> </p>
@@ -259,10 +259,12 @@
         let amount=total*rate;
 
         document.getElementById("eth").value = n;
+        document.getElementById("total_ebt").innerHTML=total;
+        document.getElementById("total_amount").innerHTML=amount;
 
-        $("#total_ebt").val(total);
+        //$("#total_ebt").val(total);
 
-        $("#amount_total").val(amount);
+        //$("#amount_total").val(amount);
 
         console.log(total);
         console.log(amount);
