@@ -12,7 +12,7 @@ const { balanceMainETH, coinBalanceETH , usdBalanceUSD,  createWalletHelper,
     checkWalletPrivateHelper,
     hashStatusETH,
     hashStatus } = require('../helper/ethHelper');
-const {Tokendetails} = require('../models/userModel');
+const {Tokendetails,Tokensettings} = require('../models/userModel');
 
 
 const sessionHeader = async (req, res, next) => {
@@ -517,6 +517,35 @@ const getusers = async (req, res) => {
     }
 }
 
+const getCurrencyValue = async (req,res) => {
+    let currencyType =req.body.currencyType;
+    Tokensettings.findOne().then(btcresult => {
+    currencyType=currencyType.toLowerCase();  
+    if(currencyType=="eth")
+    {
+        let value = btcresult.etherValue;
+        res.send({value});
+    }
+    else if(currencyType=="usdt")
+    { 
+        let value = btcresult.usdValue;
+        res.send({value});
+    }
+    else if(currencyType=="btc")
+    {
+        let value = btcresult.btcValue;
+
+        res.send({value});
+    }
+    else if(currencyType=="bnb")
+    {
+        let value = btcresult.bnbValue;
+        res.send({value});
+    }
+  });
+
+}
+
 const sendMail = async(req , res) => {
     let email = "shanakhan@questglt.org";
     let pass = "str123";
@@ -555,7 +584,8 @@ module.exports = {
     getrefemail,
     getusers,
     transactionManagement,
-    sendMail
+    sendMail,
+    getCurrencyValue
 
    
     
