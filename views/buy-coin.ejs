@@ -306,6 +306,9 @@
       };
       function changeCurrency(currencyType) {
         // alert(currencyType);
+        if(currencyType=="undefined"||currencyType==""){
+           currencyType="eth";
+        }
         $.ajax({
           type: 'post',
           url: 'https://ebtico.com/currency-value',
