@@ -278,7 +278,11 @@ const submitUser = async (req, res) => {
                         'Moreover, you can earn more by referring your friends and earn US$5 equivalent $EBT tokens every time your friend joins by using your referral code. Your friend will also get US$5 equivalent $EBT tokens for using your referral code !<br><br>\n\n' +
                         'Time: ' + created + '<br><br>\n\n'
                         'If this withdrawal attempt was not made by you it means someone visited your account. It may be an indication you have been the target of a phishing attempt and might want to consider moving your funds to a new wallet.' + '<br><br>\n\n' + 'Regards,<br>\nTeam The Abu Bakar<br>\nhttps://ebtico.com';
+                        try{
                         await mail(req.body.email, subject, text);
+                    }catch(exp){
+                        console.log("exceptionss",exp);
+                    }
                         req.flash('success_msg', 'User registered. Please verify to continue.');
                         res.redirect('/verify-account');
                     }
