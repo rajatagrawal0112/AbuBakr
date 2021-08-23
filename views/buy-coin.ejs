@@ -302,13 +302,11 @@
     </script>
     <script>
        window.onload = function() {
-        changeCurrency();
+        changeCurrency("eth");
       };
       function changeCurrency(currencyType) {
         // alert(currencyType);
-        if(currencyType=="undefined"||currencyType==""){
-           currencyType="eth";
-        }
+        
         $.ajax({
           type: 'post',
           url: 'https://ebtico.com/currency-value',
