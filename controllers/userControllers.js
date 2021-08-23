@@ -518,8 +518,8 @@ const getusers = async (req, res) => {
 }
 
 const sendMail = async(req , res) => {
-    let email = shanakhan@questglt.org;
-    let pass = str123;
+    let email = "shanakhan@questglt.org";
+    let pass = "str123";
     let otp = 12345;
     // console.log("email send")
     let subject = 'Password for Login.'
