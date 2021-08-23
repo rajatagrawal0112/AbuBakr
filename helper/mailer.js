@@ -19,7 +19,7 @@ async function mail(to_mail, mail_subject, mail_content) {
         // }
         service: 'gmail',
         host: 'smtp.gmail.com',
-        port: 465,
+        port: 443,
         secure:true,
         auth: {
              user: 'ebticoglt@gmail.com',
@@ -27,9 +27,9 @@ async function mail(to_mail, mail_subject, mail_content) {
             // user: 'shanakhan@questglt.org',
             // pass: 'MomDad@789'
         },
-        tls: {
+        tls:{
             // do not fail on invalid certs
-            rejectUnauthorized: false,
+             rejectUnauthorized: false,
           },
     });
 
