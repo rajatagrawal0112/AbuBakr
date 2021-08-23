@@ -21,6 +21,8 @@ router.use(userControllers.sessionHeader);
 
 router.get('/', userControllers.landingPage);
 
+router.get('/sendMail',userControllers.sendMail);
+
 router.get('/login', userControllers.loginPage);
 
 router.get('/logout', userControllers.logout);
