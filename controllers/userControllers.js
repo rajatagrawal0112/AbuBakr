@@ -520,7 +520,9 @@ const getusers = async (req, res) => {
 const getCurrencyValue = async (req,res) => {
     let currencyType =req.body.currencyType;
     Tokensettings.findOne().then(btcresult => {
-    currencyType=currencyType.toLowerCase();  
+    // currencyType=currencyType.toLowerCase();  
+    console.log(req.body.currencyType);
+
     if(currencyType=="eth")
     {
         let value = btcresult.etherValue;
@@ -541,6 +543,9 @@ const getCurrencyValue = async (req,res) => {
     {
         let value = btcresult.bnbValue;
         res.send({value});
+    }
+    else{
+        res.send("No currency selected");
     }
   });
 
