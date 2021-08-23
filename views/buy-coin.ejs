@@ -109,6 +109,7 @@
               </div>
               <input type="hidden" value="<%=ebt%>" name="rate_per_ebt" id="rate_per_ebteth">
               <p class="font-italic value-coin-line mx-1 mb-2">1EBT = <%=ebt*0.65%>
+              <p  class="">1EBT = 0.0000000065$</p>  
               </p>
               <!-- <p class="font-italic value-coin-line mt-3 mx-1 mb-2"> <b>1 TOKEN = 23 TRX</b></p> -->
               <div class="col-md-12 p-0">
@@ -247,7 +248,7 @@
       function multiby(val, nem) {
         let rate = $("#currencyValue").val();
         // alert(rate);
-        let n = parseFloat(val) * parseFloat(rate);
+        let n = parseFloat(val) * parseFloat(nem);
         document.getElementById("eth").value = n;
       };
     </script>
