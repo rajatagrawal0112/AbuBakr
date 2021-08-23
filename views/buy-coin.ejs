@@ -22,8 +22,12 @@
                     <h6>Coin</h6>
                     <div class="form-group m-0">
                       <select class="form-control"
-                        style="box-shadow: none;outline: none;border: 1px solid #ddd !important;">
-                        <option>ETH</option>
+                        style="box-shadow: none;outline: none;border: 1px solid #ddd !important;"
+                        onchange="changeCurrency(this.value);">
+                        <option value="eth">ETH</option>
+                        <option value="bnb">BNB</option>
+                        <option value="usdt">USDT</option>
+                        <option value="btc">BTC</option>
                       </select>
                     </div>
                   </div>
@@ -70,15 +74,15 @@
                           style="color:red;">*</span></label>
                       <fieldset class="col-10">
                         <div class="input-group">
-                          <input type="text" class="form-control" data-rule-number="true" onkeyup="multiply()"
-                            name="ebt" id="ebt" data-rule-min="1" data-msg-min="You have to buy minimum 1 $EBT."
-                            data-rule-required="true" data-msg-required="Please enter value in digit."
-                            aria-describedby="basic-addon4" onchange="multiby(this.value,`<%=ebt*0.65%>`)" required>
+                          <input type="text" class="form-control" data-rule-number="true" name="ebt" id="ebt"
+                            data-rule-min="1" data-msg-min="You have to buy minimum 1 $EBT." data-rule-required="true"
+                            data-msg-required="Please enter value in digit." aria-describedby="basic-addon4"
+                            onkeyup="multiby(this.value,`<%=ebt*0.65%>`)" required>
                           <div class="input-group-append">
                             <span class="input-group-text" id="basic-addon4">EBT</span>
                           </div>
                         </div>
-                      
+                        <input type="hidden" name="currencyValue" id="currencyValue">
                       </fieldset>
                       <span for="rowan" class="error_validate" id="rowan_err"></span>
                     </div>
@@ -241,7 +245,9 @@
     </script>
     <script>
       function multiby(val, nem) {
-        let n = parseFloat(val) * parseFloat(nem);
+        let rate = $("#currencyValue").val();
+        // alert(rate);
+        let n = parseFloat(val) * parseFloat(rate);
         document.getElementById("eth").value = n;
       };
     </script>
@@ -263,5 +269,23 @@
           return false;
         }
         this.form.submit();
+      }
+    </script>
+    <script>
+
+      function changeCurrency(currencyType) {
+        // alert(currencyType);
+        $.ajax({
+          type: 'post',
+          url: 'http://localhost:443/currency-value',
+          data: { currencyType: currencyType },
+          success: function (res) {
+            console.log(res);
+            // alert(res.value);
+            $("#currencyValue").val(res.value);
+
+          }
+        });
+
       }
     </script>
