@@ -24,7 +24,7 @@
                       <select class="form-control"
                         style="box-shadow: none;outline: none;border: 1px solid #ddd !important;background-color: transparent !important;"
                         onchange="changeCurrency(this.value);">
-                        <option value="">Select Coin</option>
+                        
                         <option value="eth">ETH</option>
                         <option value="bnb">BNB</option>
                         <option value="usdt">USDT</option>
@@ -268,7 +268,7 @@
         let amount=total*rate;
 
         document.getElementById("eth").value = n;
-        document.getElementById("total_ebt").innerHTML="Total EBT you will get="+total;
+        document.getElementById("total_ebt").innerHTML="Total EBT you will get="+total.toLocaleString();
        // document.getElementById("total_amount").innerHTML=amount;
 
         //$("#total_ebt").val(total);
