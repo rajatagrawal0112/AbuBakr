@@ -164,35 +164,35 @@ var transporter = nodemailer.createTransport({
   }
 });
 
-routes.get('/admin-login', middleware_check_login, (req, res) => {
+routes.get('/admin-login',  (req, res) => {
   let fail = req.flash('fail');
   let success_logout = req.flash('success_logout');
   res.render('admin/admin-login/admin_login.ejs', { fail, success_logout });
 });
 
-routes.post('/submit-details',middleware_check_login, async (req, res) => {
-  err_msg = req.flash('err_msg');
-  success_msg = req.flash('success_msg');
+// routes.post('/submit-details',middleware_check_login, async (req, res) => {
+//   err_msg = req.flash('err_msg');
+//   success_msg = req.flash('success_msg');
 
-  const email = req.body.email;
-  const password = req.body.password;
+//   const email = req.body.email;
+//   const password = req.body.password;
 
-  let Admin = {
-    name: 'Quest',
-    email: 'aashishporwal@questglt.org',
-    password: '123456',
-    user_type: 'admin'
-  };
+//   let Admin = {
+//     name: 'Quest',
+//     email: 'aashishporwal@questglt.org',
+//     password: '123456',
+//     user_type: 'admin'
+//   };
 
   
-    if (email == 'aashishporwal@questglt.org' && password == '123456') {
-      console.log('Admin found')
-       res.redirect('/main-dashboard');
-    } else {
-        res.redirect('/admin-login');
-      }
+//     if (email == 'aashishporwal@questglt.org' && password == '123456') {
+//       console.log('Admin found')
+//        res.redirect('/main-dashboard');
+//     } else {
+//         res.redirect('/admin-login');
+//       }
 
-});
+// });
 
 
 routes.post('/submit-details', async (req, res) => {
@@ -202,13 +202,13 @@ routes.post('/submit-details', async (req, res) => {
   // const email = req.body.username;
   // const password = req.body.password;
 
-  const email = "aashishporwal38@gmail.com";
-  const password = req.body.password;
+  const email = "ebticoglt@gmail.com";
+  const password = "Quest@ebtico";
 
   let Admin = {
-    name: 'Aashish',
+    name: 'Abu Bakar',
     email: req.body.email,
-    password: Quest0106 ,
+    password: req.body.password,
     user_type: 'admin'
   };
 
@@ -223,7 +223,7 @@ routes.post('/submit-details', async (req, res) => {
     res.redirect('/admin-login');
   } else {
     // const mystr = await userServices.createCipher(password);
-    let checkPass = await adminServices.checkAdminPass(email, Quest0106 )
+    let checkPass = await adminServices.checkAdminPass(email, password)
 
     if (checkPass == 'wrongPassword') {
       req.flash('fail', 'You have entered wrong password try again.');
@@ -447,17 +447,21 @@ routes.post('/update-password-front-admin', middleware_check_login, (req, res) =
 
 });
 
-
-routes.get('/logout1', middleware_check_login, (req, res) => {
-  console.log("logout")
-  req.session.destroy(function (err) {
-    console.log("in_logout")
-  });
-
-  req.flash('success_logout', 'You have logged out successfully.');
-
+router.get('/logout', async (req, res) => {
+  req.session.destroy();
   res.redirect('/admin-login');
 });
+
+// routes.get('/logout1', middleware_check_login, (req, res) => {
+//   console.log("logout")
+//   req.session.destroy(function (err) {
+//     console.log("in_logout")
+//   });
+
+//   req.flash('success_logout', 'You have logged out successfully.');
+
+//   res.redirect('/admin-login');
+// });
 
 
 
