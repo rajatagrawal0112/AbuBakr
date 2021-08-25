@@ -1354,7 +1354,18 @@ border-radius: 50%;
 .select-options li[rel="hide"] {
   display: none;
 }
-
+.error_validate{
+    color:#d5b44a;
+}
+.succ_flash_msg, .success_validate{
+    color: green;
+    background-color: #f7eabf;
+    display: block;
+    padding: 10px;
+    border-radius: 5px;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
 
 /** body css end **/
 
@@ -1455,8 +1466,15 @@ a:focus, a:hover {color: #d5b44a ; text-decoration: underline;}
     font-size: 20px;
     word-break: break-all;
     display: block;
-    width: 100%;
+    width: auto;
     margin-bottom: 20px;
+}
+.bitcoin-flex-box img {
+    height: 50px;
+    margin-right: 10px;
+}
+.bitcoin-flex-box {
+    flex-wrap: nowrap;
 }
 .create-wallet-block .copy-id-dash a {
     margin: 0 auto;
