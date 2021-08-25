@@ -78,7 +78,7 @@ const deactivateUser = async (req, res) => {
 
 const EBTSold = async (admin_bal) => {
 
-    const total_EBT = 100000000000000000000000000;
+    const total_EBT = 1000000000000000000000000000000000;
     const total = parseFloat(total_EBT) / Math.pow(10, 18);
     const ebtSold = total - admin_bal
     return ebtSold

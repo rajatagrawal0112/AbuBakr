@@ -27,8 +27,8 @@
       <!-- partial:partials/_navbar.html -->
       <nav class="navbar default-layout-navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
         <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
-          <a class="navbar-brand brand-logo" href="main-dashboard.ejs"><img src="admin_assets/images/logo-white.png" alt="logo" /></a>
-          <a class="navbar-brand brand-logo-mini" href="main-dashboard.ejs"><img src="admin_assets/images/logo-white.png" alt="logo" /></a>
+          <a class="navbar-brand brand-logo" href="/main-dashboard"><img src="admin_assets/images/logo-white.png" alt="logo" /></a>
+          <a class="navbar-brand brand-logo-mini" href="/main-dashboard"><img src="admin_assets/images/logo-white.png" alt="logo" /></a>
         </div>
         <div class="navbar-menu-wrapper d-flex align-items-stretch">
           <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
@@ -84,7 +84,7 @@
                   <!--change to offline or busy as needed-->
                 </div>
                 <div class="nav-profile-text d-flex flex-column">
-                  <span class="font-weight-bold mb-2">John</span>
+                  <span class="font-weight-bold mb-2"><%= session.user_name%></span>
                   <span class="text-secondary text-small">Project Manager</span>
                 </div>
                <!--  <i class="mdi mdi-bookmark-check text-success nav-profile-badge"></i> -->
@@ -104,15 +104,15 @@
               </a>
               <div class="collapse" id="ui-basic">
                 <ul class="nav flex-column sub-menu">
-                  <li class="nav-item"> <a class="nav-link" href="/home-banner-details">Home Banner</a></li>
+                  <!-- <li class="nav-item"> <a class="nav-link" href="/home-banner-details">Home Banner</a></li> -->
                   
-                  <li class="nav-item"> <a class="nav-link" href="/key-features">Key Features</a></li>
+                  <!-- <li class="nav-item"> <a class="nav-link" href="/key-features">Key Features</a></li> -->
                   <li class="nav-item"> <a class="nav-link" href="/problem">Problems</a></li>
                   <li class="nav-item"> <a class="nav-link" href="/solution">Solutions</a></li>
                    <li class="nav-item"> <a class="nav-link" href="/token-allocation">Token Allocation</a></li>
                     <!-- <li class="nav-item"> <a class="nav-link" href="partner-list.ejs">Partners</a></li> -->
 
-                  <li class="nav-item"> <a class="nav-link" href="/roadmap">Roadmap</a></li>
+                  <!-- <li class="nav-item"> <a class="nav-link" href="/roadmap">Roadmap</a></li> -->
 
                   <li class="nav-item"> <a class="nav-link" href="/whitepaper">Whitepaper</a></li>
 
@@ -150,7 +150,7 @@
           
         
 
-              <li class="nav-item">
+              <!-- <li class="nav-item">
               <a class="nav-link" data-toggle="collapse" href="#ui-basic1" aria-expanded="false" aria-controls="ui-basic">
                 <span class="menu-title">Contact Info</span>
                 <i class="menu-arrow"></i>
@@ -163,7 +163,7 @@
                   <li class="nav-item"> <a class="nav-link" href="/feedback-list">Feedback List</a></li>
                 </ul>
               </div>
-            </li>
+            </li> -->
 
                <li class="nav-item">
               <a class="nav-link" data-toggle="collapse" href="#ui-basic1" aria-expanded="false" aria-controls="ui-basic">
@@ -182,16 +182,16 @@
 
               <li class="nav-item">
               <a class="nav-link" data-toggle="collapse" href="#ui-basic1" aria-expanded="false" aria-controls="ui-basic">
-                <span class="menu-title">ART Details</span>
+                <span class="menu-title">EBT Details</span>
                 <i class="menu-arrow"></i>
                 <i class="mdi mdi-cash menu-icon"></i>
               </a>
               <div class="collapse" id="ui-basic1">
                 <ul class="nav flex-column sub-menu">
-                  <li class="nav-item"> <a class="nav-link" href="/admin-referral-table">Referral</a></li>
+                  <!-- <li class="nav-item"> <a class="nav-link" href="/admin-referral-table">Referral</a></li> -->
                   <li class="nav-item"> <a class="nav-link" href="/update-token">Update Tokenomics</a></li>
-                  <li class="nav-item"> <a class="nav-link" href="/summary">$EBT List</a></li>
-                  <li class="nav-item"> <a class="nav-link" href="/bonus-persent">Referral Bonus %</a></li>
+                  <!-- <li class="nav-item"> <a class="nav-link" href="/summary">$EBT List</a></li> -->
+                  <!-- <li class="nav-item"> <a class="nav-link" href="/bonus-persent">Referral Bonus %</a></li> -->
                 </ul>
               </div>
             </li>
