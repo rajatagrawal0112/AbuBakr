@@ -469,14 +469,15 @@ router.post('/ETH', isUser, async function (req, res) {
   console.log("Hello from ETH");
   console.log("fields========== ", req.body);
   var user_id = req.body.user_id;
-  var ebt_count = req.body.ebt;
+  var usd_count = req.body.usd;
+  var ebt_count = (req.body.usd)*(1/0.0000000065);
   Tokensettings.findOne({}).then(ebt_rate => {
     var rate_per_ebt = ebt_rate.etherValue;
     // var rate_per_rwn = req.body.rate_per_rowan;
-    var total_amnt = (ebt_count) * (rate_per_ebt);
+    var total_amnt = (usd_count) * (rate_per_ebt);
     var eth_wallet_address = req.body.eth_wallet_address;
     var transaction_Id = req.body.transaction_id;
-    // var sender_wallet_address = req.body.wallet_address;
+    var user_wallet_address = req.body.user_wallet_address;
     var imageFile = req.body.transactionImage;
     // var image;
     // if (!imageFile) {
@@ -494,7 +495,7 @@ router.post('/ETH', isUser, async function (req, res) {
       rate_per_ebt: rate_per_ebt,
       total_amnt: total_amnt,
       transaction_Id: transaction_Id,
-      // sender_wallet_address: sender_wallet_address,
+      sender_wallet_address: user_wallet_address,
       eth_wallet_address: eth_wallet_address,
       image: imageFile,
       payment_type: payment_type,

@@ -3100,7 +3100,7 @@ routes.get('/delete-admin-privacy-policy', middleware_check_login, (req, res) =>
 })
 
 ////////////****************privacy policy ***************////////////////
-routes.get('/admin-cookie-policy', middleware_check_login, (req, res) => {
+routes.get('/cookie-policy', middleware_check_login, (req, res) => {
 
   res.render('admin/front-admin/cookie-policy', { err_msg, success_msg, Name: req.session.user_name, profile_image: req.session.profile_image, session: req.session, expressFlash: req.flash() })
 })
@@ -3126,17 +3126,25 @@ routes.get('/feedback-list',middleware_check_login, (req, res) => {
   res.render('admin/front-admin/feedback-list', { err_msg, success_msg, Name: req.session.user_name, profile_image: req.session.profile_image, session: req.session, expressFlash: req.flash() })
 })
 
-routes.get('/order-history', middleware_check_login,(req, res) => {
-
-  OrderDetails.find({}).then((orderDetails) => {
-    //console.log(problemDetails)
-    res.render('admin/front-admin/order-history', { err_msg, success_msg, Name: req.session.user_name, profile_image: req.session.profile_image, session: req.session, expressFlash: req.flash(), orderDetails })
-  }, (err) => {
-    res.send('Some thing went wrong try again.');
+routes.get('/order-history',middleware_check_login,  (req, res) => {
+  err_msg = req.flash('err_msg');
+  success_msg = req.flash('success_msg');
+  var day = moment(new Date()).format('MM/DD/YYYY');
+  // Registration.find({ deleted: '0', created_at: { $gte: day + ', 00:00:00 AM', $lte: day + ', 12:59:59 PM' } }).sort({ _id: -1 }).lean().then(async (results) => {
+  //   console.log('448-results', results)
+  // Registration.find({ deleted: '0' }).sort({ _id: -1 }).lean().then(async (results) => {
+  //   console.log("result======== ", results);
+  OrderDetails.find({}).then(async (orderDetails) => {
+   if (orderDetails) {
+      
+      res.render('admin/front-admin/order-history.ejs', { err_msg, success_msg, expressFlash: req.flash(), order_details: orderDetails, moment, session: req.session, user_id: req.session.user_id, ebt_count: req.session.ebt_count, rate_per_ebt: req.session.rate_per_ebt, total_amnt: req.session.total_amnt, transaction_Id: req.session.transaction_Id, sender_wallet_address: req.session.sender_wallet_address, eth_wallet_address: req.session.eth_wallet_address, image: req.session.image , payment_type: req.session.payment_type,  payment_status: req.session.payment_status, created_at: req.session.created_at, });
+    }
+  }, (error) => {
+    res.send('Something went wrong');
   }).catch((e) => {
-    res.send('Some thing went wrong try again.');
+    res.send(e);
   });
-})
+});
 
 routes.get('/admin-referral-table', middleware_check_login, (req, res) => {
   err_msg = req.flash('err_msg');
@@ -3159,8 +3167,22 @@ routes.get('/bonus-persent',middleware_check_login, (req, res) => {
 routes.get('/admin-transaction-table',middleware_check_login,  (req, res) => {
   err_msg = req.flash('err_msg');
   success_msg = req.flash('success_msg');
-  res.render('admin/front-admin/admin-transaction-table', { err_msg, success_msg, Name: req.session.user_name, profile_image: req.session.profile_image, session: req.session, expressFlash: req.flash() })
-})
+  var day = moment(new Date()).format('MM/DD/YYYY');
+  // Registration.find({ deleted: '0', created_at: { $gte: day + ', 00:00:00 AM', $lte: day + ', 12:59:59 PM' } }).sort({ _id: -1 }).lean().then(async (results) => {
+  //   console.log('448-results', results)
+  // Registration.find({ deleted: '0' }).sort({ _id: -1 }).lean().then(async (results) => {
+  //   console.log("result======== ", results);
+  Tokendetails.find({}).then(async (tokendetails) => {
+    if (tokendetails) {
+      
+      res.render('admin/front-admin/admin-transaction-table.ejs', { err_msg, success_msg, expressFlash: req.flash(), token_details: tokendetails, moment, session: req.session, user_id: req.session.user_id, wallet_id: req.session.wallet_id, sender_wallet_address: req.session.sender_wallet_address, receiver_wallet_address: req.session.receiver_wallet_address, hash: req.session.hash, amount: req.session.amount, payment_status: req.session.payment_status, token_type: req.session.token_type , block_id: req.session.block_id,  transaction_type: req.session.transaction_type, referred_to_name: req.session.referred_to_name, created_at: req.session.created_at, });
+      }
+  }, (error) => {
+    res.send('Something went wrong');
+  }).catch((e) => {
+    res.send(e);
+  });
+});
 
 /////////////////////////////////////////////////////////////////
 routes.get('/site-info',middleware_check_login,  (req, res) => {

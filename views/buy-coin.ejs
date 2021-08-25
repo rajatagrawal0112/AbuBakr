@@ -75,7 +75,7 @@
                           style="color:red;">*</span></label>
                       <fieldset class="col-10">
                         <div class="input-group">
-                          <input type="text" class="form-control" data-rule-number="true" name="ebt" id="ebt"
+                          <input type="text" class="form-control" data-rule-number="true" name="usd" id="usd"
                             data-rule-min="1" data-msg-min="You have to buy minimum 1 $EBT." data-rule-required="true"
                             data-msg-required="Please enter value in digit." aria-describedby="basic-addon4"
                             onkeyup="multiby(this.value,`<%=ebt%>`)" required>
@@ -139,8 +139,7 @@
                       </div> -->
                       <div class="input-group col-sm-7 input-dash copy-id-dash">
                         <input type="text" class="form-control secure"
-                          value="0xcB99B8269a22fa818Fb766B10Af612Fe97CC463d" id="eth_wallet_address"
-                          name="eth_wallet_address" data-rule-required="true"
+                          value="0xcB99B8269a22fa818Fb766B10Af612Fe97CC463d" id="eth_wallet_address" name="eth_wallet_address" data-rule-required="true"
                           data-msg-required="Please enter Ethereum Wallet Address." readonly="">
                         <a onclick="myFunction()" href="javascript:void(0);"><i class="fa fa-copy"></i></a>
 
@@ -157,6 +156,17 @@
                       </div>
                     </div>
                   </div>
+
+                  <div class="form-group">
+                    <div class="row">
+                      <label class="control-label col-sm-5">User Wallet Address</label>
+                      <div class="col-sm-7">
+                        <input type="text" class="form-control secure" id="user_wallet_address" name="user_wallet_address"
+                          required>
+                      </div>
+                    </div>
+                  </div>
+
                   <div class="form-group">
                     <div class="row">
                       <label class="control-label col-sm-5">Upload Screenshot</label>
@@ -190,7 +200,8 @@
 
                   <div class="checkbox">
                     <label>
-                      <input type="checkbox" value="" required>
+                      <input type="checkbox" data-rule-required="true"
+                      data-msg-required="Please Accept Terms & Conditions" value="" required>
                       <span class="cr"><i class="fa fa-check cr-icon"></i></span>
                       I agree with terms and conditions of $EBT.
                     </label>
@@ -315,7 +326,7 @@
             console.log(res);
             // alert(res.value);
             $("#currencyValue").val(res.value);
-            document.getElementById("ebt").value = 0;
+            document.getElementById("usd").value = 0;
             document.getElementById("eth").value = 0;
 
              document.getElementById("basic-addon-curr").innerHTML=currencyType;
