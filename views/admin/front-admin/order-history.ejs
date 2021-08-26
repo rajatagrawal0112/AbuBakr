@@ -72,11 +72,11 @@
                         <td><%- details.payment_type%></td>
                         <td><%- details.ebt_count%></td>
                         <td><%- details.payment_status%>
-                          <!-- <%if(details.payment_status=="pending" ){%>
-                            <a href="/deactiveUser?id=<%=details.payment_status%>">pending</a>
+                          <%if(details.payment_status=="pending" ){%>
+                            <P>pending</P>
                             <%}else{%>
-                              <a href="/activeUser?id=<%=details.payment_status%>">Paid</a>
-                              <%}%> -->
+                              <a href="/verifyorder?id=<%=details._id%>">Paid</a>
+                              <%}%>
                             </td>
                         <td><%- details.payment_status%></td>
                         <td><%- details.image%></td>

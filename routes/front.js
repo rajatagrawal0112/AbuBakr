@@ -468,8 +468,10 @@ router.post('/ETH', isUser, async function (req, res) {
   //     }
   console.log("Hello from ETH");
   console.log("fields========== ", req.body);
-  var user_id = req.body.user_id;
+  var user_id = req.session.re_us_id;
   var usd_count = req.body.usd;
+  console.log("bbbbb", user_id);
+
   var ebt_count = (req.body.usd)*(1/0.0000000065);
   Tokensettings.findOne({}).then(ebt_rate => {
     var rate_per_ebt = ebt_rate.etherValue;

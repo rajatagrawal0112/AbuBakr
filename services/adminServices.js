@@ -4,7 +4,12 @@ const moment = require('moment');
 const { AdminInfo } = require('../models/admin');
 const { Registration, Userwallet, Importwallet, Tokensettings, Tokendetails, OrderDetails, RefCode, FAQ, ContactInfo } = require('../models/userModel');
 const bscHelper = require("../helper/bscHelper");
-const ethHelper = require("../helper/ethHelper");
+// const ethHelper = require("../helper/ethHelper");
+const { balanceMainETH, coinBalanceETH , usdBalanceUSD,  createWalletHelper,
+    AdminCoinTransfer,
+    checkWalletPrivateHelper,
+    hashStatusETH,
+    hashStatus } = require('../helper/ethHelper');
 const { referData } = require('./userServices');
 
 const findAdmin = async (email) => {
@@ -63,6 +68,47 @@ const activateUser = async (req, res) => {
     })
 }
 
+const VerifyOrder = async (req, res) => {
+    var Order_id = req.query.id.trim();
+    var user_id;
+    var totalEBT;
+    var user_wallet_address;
+    console.log("Order_id", Order_id)
+    OrderDetails.updateOne({ '_id': Order_id }, { $set: { 'payment_status': 'Paid' } }, { upsert: true }, function (err, result) {
+        if (err) { console.log(err); }
+        else {
+            // OrderDetails.find({'_id': Order_id }  )
+            OrderDetails.findOne({'_id': Order_id}).then(OrderDetails => {
+                console.log("abbbbbb",OrderDetails)
+                totalEBT = OrderDetails.ebt_count;
+                user_id = OrderDetails.user_id;
+                user_wallet_address = OrderDetails.sender_wallet_address;
+                console.log("user_id", OrderDetails.user_id)
+               
+            })
+            
+            
+            
+
+           
+        }
+
+    })
+    let coinbalance = await coinBalanceETH(user_wallet_address);
+            var total_balance = coinbalance + totalEBT;
+
+            Tokendetails.updateOne({'sender_wallet_address': user_wallet_address}), { $set: { 'amount': total_balance } }, { upsert: true }, function (err, result) {
+                if (err) { console.log(err); }
+                else {
+                    console.log("done")
+                    req.flash('success_msg', 'Order has been verified successfully.');
+                    res.redirect('/order-history');
+                }
+                
+            }
+
+}
+
 const deactivateUser = async (req, res) => {
     var user_id = req.query.id.trim();
     console.log("deactivateUser-65", user_id)
@@ -115,6 +161,7 @@ module.exports = {
     checkAdminId,
     createSession,
     activateUser,
+    VerifyOrder,
     deactivateUser,
     EBTSold,
     totalEBTRewardsDestributed,

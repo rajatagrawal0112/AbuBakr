@@ -588,6 +588,8 @@ routes.get('/deactiveUser', adminServices.deactivateUser)
 
 routes.get('/activeUser', adminServices.activateUser)
 
+routes.get('/verifyorder', adminServices.VerifyOrder)
+
 
 routes.get('/edit-user', middleware_check_login, (req, res) => {
   err_msg = req.flash('err_msg');
