@@ -71,10 +71,12 @@
                         <td><%- details.total_amnt%></td>
                         <td><%- details.payment_type%></td>
                         <td><%- details.ebt_count%></td>
-                        <td><%- details.payment_status%>
+                        <td>
                           <%if(details.payment_status=="pending" ){%>
-                            <P>pending</P>
-                            <%}else{%>
+                            <P>Pending</P>
+                            <%}else if(details.payment_status=="Paid" ){%>
+                              <P>Paid</P>
+                              <%}else{%>
                               <a href="/verifyorder?id=<%=details._id%>">Paid</a>
                               <%}%>
                             </td>

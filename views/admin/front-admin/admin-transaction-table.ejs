@@ -56,9 +56,9 @@
                       <td><%- i %></td>
                       <td><%- details.created_at%></td>
                       <!-- <td>John Doe</td> -->
-                      <td><a href="https://ropsten.etherscan.io/address/<%- details.hash%>" target="_blank"><%- details.hash%></a></td>
+                      <td><a href="https://ropsten.etherscan.io/tx/<%-details.hash%>" target="_blank"><%- details.hash%></a></td>
                       <td><a href="https://ropsten.etherscan.io/address/<%- details.sender_wallet_address%>" target="_blank"><%- details.sender_wallet_address%></a></td>
-                      <td><a href="https://ropsten.etherscan.io/tx/<%- details.receiver_wallet_address%>" target="_blank"><%- details.receiver_wallet_address%></a></td>
+                      <td><a href="https://ropsten.etherscan.io/address/<%- details.receiver_wallet_address%>" target="_blank"><%- details.receiver_wallet_address%></a></td>
                       <!-- <td><%- details.payment_method%></td> -->
                       <td><%- details.payment_status%></td>
                       <td><%- details.amount%></td>

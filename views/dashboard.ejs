@@ -133,7 +133,7 @@
                              <!-- <input class="form-control text-left" type="text" placeholder="" value="2798ehgdgdsffsfsfighj9832q787ysuueh"> -->
                              <input class="form-control" type="text" id="address" name="address"
                              value="<%=wallet_details.wallet_address %>" placeholder="" readonly>
-                             <a href=""><i class="fa fa-copy"></i></a>
+                            <a onclick="myFunction()" href="javascript:void(0);"><i class="fa fa-copy"></i></a>
                              <a href=""><i class="fa fa-share"></i></a>
                         </div>
                         </div>
@@ -181,3 +181,14 @@
            
 
      <%- include('footer') %>
+
+     <script type="text/javascript">
+      function myFunction() {
+        var copyText = document.getElementById("address");
+        if ($('#address').val() != "") {
+          copyText.select();
+          document.execCommand("copy");
+          alert("Wallet Address is copied.");
+        }
+      }
+    </script>

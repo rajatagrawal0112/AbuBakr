@@ -1,9 +1,11 @@
 const moment = require('moment');
 
-
+const Tx = require('ethereumjs-tx').Transaction;
+const Common = require('ethereumjs-common');
 const { AdminInfo } = require('../models/admin');
 const { Registration, Userwallet, Importwallet, Tokensettings, Tokendetails, OrderDetails, RefCode, FAQ, ContactInfo } = require('../models/userModel');
 const bscHelper = require("../helper/bscHelper");
+const blockchainServices = require("../services/blockchainServices");
 // const ethHelper = require("../helper/ethHelper");
 const { balanceMainETH, coinBalanceETH , usdBalanceUSD,  createWalletHelper,
     AdminCoinTransfer,
@@ -21,6 +23,8 @@ const findAdmin = async (email) => {
         return 'notAdmin'
     }
 };
+
+const adminAddress = process.env.ADMIN;
 
 const checkAdminPass = async (email, password) => {
     let user = await AdminInfo.findOne({ 'email': email, 'password': password });
@@ -68,54 +72,77 @@ const activateUser = async (req, res) => {
     })
 }
 
+// const VerifyOrder = async (req, res) => {
+//     var Order_id = req.query.id.trim();
+//     var user_id;
+//     var totalEBT;
+//     var user_wallet_address;
+
+//     console.log("Order_id", Order_id)
+
+//     OrderDetails.updateOne({ '_id': Order_id }, { $set: { 'payment_status': 'Paid' } }, { upsert: true }, function (err, result) {
+//         if (err) { console.log(err); }
+//         else {
+//             // OrderDetails.find({'_id': Order_id }  )
+//              OrderDetails.findOne({'_id': Order_id}).then(OrderDetails => {
+//                 console.log("abbbbbb",OrderDetails)
+//                totalEBT = OrderDetails.ebt_count;
+//                user_id = OrderDetails.user_id;
+//                user_wallet_address = OrderDetails.sender_wallet_address;
+//                console.log("user wallet", user_wallet_address)
+//                console.log("user_id", OrderDetails.user_id)
+                                                    
+//             });       
+//         }
+//     })
+//     let walletData = blockchainServices.userWalletFindWallet(user_wallet_address);
+//         let abc = "123";
+//         let finalSend = abc.toString();
+//         // let finalSend = totalEBT.toString();
+//         // let hashObject3 = await AdminCoinTransfer(user_wallet_address, finalSend);
+//         console.log(finalSend,'-------------------finalSend',typeof finalSend);
+//         let hash3 = hashObject3.transactionHash;
+//         await blockchainServices.addTransaction(user_id, walletData._id, adminAddress, user_wallet_address, hash3, finalSend, '$EBT');
+//         let userwallet = await blockchainServices.userWalletFindWallet(user_wallet_address);
+//         await blockchainServices.importWalletEntry(user_id, userwallet._id, created);      
+//               console.log("done")
+//               req.flash('success_msg', 'Order has been verified successfully.');
+//               res.redirect('/order-history');
+// }
+
 const VerifyOrder = async (req, res) => {
     var Order_id = req.query.id.trim();
-    //var user_id;
-    //var totalEBT;
-    //var user_wallet_address;
+    var totalEBT;
+    var address ;
 
     console.log("Order_id", Order_id)
+    OrderDetails.updateOne({ '_id': Order_id }, { $set: { 'payment_status': 'Paid' } }, { upsert: true },  function (err, result) {
+        OrderDetails.findOne({'_id': Order_id}).then( async OrderDetails => {
+         totalEBT = OrderDetails.ebt_count;
+            user_id = OrderDetails.user_id;
+            address = OrderDetails.sender_wallet_address;
+            console.log("user wallet", address,totalEBT)
+            console.log("user_id", OrderDetails.user_id)
+            let sendebt = parseFloat(totalEBT);
+            let finalSend = sendebt.toString();
+            // let finalSend = '153';
+            console.log("address-", address, finalSend)
+            let hashObject3 = await AdminCoinTransfer(address, finalSend);
+            console.log(finalSend,'----------finalSend',typeof finalSend);
+            let hash3 = hashObject3.transactionHash;
+            await blockchainServices.addTransaction(user_id, Userwallet._id, adminAddress, address, hash3, finalSend, '$EBT');
+            // let userwallet = await blockchainServices.userWalletFindWallet(address);
+            // await blockchainServices.importWalletEntry(user_id, userwallet._id, created);
+            req.flash('success_msg', 'Order has been verified successfully.');
+            // res.redirect('/order-history?wallet=' + Buffer.from(address).toString('base64'));
 
-    OrderDetails.updateOne({ '_id': Order_id }, { $set: { 'payment_status': 'Paid' } }, { upsert: true }, function (err, result) {
-        if (err) { console.log(err); }
-        else {
-            // OrderDetails.find({'_id': Order_id }  )
-             OrderDetails.findOne({'_id': Order_id}).then(OrderDetails => {
-                console.log("abbbbbb",OrderDetails)
-               var totalEBT = OrderDetails.ebt_count;
-               var user_id = OrderDetails.user_id;
-               var user_wallet_address = OrderDetails.sender_wallet_address;
-               console.log("user_id", OrderDetails.user_id)
-
-
-
-            Tokendetails.findOne({'sender_wallet_address': user_wallet_address}).then(user_token=>{
-                   
-
-
-             let coinbalance =user_token.amount;
-          
-             let total_balance = coinbalance + totalEBT;
-
-             Tokendetails.updateOne({'sender_wallet_address': user_wallet_address}), { $set: { 'amount': total_balance } }, { upsert: true }, function (err, result) {
-                if (err) { console.log(err); }
-                else {
-                    console.log("done")
-                    req.flash('success_msg', 'Order has been verified successfully.');
-                    res.redirect('/order-history');
-                 }
-                
-               }
-                }); 
-               
-            });
-            
-        }
-
+            res.redirect('/order-history');
+        });
     })
-    
-
+    // let sendebt = parseInt(totalEBT);
+    // let finalSend = sendebt.toString();
 }
+
 
 const deactivateUser = async (req, res) => {
     var user_id = req.query.id.trim();

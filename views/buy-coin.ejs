@@ -161,8 +161,8 @@
                     <div class="row">
                       <label class="control-label col-sm-5">User Wallet Address</label>
                       <div class="col-sm-7">
-                        <input type="text" class="form-control secure" id="user_wallet_address" name="user_wallet_address"
-                          required>
+                        <input type="text" class="form-control secure" value="<%=wallet_details.wallet_address %>" id="user_wallet_address" name="user_wallet_address" data-rule-required="true" data-msg-required="Please enter Ethereum Wallet Address." readonly="" >
+                        <!-- <input type="text" class="form-control secure" id="user_wallet_address" name="user_wallet_address" required> -->
                       </div>
                     </div>
                   </div>
@@ -298,7 +298,7 @@
         if ($('#eth_wallet_address').val() != "") {
           copyText.select();
           document.execCommand("copy");
-          alert("eth_wallet_address is copied.");
+          alert("wallet address is copied.");
         }
       }
     </script>
