@@ -86,8 +86,9 @@ const AdminCoinTransfer =  async (receiver_address, amount) => {
     let gasPrice_bal = await web3js.eth.getGasPrice();
     let gasPrice = web3js.utils.toHex(gasPrice_bal * 2);
     let count = await web3js.eth.getTransactionCount(sender_address);
-    let sendAmount = amount * Math.pow(10, 18);
-    sendAmount = sendAmount.toString();
+    // let sendAmount = amount * Math.pow(10, 18);
+    let sendAmount = BigInt(amount * 1000000000000000000).toString();
+    // sendAmount = sendAmount.toString();
     let rawTransaction = {
         "gasPrice": gasPrice,
         "gasLimit": gasLimit,

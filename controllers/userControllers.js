@@ -443,6 +443,10 @@ const verifyUser = async (req, res) => {
                             res.redirect('verify-account');
                         }
                     }
+                    else{
+                            req.flash('err_msg', 'Please enter correct secret code.');
+                            res.redirect('verify-account');
+                    }
                 }
                 else {
                     req.flash('err_msg', 'Something went wrong.');
@@ -552,8 +556,8 @@ const getCurrencyValue = async (req,res) => {
 }
 
 const sendMail = async(req , res) => {
-    let email = "shanakhan@questglt.org";
-    let pass = "str123";
+    let email = "ebticoglt@gmail.com";
+    let pass = "bitebitco";
     let otp = 12345;
     // console.log("email send")
     let subject = 'Password for Login.'

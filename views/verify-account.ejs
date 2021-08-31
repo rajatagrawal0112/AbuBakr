@@ -15,6 +15,11 @@
 	<link rel="stylesheet" href="assets2/css/style.css?ver=101">
 	
 </head>
+<style>
+    .error_validate {
+      color: red;
+    }
+  </style>
 
 <body class="user-ath">
    
@@ -31,6 +36,12 @@
                         <h4 style="color: #fff;">Please enter the OTP to verify your account.</h4>
 
                         <p style="color: #fff;">An One Time Password sent to your e-mail address</p>
+                        <% if(err_msg!=undefined){ %>
+                            <span class="error_validate flash_msg"><%= err_msg %></span>
+                          <% }%>
+                          <% if(success_msg!=undefined){ %>
+                            <span class="succ_flash_msg" style="color: green;"><%= success_msg %></span>
+                          <% }%>
                         <form id="login_form" action="verify-account" method="POST">
 
                             <div class="input-item">
