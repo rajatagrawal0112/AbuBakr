@@ -23,7 +23,7 @@ router.get('/', userControllers.landingPage);
 
 router.get('/sendMail',userControllers.sendMail);
 
-router.get('/login', userControllers.loginPage);
+// router.get('/login', userControllers.loginPage);
 
 router.get('/logout', userControllers.logout);
 
@@ -59,7 +59,7 @@ router.get('/receive-ebt', isUser, function (req, res) {
 
 router.get('/send-EBT', userControllers.sendPage);
 
-router.get('/signup', userControllers.signupPage);
+// router.get('/signup', userControllers.signupPage);
 
 router.get('/forgot-pass', userControllers.forgotPage);
 
@@ -67,7 +67,7 @@ router.get('/forgot-pass', userControllers.forgotPage);
 //***************** verify email **************// 
 router.get('/verify-account', userControllers.verifyPage);
 
-router.post('/login', userControllers.LoginPost);
+// router.post('/login', userControllers.LoginPost);
 
 //***************** get dashboard **************//
 router.get('/dashboard', isUser, userControllers.dashboardPage);
@@ -269,7 +269,7 @@ router.post('/forgot-pass', userControllers.submitForgot);
 
 
 
-router.post('/signup', userControllers.submitUser);
+// router.post('/signup', userControllers.submitUser);
 
 //***************** post login **************//
 router.post('/verify-account', userControllers.verifyUser);
