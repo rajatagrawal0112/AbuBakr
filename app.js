@@ -41,6 +41,16 @@ app.use(express.static(path.join(__dirname,'/public')));
 
 app.use(flash())
 
+app.use(function(req,res,next){
+
+if (req.secure){
+    return next();
+}else{
+res.redirect("https://" + req.headers.host + req.url);  
+
+}
+})
+
 app.use("/", indexroutes);
 console.log(process.env.ADMIN)
 
@@ -70,6 +80,8 @@ app.use('/', routes);
     res.setHeader('X-Foo', 'bar')
    })
 
+
+
 var options = {
 
 key: fs.readFileSync('/etc/letsencrypt/live/ethereumbuckeyetoken.io/privkey.pem', 'utf8'),
@@ -80,14 +92,14 @@ ca: fs.readFileSync('/etc/letsencrypt/live/ethereumbuckeyetoken.io/chain.pem', '
     
 };
 
-console.log('3009')
-// Create an HTTP service.
-http.createServer(app).listen(4000); 
-// Create an HTTPS service identical to the HTTP service.
-https.createServer(options, app).listen(443);
+ console.log('3009')
+// // Create an HTTP service.
+ http.createServer(app).listen(80); 
+// // Create an HTTPS service identical to the HTTP service.
+ https.createServer(options, app).listen(443);
 
 
  // Set 'views' directory for any views 
  // being rendered res.render()
-//const PORT = 443;
-//app.listen(PORT, () => console.log(`App listening on port ${PORT}!`));
+// const PORT = 443;
+// app.listen(PORT, () => console.log(`App listening on port ${PORT}!`));
